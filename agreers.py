@@ -21,11 +21,14 @@ import matplotlib.pyplot as plt
 # UserID::Gender::Age::Occupation::Zip-code
 # MovieID::Title::Genres
 
-user_data = pd.read_table('data/ml-1m/ratings.dat', sep='::', names=['user id', 'item id', 'rating', 'timestamp'])
+user_data = pd.read_table('data/ml-100k/u.data', sep='\t', names=['user id', 'item id', 'rating', 'timestamp'])
+
+# user_data = pd.read_table('data/ml-1m/ratings.dat', sep='::', names=['user id', 'item id', 'rating', 'timestamp'])
+
 # user_user = pd.read_table('data/ml-1m/users.dat', sep='::',names=['user id', 'age', 'gender', 'occupation', 'zip code'])
 # movies_list = pd.read_table('data/ml-1m/movies.dat', sep='::',names=['movie id', 'tite','genre' ])
 
-# user_data = user_data.head(300000)
+# user_data = user_data.head(1000)
 
 n_users = user_data['user id'].unique().shape[0]
 n_items = user_data['item id'].unique().shape[0]
@@ -54,7 +57,9 @@ for line in user_data.itertuples():
     rating_matrix[line[1]-1, line[2]-1] = line[3]
 
 
-# print(rating_matrix[0:10])
+rating_matrix = rating_matrix.T
+n_users = n_items
+
 trust_matix = np.zeros((n_users,n_users))
 def agreement(ratings, alpha):
     #for each unique user iterate
@@ -64,29 +69,9 @@ def agreement(ratings, alpha):
                 a_ratings = rating_matrix[user_a]
                 b_ratings = rating_matrix[user_b]
 
-                a_ix = np.nonzero(a_ratings)
-                b_ix = np.nonzero(b_ratings)
-
-                # commonset = np.intersect1d(np.nonzero(rating_matrix[user_a]), np.nonzero(rating_matrix[user_b]))
-                commonset = np.intersect1d(a_ix, b_ix)
-
-                    # print(commonset)
-                    # print('a_ratings[commonset]')
-                    # print(a_ratings[commonset])
-                    # print('b_ratings[commonset]')
-                    # print(b_ratings[commonset])
-
-                    # print('len(commonset)')
-                    
+                commonset = np.intersect1d(np.nonzero(rating_matrix[user_a]), np.nonzero(rating_matrix[user_b]))
+                 
                 common_set_length = len(commonset)
-                # print(common_set_length)
-                # print(user_a)
-                
-
-
-
-                #get #of common positive n common negatives
-
 
                 trust = 0
 
@@ -94,55 +79,11 @@ def agreement(ratings, alpha):
                     a_positive = a_ratings[commonset] > alpha
                     b_positive = b_ratings[commonset] > alpha
 
-                        # 5,1,5,4,2,2 >2.4 = T,F,T,T,F,F
-                        #                               =(po1)+(ne2) = (3) 
-                        # 1,5,1,3,1,1 >2.4 = F,T,F,T,F,F   
+                    agreement = np.sum(np.logical_not(np.logical_xor(a_positive, b_positive)))
 
- 
-                        # print("a_positive")
-                        # print(a_positive)
-
-                        # print("b_positive")
-                        # print(b_positive)
-
-                    agreed_positive = np.logical_and(a_positive, b_positive)
-                        # print("agreed_positive")
-                        # print(agreed_positive)
-
-                    a_negative = a_ratings[commonset] < alpha
-                    b_negative = b_ratings[commonset] < alpha
-
-                        # print("a_negative")
-                        # print(a_negative)
-
-                        # print("b_negative")
-                        # print(b_negative)
-
-                    agreed_negative = np.logical_and(a_negative, b_negative)
-                        # print("agreed_negative")
-                        # print(agreed_negative)
-
-                    agreement = np.sum(agreed_positive) + np.sum(agreed_negative)
-
-                        # print('agreement')
-                        # print(agreement)
-                        
                     trust = agreement/common_set_length
 
                 trust_matix[user_a,user_b] = trust
-
-                # trust = total agreement/total ratings
-                # total agreement = agreed (positives + negatives)
-                # a_common = [1,2,3,5,1,5] positive = [F,F,T,T,F,T] , (x>2.5)? T : F
-                # b_common = [3,4,2,4,1,3] positive = [T,T,F,T,F,T] , (x>2.5)? T : F
-                # total agreement = 1+1
-                # trust = (1+1)/6
-
-
-
-                #normalization userser range = highest-lowest OR score- mean.
-                # [5,3,3,5,3,5,4,5] [2,0,0,2,0,2,1,0]  
-                # [5,1,1,5,1,5,4,5] [4,0,0,4,0,4,3,4]
 
 
 
@@ -152,12 +93,14 @@ total = start - time.time()
 print(total)
 print(trust_matix)
 
-# plt.imshow(trust_matix);
-# plt.colorbar()
-# plt.show()
+# np.save('train_data_matrix.npy', train_data_matrix)
+# np.save('test_data_matrix.npy', test_data_matrix)
 
-plt.matshow(trust_matix);
+
+
+np.save('trust_matix_it.npy', trust_matix)
+t = np.load('trust_matix_it.npy')
+plt.matshow(t);
 plt.colorbar()
 plt.show()
 
-# np.save('trust_matix.npy', trust_matix)

@@ -23,15 +23,17 @@ from sklearn.metrics import mean_squared_error
 # MovieID::Title::Genres
 
 
+user_data = pd.read_table('data/ml-100k/u.data', sep='\t', names=['user id', 'item id', 'rating', 'timestamp'])
 
-user_data = pd.read_table('data/ml-1m/ratings.dat', sep='::', names=['user id', 'item id', 'rating', 'timestamp'])
-user_user = pd.read_table('data/ml-1m/users.dat', sep='::',names=['user id', 'age', 'gender', 'occupation', 'zip code'])
-movies_list = pd.read_table('data/ml-1m/movies.dat', sep='::',names=['movie id', 'tite','genre' ])
+# user_data = pd.read_table('data/ml-1m/ratings.dat', sep='::', names=['user id', 'item id', 'rating', 'timestamp'])
+# user_user = pd.read_table('data/ml-1m/users.dat', sep='::',names=['user id', 'age', 'gender', 'occupation', 'zip code'])
+# movies_list = pd.read_table('data/ml-1m/movies.dat', sep='::',names=['movie id', 'tite','genre' ])
 
 n_users = user_data['user id'].unique().shape[0]
 n_items = user_data['item id'].unique().shape[0]
 # user_data2 = user_data.copy()
-user_data['item id'] = pd.factorize(user_data['item id'])[0] + 1
+
+# user_data['item id'] = pd.factorize(user_data['item id'])[0] + 1
 
 # print("user_data['user id'].unique()")
 # print(user_data['user id'].unique())
@@ -92,6 +94,12 @@ cosine_user_similarity = 1 - user_similarity
 
 # item -item similarity Matrix (1682x1682) :
 cosine_item_similarity = 1 - item_similarity
+
+np.save('cosine_user_similarity_od', cosine_user_similarity)
+np.save('cosine_user_similarity_od', cosine_user_similarity)
+np.save('train_data_matrix_od', train_data_matrix)
+np.save('test_data_od', test_data)
+
 
 
 def predict(ratings, similarity, type='user'):
@@ -238,6 +246,7 @@ def get_harmonic_mean(trust_matrix, cos_similarity):
 
 def get_trust_prediction(train_data_matrix,cos_similarity,batch_size, prediction, ptype):
     trust_matrix = gen_trust_matrix_leave_one_out(train_data_matrix, cos_similarity,batch_size, prediction, ptype)
+    np.save('trust_matrix'+str(ptype)+'_od.npy', trust_matrix)
     trust_weights = get_harmonic_mean(trust_matrix,cos_similarity)
     
     return predict(train_data_matrix,trust_weights,ptype)
@@ -309,8 +318,8 @@ def proccess_batch(batch_size,testp,prdict,cosim,ptype):
             print(str(rmse(tp, test[ini:ini+batch_size,:])))
             ini += batch_size
 
-user_batch_size = 300#n_users
-item_batch_size = 300#n_items
+user_batch_size = n_users#300#n_users
+item_batch_size = n_items#300#n_items
 
 
 # user - user CF:
