@@ -33,7 +33,7 @@ n_users = user_data['user id'].unique().shape[0]
 n_items = user_data['item id'].unique().shape[0]
 # user_data2 = user_data.copy()
 
-# user_data['item id'] = pd.factorize(user_data['item id'])[0] + 1
+user_data['item id'] = pd.factorize(user_data['item id'])[0] + 1
 
 # print("user_data['user id'].unique()")
 # print(user_data['user id'].unique())
@@ -246,7 +246,7 @@ def get_harmonic_mean(trust_matrix, cos_similarity):
 
 def get_trust_prediction(train_data_matrix,cos_similarity,batch_size, prediction, ptype):
     trust_matrix = gen_trust_matrix_leave_one_out(train_data_matrix, cos_similarity,batch_size, prediction, ptype)
-    np.save('trust_matrix'+str(ptype)+'_od.npy', trust_matrix)
+    # np.save('trust_matrix'+str(ptype)+'_od_1M.npy', trust_matrix)
     trust_weights = get_harmonic_mean(trust_matrix,cos_similarity)
     
     return predict(train_data_matrix,trust_weights,ptype)
@@ -318,8 +318,8 @@ def proccess_batch(batch_size,testp,prdict,cosim,ptype):
             print(str(rmse(tp, test[ini:ini+batch_size,:])))
             ini += batch_size
 
-user_batch_size = n_users#300#n_users
-item_batch_size = n_items#300#n_items
+user_batch_size = 300#n_users
+item_batch_size = 300#n_items
 
 
 # user - user CF:
@@ -337,7 +337,8 @@ ptype = 'item'
 # proccess_batch(item_batch_size, train_data_matrix, item_prediction, cosine_item_similarity,  ptype)
 
 
-eval_single(train_data_matrix,cosine_user_similarity,cosine_item_similarity,user_batch_size, item_batch_size,train_data_matrix, train_data_matrix, test_data_matrix)
+# eval_single(train_data_matrix,cosine_user_similarity,cosine_item_similarity,user_batch_size, item_batch_size,train_data_matrix, train_data_matrix, test_data_matrix)
+eval_single(train_data_matrix,cosine_user_similarity,cosine_item_similarity,user_batch_size, item_batch_size,test_data_matrix, test_data_matrix, test_data_matrix)
 
 # get_trust_filtered_prediction(train_data_matrix[:,:item_batch_size], cosine_item_similarity[:item_batch_size,:item_batch_size],item_batch_size,item_prediction[:,:item_batch_size], ptype='item')
 # get_trust_filtered_prediction(train_data_matrix[:user_batch_size,:], cosine_item_similarity[:user_batch_size,:user_batch_size],user_batch_size,user_prediction[:user_batch_size,:], ptype='user')
