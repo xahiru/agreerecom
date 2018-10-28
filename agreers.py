@@ -12,10 +12,8 @@ from sklearn.metrics import mean_squared_error
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.model_selection import train_test_split
-##  Tool for calculating MSE
-from sklearn.metrics import mean_squared_error
 
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 from recomeng import RecomEng as rec
  
@@ -40,7 +38,7 @@ n_items = user_data['item id'].unique().shape[0]
 # n_users = len(user_data)
 # n_items = len(user_data[0])
 
-#resequence user id's
+#resequence user id's # for mk1M dataset
 # user_data['item id'] = pd.factorize(user_data['item id'])[0] + 1
 
 
@@ -67,16 +65,17 @@ rating_matrix = np.zeros((n_users,n_items))
 for line in user_data.itertuples():
     rating_matrix[line[1]-1, line[2]-1] = line[3]
 
-user_data = np.array(user_data)
-# rating_matrix = rating_matrix.T
-rating_matrix = user_data
-n_users = n_items
+
+# user_data = np.array(user_data)
+# # rating_matrix = rating_matrix.T
+# rating_matrix = user_data
+# n_users = n_items
 
 trust_matrix = np.zeros((n_users,n_users))
 def agreement(ratings, alpha):
     #for each unique user iterate
     for user_a in range(n_users):
-        for user_b in range(user_a,n_users):
+        for user_b in range(n_users):
             if user_a != user_b:
                 a_ratings = rating_matrix[user_a]
                 b_ratings = rating_matrix[user_b]
@@ -96,26 +95,78 @@ def agreement(ratings, alpha):
                     trust = agreement/common_set_length
 
                 trust_matrix[user_a,user_b] = trust
+    return trust_matrix
 
 
 
 start = time.time()
 # agreement(rating_matrix, 2.5)
-rec.gen_trust_matrix_leave_one_out()
+# trust_matrix = rec.gen_trust_matrix_leave_one_out(rating_matrix, n_users, rec.predict, 'user')
 
-total = start - time.time()
-print(total)
-print(trust_matrix)
 
 # np.save('train_data_matrix_sample.npy', train_data_matrix)
 # np.save('test_data_matrix_sample.npy', test_data_matrix)
+# np.save('data/ml-100k/agree/train_data_matrix.npy', train_data_matrix)
+# np.save('data/ml-100k/agree/test_data_matrix.npy', test_data_matrix)
 
 
 
 
-np.save('trust_matix_sample.npy', trust_matrix)
-t = np.load('trust_matix_sample.npy')
-plt.matshow(t);
-plt.colorbar()
-plt.show()
+# np.save('data/ml-100k/odn/trust_matix_odn_beta0_2.npy', trust_matrix)
+# t = np.load('data/ml-100k/agree/trust_matix_agree_alpha2_5.npy.npy')
+# plt.matshow(t);
+# plt.colorbar()
+# plt.show()
 
+ptype_list = ['user','item']
+# alog_list = ['agree', 'odn', 'pits']
+alog_list = ['agree']
+alpha = 2.5
+beta = 0.2
+alpha_beta = 0
+max_r = 5
+
+# n_users = 10
+# n_items = 100
+
+# train_data_matrix = train_data_matrix[:n_users,:n_items]
+
+# train_data_matrix_orginal = train_data_matrix.copy()
+
+for alog in alog_list:
+    for ptype in ptype_list:
+        if ptype == 'user':
+            trust_matrix = np.zeros((n_users,n_users))
+            # train_data_matrix = train_data_matrix_orginal
+        else:
+            rating_matrix = rating_matrix.T
+            n_users = n_items
+            trust_matrix = np.zeros((n_items,n_items))
+
+        if alog == 'agree':
+            trust_matrix = agreement(train_data_matrix,alpha)
+            alpha_beta = alpha
+        elif alog == 'odn':
+            trust_matrix = rec.gen_trust_matrix_leave_one_out(train_data_matrix, rec.predict, ptype)
+            # trust_matrix = rec.gen_trust_matrix_leave_one_out(train_data_matrix, rec.predict, '')
+        else:
+            trust_matrix = rec.pitsmarsh_trust(train_data_matrix, max_r, ptype)
+            alpha_beta = max_r
+        print(alog)
+        print(ptype)
+
+        np.save('data/ml-100k/'+str(alog)+'/trust_matix_'+str(ptype)+'.npy', trust_matrix)
+        # np.save('data/ml-100k/'+str(alog)+'/trust_matix_'+str(ptype)+'alpha_beta'+str(alpha_beta)+'.npy', trust_matrix)
+
+
+# save train test
+np.save('data/ml-100k/train_data_matrix.npy',train_data_matrix)
+np.save('data/ml-100k/test_data_matrix.npy',test_data_matrix)
+
+total = start - time.time()
+print(total)
+# t = np.load('data/ml-100k/'+str(alog)+'/trust_matix_'+str(ptype)+'alpha_beta'+str(alpha_beta)+'.npy')
+# print(trust_matrix)
+# plt.matshow(t);
+# plt.colorbar()
+# plt.show()

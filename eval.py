@@ -18,47 +18,28 @@ from sklearn.metrics import mean_squared_error
 from sklearn.metrics import mean_absolute_error
 
 
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 from recomeng import RecomEng as rec
 
 
 
-trust_matix = np.load('trust_matix.npy')
-trust_matix_it = np.load('trust_matix_it.npy')
+trust_matix = np.load('data/ml-100k/agree/trust_matix_user.npy')
+trust_matix_it = np.load('data/ml-100k/agree/trust_matix_item.npy')
+# trust_matix = np.load('data/ml-100k/agree/trust_matix_useralpha_beta2.5.npy')
 
-# trust_matix_it = np.load('trust_matix_it_sample.npy')
-# trust_matix = np.load('trust_matix_sample.npy')
+# trust_matix = np.load('data/ml-100k/odn/trust_matix_itemalpha_beta2.5.npy')
+# trust_matix = np.load('data/ml-100k/odn/trust_matix_useralpha_beta2.5.npy')
 
-for i in range(trust_matix.shape[0]):
-    for j in range(i, trust_matix.shape[1]):
-        trust_matix[j][i] = trust_matix[i][j]
-
-
-
-for l in range(trust_matix_it.shape[0]):
-    for m in range(l, trust_matix_it.shape[1]):
-        trust_matix_it[m][l] = trust_matix_it[l][m]
+# trust_matix = np.load('data/ml-100k/pits/trust_matix_itemalpha_beta5.npy')
+# trust_matix = np.load('data/ml-100k/pits/trust_matix_itemalpha_beta5.npy')
 
 
-# trust_matix_it = np.load('trust_matrixitem_od.npy')
-# trust_matix = np.load('trust_matrixuser_od.npy')
-
-# trust_matix_it = np.load('trust_matix_item_pitsmarsh.npy')
-# trust_matix = np.load('trust_matix_user_pitsmarsh.npy')
-
-
-
-# print('trust_matix')
-# print(trust_matix)
-
-# print('trust_matix_it')
-# print(trust_matix_it)
-train = np.load('train_data_matrix.npy')
+train = np.load('data/ml-100k/train_data_matrix.npy')
 # train = np.array([[5, 4, 3, 3, 5],[0, 0, 0, 0, 0],[4, 4, 3, 3, 5],[4, 4, 3, 1, 3],[3, 3, 2, 2, 5],[2, 0, 2, 1, 5],[2, 4, 5, 4, 1],[2, 2, 1, 1, 1],[1, 1, 1, 2, 2],[0, 0, 0, 0, 0]])
 
 
-test = np.load('test_data_matrix.npy')
+test = np.load('data/ml-100k/test_data_matrix.npy')
 # test =  np.array([[0, 0, 0, 0, 0],[2, 3, 2, 1, 2],[0, 0, 0, 0, 0],[0, 0, 0, 0, 0],[0, 0, 0, 0, 0],[0, 0, 0, 0, 0],[0, 0, 0, 0, 0],[0, 0, 0, 0, 0],[0, 0, 0, 0, 0],[1, 2, 3, 4, 3]])
 
 
@@ -89,10 +70,22 @@ cosine_user_similarity = 1 - pairwise_distances(train, metric='cosine')
 
 cosine_item_similarity = 1 - pairwise_distances(train.T, metric='cosine')
 
+print('cosine_user_similarity.shape')
+print(cosine_user_similarity.shape)
+
+print('cosine_item_similarity.shape')
+print(cosine_item_similarity.shape)
+
+print('train')
+print(train.shape)
+
 # user - user CF:
 user_prediction = rec.predict(train, cosine_user_similarity, type='user')
 # item - item CF:
 item_prediction = rec.predict(train, cosine_item_similarity, type='item')
+
+print('item_prediction.shape')
+print(item_prediction.shape)
 
 # print('User-based CF RMSE: ' + str(rmse(user_prediction, test)) + '|' + ' User-based CF AE: ' + str(ae(user_prediction, test)) + '|' + ' User-based CF MAE: ' + str(mae(user_prediction, test)))
 # print('Item-based CF RMSE: ' + str(rmse(item_prediction, test)) + '|' + ' Item-based CF AE: ' + str(ae(item_prediction, test)) + '|' + ' Item-based CF MAE: ' + str(mae(item_prediction, test)))
@@ -103,6 +96,8 @@ print('Item-based CF RMSE: ' + str(rmse(item_prediction, test)))
 
 
 # user - user TCF:
+print('trust_matix.shape')
+print(trust_matix.shape)
 tcf_user_prediction = rec.predict(train, trust_matix, type='user')
 
 # item - item TCF:
