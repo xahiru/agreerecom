@@ -20,6 +20,8 @@ from surprise import Dataset
 from surprise.model_selection import cross_validate
 
 import copy as cp
+# import random
+
 
 # data = Dataset.load_builtin('ml-100k')
 
@@ -62,7 +64,18 @@ data = Dataset.load_from_file(file_path, reader=reader)
 
 # cross_validate(algo, data, measures=['RMSE', 'MAE'], cv=5, verbose=True)
 # test set is made of 25% of the ratings.
-trainset, testset = train_test_split(data, test_size=.20)
+# random.seed(1)
+
+trainset, testset = train_test_split(data, test_size=.20, train_size=None, random_state=100, shuffle=False)
+
+# np.save('trainset.npy',trainset)
+# np.save('testset.npy',testset)
+
+# print(trainset)
+# print(testset)
+
+# trainset = np.load('trainset.npy')
+# testset = np.load('testset.npy')
 
 # sim_options = {'name': 'cosine',
 #                'user_based': True  # compute  similarities between items
@@ -77,10 +90,15 @@ algo = KNNBasic()
 
 
 
-def gen_trust_matrix_leave_one_out(trainset, batch_size, algo, testset):
-    trust_matrix = np.zeros((batch_size, batch_size))
+def gen_trust_matrix_leave_one_out(trainset, algo, testset):
+    trust_matrix = np.zeros((len(trainset.ur), len(trainset.ur)))
+    print('len(trainset.ur)')
+   
+    print(len(trainset.ur))
+    print('trust_matrix.shape')
+    print(trust_matrix.shape)
 
-    for x in range(1):
+    for x in range(len(trainset.ur)):
         # print(trainset.ur[x])
         newset = cp.deepcopy(trainset)
         newset.ur[x] = []
@@ -89,84 +107,31 @@ def gen_trust_matrix_leave_one_out(trainset, batch_size, algo, testset):
         p = algo.test(testset)
         # accuracy.rmse(p)
         df = pd.DataFrame(p,columns=['uid', 'iid', 'rui', 'est', 'details'])
-        # df.sort_index(by=['uid'], ascending=[True])
         df.sort_values(by=['uid'])
 
         # df = df.head(100)
 
         df = df.loc[df['est'] != 0] #removes items predicted 0 
-        # print(df)
-        # print(len(df.uid.unique()))
-        # print(df.uid.value_counts())
-
         df['err'] = abs(df.est - df.rui)
 
         
         filtered_df = df.loc[df['err'] < 0.2]
 
-        # filtered_df = filtered_df[['uid','iid']].groupby('uid')
-        
-
-        # filtered_df.apply(pd.Series.value_counts, axis=1)
-
-        # print(len(df[filtered_df.uid.unique()].uid.value_counts()))
-        # print(df.loc[df['uid'] == filtered_df.uid.unique()])
-        # print(df.sort_values(by=['uid']))
-
-        # print(df.loc[df['uid'].isin(filtered_df.uid.unique())])
-
+    
         uid1 = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts().keys().tolist()
-        den = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts().tolist()
+        new_list = [int(i)-1 for i in uid1]
+        # res = list(map(int, uid1))
 
-        # print(df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts())
-       
-        # df['denominator'] = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts()
-        
-        # print(df.loc[df['uid'].isin(filtered_df.uid.unique())].uid)
-        
-        # print(filtered_df.uid.unique())
+        den = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts()
 
         uids = filtered_df.uid.value_counts().keys().tolist()
-        nu = filtered_df.uid.value_counts().tolist()
+        nu = filtered_df.uid.value_counts()
 
-        print(sorted(uid1))
-        print(sorted(uids))
+        # print(sorted(uid1))
+        # print(sorted(uids))
 
-        # print(filtered_df.uid.value_counts())
-        # df['numerator'] = filtered_df.uid.value_counts()
-        # print(df.sort_values(by=['uid']))
+        trust_matrix[x,new_list] = nu/den
 
-
-
-        # print(numerator/denominator)
-
-        # print(df.loc[filtered_df.uid.unique()])#numerator
-        # print(filtered_df)#numerator
-        # print(df.shape)
-        # print(df.loc[filtered_df.uid.unique()])
-    
-        # print(abs(df.est - df.rui))
-
-        # df.loc[df['column_name'] == some_value]
-        
-
-        # xhat_predict = algo.test(trainset)
-        #     # print(np.any(np.isnan(xhat_predict)))
-
-        # predic_diff = abs(prediction - xhat_predict)
-        # predic_diff[np.isnan(predic_diff)] = 0
-    
-        #     # - (xhat_predict == 0).astype(bool).sum(dim) removes #of zero entries from numerator value
-        # numerator = (xhat_predict < 0.2).astype(bool).sum(dim) - (xhat_predict == 0).astype(bool).sum(dim)
-        #     # print(numerator)
-
-        # denominator = xhat_predict.astype(bool).sum(dim)
-        #     # print(denominator)
-        # trust_row = numerator/denominator
-        # trust_row[np.isnan(trust_row)] = 0
-        # trust_row[np.isinf(trust_row)] = 0
-            
-        # trust_matrix[x] = trust_row
     return trust_matrix
 
 # Then compute RMSE
@@ -174,7 +139,9 @@ def gen_trust_matrix_leave_one_out(trainset, batch_size, algo, testset):
 
 # print(trainset.ur)
 
-new_trust_matrix = gen_trust_matrix_leave_one_out(trainset,10,algo, testset)
+new_trust_matrix = gen_trust_matrix_leave_one_out(trainset,algo, testset)
+print(new_trust_matrix)
+np.save('new_trust_matrix', new_trust_matrix)
 
 # trainset.ur[2] = []
 
