@@ -93,13 +93,13 @@ trainset, testset = train_test_split(data, test_size=.20, train_size=None, rando
 # sim_options = {'name': 'cosine',
 #                'user_based': True  # compute  similarities between items
 #                }
-# algo = KNNBasic()
-bsl_options = {'method': 'als',
-               'n_epochs': 5,
-               'reg_u': 12,
-               'reg_i': 5
-               }
-algo = BaselineOnly(bsl_options=bsl_options)
+algo = KNNBasic()
+# bsl_options = {'method': 'als',
+#                'n_epochs': 5,
+#                'reg_u': 12,
+#                'reg_i': 5
+            #    }
+# algo = BaselineOnly(bsl_options=bsl_options)
 
 
 # algo = MyOwnAlgorithm()
@@ -118,7 +118,7 @@ def gen_trust_matrix_leave_one_out(trainset, algo, testset):
     print('trust_matrix.shape')
     print(trust_matrix.shape)
 
-    for x in range(1):
+    for x in range(len(trainset.ur)):
         # print(trainset.ur[x])
         newset = cp.deepcopy(trainset)
         newset.ur[x] = []
@@ -159,7 +159,7 @@ def gen_trust_matrix_leave_one_out(trainset, algo, testset):
 
 # print(trainset.ur)
 
-def agreement_enhanced_on_estimate(trainset, algo, testset, alpha):
+def agreement_enhanced_on_estimate(trainset, algo, testset, alpha, estrui='est'):
     trust_matrix = np.zeros((len(trainset.ur), len(trainset.ur)))
     print('len(trainset.ur)')
    
@@ -167,7 +167,7 @@ def agreement_enhanced_on_estimate(trainset, algo, testset, alpha):
     print('trust_matrix.shape')
     print(trust_matrix.shape)
 
-    for x in range(10):
+    for x in range(len(trainset.ur)):
         # print(trainset.ur[x])
         newset = cp.deepcopy(trainset)
         a_row = cp.deepcopy(newset.ur[x])
@@ -186,87 +186,38 @@ def agreement_enhanced_on_estimate(trainset, algo, testset, alpha):
 
         # df = df.head(100)
 
-        df = df.loc[df['est'] != 0] #removes items predicted 0 
+        df = df.loc[df[estrui] != 0] #removes items predicted 0 
 
         a_idx = [int(row[0]) for row in a_row]
 
-        # print(df.iid.intersection(a_idx))
-        print('np.intersect1d(df.iid.astype(int), a_idx)')
-        # print(np.intersect1d(df.iid.astype(int), a_idx))
-  
+      
         commonset = df.loc[df.iid.astype(int).isin(np.intersect1d(df.iid.astype(int), a_idx))]
 
-        common_total = commonset.uid.value_counts()
-        print('common_total')
-        print(common_total)
+
         
-      
+        idx_positive_count = commonset.loc[commonset[estrui] > 2.5].uid.value_counts().keys().tolist()
+        positve_counts = commonset.loc[commonset[estrui] > 2.5].uid.value_counts()
+        # print('positve_counts')
+        # print(positve_counts)
 
-        idx_positive_count = commonset.loc[commonset['est'] > 2.5].uid.value_counts().keys().tolist()
-        positve_counts = commonset.loc[commonset['est'] > 2.5].uid.value_counts()
-        print('positve_counts')
-        print(positve_counts)
-
-        idx_negative_count = commonset.loc[commonset['est'] < 2.5].uid.value_counts().keys().tolist()
-        negatve_counts = commonset.loc[commonset['est'] < 2.5].uid.value_counts()
-        print('negatve_counts')
-        print(negatve_counts)
+        idx_negative_count = commonset.loc[commonset[estrui] < 2.5].uid.value_counts().keys().tolist()
+        negatve_counts = commonset.loc[commonset[estrui] < 2.5].uid.value_counts()
+        # print('negatve_counts')
+        # print(negatve_counts)
 
         p_totals = commonset.loc[commonset.uid.astype(int).isin(idx_positive_count)].uid.value_counts()
         n_totals = commonset.loc[commonset.uid.astype(int).isin(idx_negative_count)].uid.value_counts()
-        print('p_totals')
-        print(p_totals)
-        # p_totals.plot()
-        # plt.show()
-        # combined = positve_counts.append(negatve_counts).keys().tolist()
-        # print(combined)
-        # print('commonset.loc[commonset.uid.astype(int).isin(combined)].uid.value_counts()')
-        # print(commonset.loc[commonset.uid.astype(int).isin(combined)].uid.value_counts())
-
-        # agreement = commonset.loc[commonset.uid.astype(int).isin(combined)].uid.value_counts()/common_total
-
+        # print('p_totals')
+        # print(p_totals)
         
-
-        # print('idx_positive_count')
-        # print(idx_positive_count)
-
-        # print('idx_negative_count')
-        # print(idx_negative_count)
-
-        # idx_combined = set(idx_positive_count + idx_negative_count)
-
-        # print(set(idx_positive_count + idx_negative_count))
-
-        # agreement = commonset.loc[commonset.uid.astype(int).isin(idx_combined)].uid.value_counts()/n_totals
-        # agreement.plot()
-
         new_list = [int(i)-1 for i in idx_positive_count]
         new_list2 = [int(j)-1 for j in idx_negative_count]
 
-
-
-
-
         positive_agreement =  positve_counts/p_totals
-        print('positive_agreement')
-        print(positive_agreement)
-        negative_agreement = negatve_counts/n_totals
+        # print('positive_agreement')
         # print(positive_agreement)
-        # plt.matshow(agreement);
-        # plt.colorbar()
-        
-        # plt.figure();
-        # positive_agreement.plot()
-        # negative_agreement.plot()
-        # plt.show()
-
-
-                
-
-
-        # print(sorted(uid1))
-        # print(sorted(uids))
-
+        negative_agreement = negatve_counts/n_totals
+     
         trust_matrix[x,new_list] = positive_agreement
         trust_matrix_old = cp.deepcopy(trust_matrix)
         trust_matrix[x,new_list2] = negative_agreement
@@ -276,29 +227,35 @@ def agreement_enhanced_on_estimate(trainset, algo, testset, alpha):
 
     return trust_matrix
 
-# new_trust_matrix = gen_trust_matrix_leave_one_out(trainset,algo, testset)
+new_trust_matrix_od = gen_trust_matrix_leave_one_out(trainset,algo, testset)
 # print(new_trust_matrix)
-# np.save('new_trust_matrix', new_trust_matrix)
+np.save('new_trust_matrix_od', new_trust_matrix_od)
 
 
-new_trust_matrix = agreement_enhanced_on_estimate(trainset,algo, testset, 2.5)
+new_trust_matrix_agree = agreement_enhanced_on_estimate(trainset, algo, testset, 2.5,'est')
 # print(new_trust_matrix)
-np.save('new_trust_matrix', new_trust_matrix)
+np.save('new_trust_matrix_agree', new_trust_matrix_agree)
 
-plt.matshow(new_trust_matrix);
-plt.colorbar()
-plt.show()
-
-
-# trainset.ur[2] = []
+# plt.matshow(new_trust_matrix);
+# plt.colorbar()
+# plt.show()
 
 
-# algo.fit(trainset)
+
+algo.fit(trainset)
+p = algo.test(testset)
+df = pd.DataFrame(p,columns=['uid', 'iid', 'rui', 'est', 'details'])
 
 
-# sim = algo.sim
+sim = algo.sim
 
-# # print(sim.shape)
+print(sim)
+
+print(df)
+
+print(rmse(p))
+
+
 # trust_matix = np.load('data/ml-100k/agree/trust_matix_user.npy')
 
 # combined_sim_trust_user = (2*(trust_matix*sim))/(trust_matix + sim)
