@@ -11,6 +11,7 @@ from surprise import Dataset
 from surprise import Reader                                                      
 from surprise import dump
 from surprise.accuracy import rmse
+from surprise.accuracy import mae
 
 from surprise import accuracy
 from surprise.model_selection import train_test_split
@@ -22,16 +23,16 @@ from surprise import BaselineOnly
 
 import copy as cp
 # import random
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 
 # data = Dataset.load_builtin('ml-100k')
 
 # https://github.com/NicolasHug/Surprise/blob/master/examples/notebooks/KNNBasic_analysis.ipynb
 # https://surprise.readthedocs.io/en/v1.0.0/_modules/surprise/dataset.html
-file_path = os.path.expanduser('~') + '/code/sci/recom/data/ml-100k/u.data'
+# file_path = os.path.expanduser('~') + '/code/sci/recom/data/ml-100k/u.data'
 
-# file_path = os.path.expanduser('~') + '/Code/paper/agree/agreerecom/data/ml-100k/u.data'
+file_path = os.path.expanduser('~') + '/Code/paper/agree/agreerecom/data/ml-100k/u.data'
 reader = Reader(line_format='user item rating timestamp', sep='\t')
 data = Dataset.load_from_file(file_path, reader=reader)
 
@@ -227,14 +228,14 @@ def agreement_enhanced_on_estimate(trainset, algo, testset, alpha, estrui='est')
 
     return trust_matrix
 
-new_trust_matrix_od = gen_trust_matrix_leave_one_out(trainset,algo, testset)
+# new_trust_matrix_od = gen_trust_matrix_leave_one_out(trainset,algo, testset)
 # print(new_trust_matrix)
-np.save('new_trust_matrix_od', new_trust_matrix_od)
+# np.save('new_trust_matrix_od', new_trust_matrix_od)
 
 
-new_trust_matrix_agree = agreement_enhanced_on_estimate(trainset, algo, testset, 2.5,'est')
+# new_trust_matrix_agree = agreement_enhanced_on_estimate(trainset, algo, testset, 2.5,'est')
 # print(new_trust_matrix)
-np.save('new_trust_matrix_agree', new_trust_matrix_agree)
+# np.save('new_trust_matrix_agree', new_trust_matrix_agree)
 
 # plt.matshow(new_trust_matrix);
 # plt.colorbar()
@@ -254,6 +255,7 @@ print(sim)
 print(df)
 
 print(rmse(p))
+mae(p)
 
 
 # trust_matix = np.load('data/ml-100k/agree/trust_matix_user.npy')

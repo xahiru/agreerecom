@@ -58,21 +58,39 @@ class RecomEng:
         pred[np.isinf(pred)] = 0
         return pred
 
-    def gen_trust_matrix_leave_one_out(ratings, predict, ptype='user'):
+    def gen_trust_matrix_leave_one_out(ratings, predict, testset, ptype='user'):
         dim = 1
         
         #     # dim = 0
             # nums = ratings.T
+        print('ptype')
+        print(ptype)
+        if ptype == 'item':
+            testset = testset.T
+            ratings = ratings.T
 
         similarity = 1 - pairwise_distances(ratings, metric='cosine')
-        prediction = predict(ratings, similarity, ptype)
+        testsim = 1 - pairwise_distances(testset, metric='cosine')
+        
+        print('ratings.shape')
+        print(ratings.shape)
+        print('testset.shape')
+        print(testset.shape)
+        print('testsim.shape')
+        print(testsim.shape)
+
+        if ptype == 'item':
+            testset = testset.T
+
+        prediction = predict(testset, testsim, ptype)
 
         trust_matrix = np.zeros((ratings.shape[0],ratings.shape[0]))
 
-        if(ptype == 'item'):
-            trust_matrix = np.zeros((ratings.shape[1],ratings.shape[1]))
+        # if(ptype == 'item'):
+        #     prediction = predict(testset.T, testsim, ptype)
+        #     trust_matrix = np.zeros((ratings.shape[1],ratings.shape[1]))
 
-        # print('trust_matrix.shape')
+        print('trust_matrix.shape')
         print(trust_matrix.shape)
         for x in range(ratings.shape[0]):
             ratings_new = ratings.copy()
@@ -81,6 +99,9 @@ class RecomEng:
             ratings_new[x] = 0
             similarity_new[x,:] = 0
             similarity_new[:,x] = 0
+
+            if ptype == 'item':
+                ratings_new = ratings_new.T
 
             xhat_predict = predict(ratings_new, similarity_new,ptype)
             # print(np.any(np.isnan(xhat_predict)))
@@ -134,26 +155,26 @@ class RecomEng:
 
     def agreement(ratings, alpha):
     #for each unique user iterate
-    for user_a in range(ratings.shape[0]):
-        for user_b in range(ratings.shape[0]):
-            if user_a != user_b:
-                a_ratings = ratings[user_a]
-                b_ratings = ratings[user_b]
+        for user_a in range(ratings.shape[0]):
+            for user_b in range(ratings.shape[0]):
+                if user_a != user_b:
+                    a_ratings = ratings[user_a]
+                    b_ratings = ratings[user_b]
 
-                commonset = np.intersect1d(np.nonzero(a_ratings), np.nonzero(b_ratings))
-                 
-                common_set_length = len(commonset)
+                    commonset = np.intersect1d(np.nonzero(a_ratings), np.nonzero(b_ratings))
+                    
+                    common_set_length = len(commonset)
 
-                trust = 0
+                    trust = 0
 
-                if(common_set_length > 0):
-                    a_positive = a_ratings[commonset] > alpha
-                    b_positive = b_ratings[commonset] > alpha
+                    if(common_set_length > 0):
+                        a_positive = a_ratings[commonset] > alpha
+                        b_positive = b_ratings[commonset] > alpha
 
-                    agreement = np.sum(np.logical_not(np.logical_xor(a_positive, b_positive)))
+                        agreement = np.sum(np.logical_not(np.logical_xor(a_positive, b_positive)))
 
-                    trust = agreement/common_set_length
+                        trust = agreement/common_set_length
 
-                trust_matrix[user_a,user_b] = trust
-    return trust_matrix
+                    trust_matrix[user_a,user_b] = trust
+        return trust_matrix
 
