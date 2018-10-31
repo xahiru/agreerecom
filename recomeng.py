@@ -58,21 +58,20 @@ class RecomEng:
         pred[np.isinf(pred)] = 0
         return pred
 
-    def gen_trust_matrix_leave_one_out(ratings, predict, ptype='user'):
+    def gen_trust_matrix_leave_one_out(ratings, predict, testset, ptype='user'):
         dim = 1
         
         #     # dim = 0
             # nums = ratings.T
+        print('ptype')
+        print(ptype)
 
         similarity = 1 - pairwise_distances(ratings, metric='cosine')
-        prediction = predict(ratings, similarity, ptype)
-
+        prediction = testset
+        # print('prediction.shape')
+        # print(prediction.shape)
         trust_matrix = np.zeros((ratings.shape[0],ratings.shape[0]))
-
-        if(ptype == 'item'):
-            trust_matrix = np.zeros((ratings.shape[1],ratings.shape[1]))
-
-        # print('trust_matrix.shape')
+        print('trust_matrix.shape')
         print(trust_matrix.shape)
         for x in range(ratings.shape[0]):
             ratings_new = ratings.copy()
@@ -82,8 +81,14 @@ class RecomEng:
             similarity_new[x,:] = 0
             similarity_new[:,x] = 0
 
-            xhat_predict = predict(ratings_new, similarity_new,ptype)
-            # print(np.any(np.isnan(xhat_predict)))
+            if ptype == 'item':
+                ratings_new = ratings_new.T
+
+            xhat_predict = predict(ratings_new, similarity_new, ptype)
+            # print('xhat_predict.shape')
+            # print(xhat_predict.shape)
+            if ptype == 'item':
+                xhat_predict = xhat_predict.T
 
             predic_diff = abs(prediction - xhat_predict)
             predic_diff[np.isnan(predic_diff)] = 0
@@ -104,12 +109,8 @@ class RecomEng:
         return trust_matrix
 
     def pitsmarsh_trust(ratings, max_r, ptype='user'):
-        if(ptype == 'item'):
-            ratings = ratings.T
         
         trust_matrix = np.zeros((ratings.shape[0], ratings.shape[0]))
-        # if(ptype == 'item'):
-        #     trust_matrix = np.zeros((ratings.shape[1], ratings.shape[1]))
         for a in range(ratings.shape[0]):
             for b in range(ratings.shape[0]):
                 if (a!=b):
@@ -134,26 +135,26 @@ class RecomEng:
 
     def agreement(ratings, alpha):
     #for each unique user iterate
-    for user_a in range(ratings.shape[0]):
-        for user_b in range(ratings.shape[0]):
-            if user_a != user_b:
-                a_ratings = ratings[user_a]
-                b_ratings = ratings[user_b]
+        for user_a in range(ratings.shape[0]):
+            for user_b in range(ratings.shape[0]):
+                if user_a != user_b:
+                    a_ratings = ratings[user_a]
+                    b_ratings = ratings[user_b]
 
-                commonset = np.intersect1d(np.nonzero(a_ratings), np.nonzero(b_ratings))
-                 
-                common_set_length = len(commonset)
+                    commonset = np.intersect1d(np.nonzero(a_ratings), np.nonzero(b_ratings))
+                    
+                    common_set_length = len(commonset)
 
-                trust = 0
+                    trust = 0
 
-                if(common_set_length > 0):
-                    a_positive = a_ratings[commonset] > alpha
-                    b_positive = b_ratings[commonset] > alpha
+                    if(common_set_length > 0):
+                        a_positive = a_ratings[commonset] > alpha
+                        b_positive = b_ratings[commonset] > alpha
 
-                    agreement = np.sum(np.logical_not(np.logical_xor(a_positive, b_positive)))
+                        agreement = np.sum(np.logical_not(np.logical_xor(a_positive, b_positive)))
 
-                    trust = agreement/common_set_length
+                        trust = agreement/common_set_length
 
-                trust_matrix[user_a,user_b] = trust
-    return trust_matrix
+                    trust_matrix[user_a,user_b] = trust
+        return trust_matrix
 

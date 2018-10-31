@@ -119,8 +119,8 @@ start = time.time()
 # plt.show()
 
 ptype_list = ['user','item']
-# alog_list = ['agree', 'odn', 'pits']
-alog_list = ['agree']
+# alog_list = ['pits']
+alog_list = ['agree','odn', 'pits']
 alpha = 2.5
 beta = 0.2
 alpha_beta = 0
@@ -130,6 +130,7 @@ max_r = 5
 # n_items = 100
 
 # train_data_matrix = train_data_matrix[:n_users,:n_items]
+# test_data_matrix = test_data_matrix[:n_users,:n_items]
 
 # train_data_matrix_orginal = train_data_matrix.copy()
 
@@ -140,6 +141,8 @@ for alog in alog_list:
             # train_data_matrix = train_data_matrix_orginal
         else:
             rating_matrix = rating_matrix.T
+            train_data_matrix = train_data_matrix.T
+            test_data_matrix = test_data_matrix.T
             n_users = n_items
             trust_matrix = np.zeros((n_items,n_items))
 
@@ -147,24 +150,28 @@ for alog in alog_list:
             trust_matrix = agreement(train_data_matrix,alpha)
             alpha_beta = alpha
         elif alog == 'odn':
-            trust_matrix = rec.gen_trust_matrix_leave_one_out(train_data_matrix, rec.predict, ptype)
+            # print(ptype)
+            trust_matrix = rec.gen_trust_matrix_leave_one_out(train_data_matrix, rec.predict,test_data_matrix, ptype)
             # trust_matrix = rec.gen_trust_matrix_leave_one_out(train_data_matrix, rec.predict, '')
         else:
             trust_matrix = rec.pitsmarsh_trust(train_data_matrix, max_r, ptype)
             alpha_beta = max_r
-        print(alog)
-        print(ptype)
+        # print(alog)
+        # print(ptype)
+        # print(trust_matrix.shape)
 
-        np.save('data/ml-100k/'+str(alog)+'/trust_matix_'+str(ptype)+'.npy', trust_matrix)
+        np.save('data/ml-100k/'+str(alog)+'/trust_matix_'+str(ptype)+'_plain.npy', trust_matrix)
+        print('loaded '+ptype+' matrix size' + str(np.load('data/ml-100k/'+str(alog)+'/trust_matix_'+str(ptype)+'_plain.npy').shape))
         # np.save('data/ml-100k/'+str(alog)+'/trust_matix_'+str(ptype)+'alpha_beta'+str(alpha_beta)+'.npy', trust_matrix)
 
 
 # save train test
-np.save('data/ml-100k/train_data_matrix.npy',train_data_matrix)
-np.save('data/ml-100k/test_data_matrix.npy',test_data_matrix)
+# np.save('data/ml-100k/train_data_matrix.npy',train_data_matrix)
+# np.save('data/ml-100k/test_data_matrix.npy',test_data_matrix)
 
 total = start - time.time()
 print(total)
+
 # t = np.load('data/ml-100k/'+str(alog)+'/trust_matix_'+str(ptype)+'alpha_beta'+str(alpha_beta)+'.npy')
 # print(trust_matrix)
 # plt.matshow(t);

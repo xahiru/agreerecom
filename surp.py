@@ -14,6 +14,7 @@ from surprise import Dataset
 from surprise import Reader                                                      
 from surprise import dump
 from surprise.accuracy import rmse
+from surprise.accuracy import mae
 
 from surprise import accuracy
 from surprise.model_selection import train_test_split
@@ -25,14 +26,14 @@ from surprise import BaselineOnly
 
 import copy as cp
 # import random
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 
 # data = Dataset.load_builtin('ml-100k')
 
 # https://github.com/NicolasHug/Surprise/blob/master/examples/notebooks/KNNBasic_analysis.ipynb
 # https://surprise.readthedocs.io/en/v1.0.0/_modules/surprise/dataset.html
-file_path = os.path.expanduser('~') + '/code/sci/recom/data/ml-100k/u.data'
+file_path = os.path.expanduser('~') + '/code/sci/recom/data/ml-100k/u1.base'
 
 # file_path = os.path.expanduser('~') + '/Code/paper/agree/agreerecom/data/ml-100k/u.data'
 reader = Reader(line_format='user item rating timestamp', sep='\t')
@@ -119,6 +120,7 @@ algo = KNNBasic()
 
 
 def gen_trust_matrix_leave_one_out(trainset, algo, testset, ptype='user'):
+    print('======================== gen_trust_matrix_leave_one_out |START|========================')
     col_row_length = len(trainset.ur)
     
     if ptype == 'item':
@@ -128,6 +130,7 @@ def gen_trust_matrix_leave_one_out(trainset, algo, testset, ptype='user'):
     print('trust_matrix.shape')
     print(trust_matrix.shape)
 
+    print('======================== gen_trust_matrix_leave_one_out |Loop|========================')
     # for x in range(1):
     for x in range(col_row_length):
         # print(trainset.ur[x])
@@ -164,9 +167,12 @@ def gen_trust_matrix_leave_one_out(trainset, algo, testset, ptype='user'):
 
         # print(sorted(uid1))
         # print(sorted(uids))
+        # print('nu/den')
+        # print(nu/den)
 
         trust_matrix[x,new_list] = nu/den
-
+    
+    print('======================== gen_trust_matrix_leave_one_out |END|========================')
     return trust_matrix
 
 # Then compute RMSE
@@ -175,15 +181,24 @@ def gen_trust_matrix_leave_one_out(trainset, algo, testset, ptype='user'):
 # print(trainset.ur)
 
 def agreement_enhanced_on_estimate(trainset, algo, testset, alpha, ptype='user', estrui='est'):
+    print('======================== agreement_enhanced_on_estimate |START|========================')
     col_row_length = trainset.n_users
     
     if ptype == 'item':
         col_row_length = trainset.n_items
+    
+    # a1 = np.array(trainset.all_ratings())
+    # a2 = np.array(trainset.all.[1])
+    # A = np.matrix([a1,a2])
+    # print(a1)
+
 
     trust_matrix = np.zeros((col_row_length, col_row_length))
+    # print('trainset.ur')
+    # print(trainset.ur)
     print('trust_matrix.shape')
     print(trust_matrix.shape)
-
+    print('======================== agreement_enhanced_on_estimate |Loop|========================')
     # for x in range(1):
     for x in range(col_row_length):
         # print(trainset.ur[x])
@@ -207,6 +222,8 @@ def agreement_enhanced_on_estimate(trainset, algo, testset, alpha, ptype='user',
         df.sort_values(by=['uid'])
 
         # df = df.head(100)
+        # print('df')
+        # print(df)
 
         df = df.loc[df[estrui] != 0] #removes items predicted 0 
 
@@ -231,6 +248,8 @@ def agreement_enhanced_on_estimate(trainset, algo, testset, alpha, ptype='user',
         n_totals = commonset.loc[commonset.uid.astype(int).isin(idx_negative_count)].uid.value_counts()
         # print('p_totals')
         # print(p_totals)
+        # print('n_totals')
+        # print(n_totals)
         
         new_list = [int(i)-1 for i in idx_positive_count]
         new_list2 = [int(j)-1 for j in idx_negative_count]
@@ -239,30 +258,39 @@ def agreement_enhanced_on_estimate(trainset, algo, testset, alpha, ptype='user',
         # print('positive_agreement')
         # print(positive_agreement)
         negative_agreement = negatve_counts/n_totals
+        # print('negative_agreement')
+        # print(negative_agreement)
      
         trust_matrix[x,new_list] = positive_agreement
         trust_matrix_old = cp.deepcopy(trust_matrix)
         trust_matrix[x,new_list2] = negative_agreement
         trust_matrix = (trust_matrix_old + trust_matrix)/2
-
-
-
+        # print('=========== agreement_enhanced_on_estimate |Loop|iteration|===========')
+    
+    print('======================== agreement_enhanced_on_estimate |END|========================')
     return trust_matrix
 
 start = time.time()
 new_trust_matrix_od_user = gen_trust_matrix_leave_one_out(trainset,algo, testset, ptype='user')
-new_trust_matrix_od_item = gen_trust_matrix_leave_one_out(trainset,algo, testset, ptype='item')
-# print(new_trust_matrix_od)
-np.save('new_trust_matrix_od_user', new_trust_matrix_od_user)
-np.save('new_trust_matrix_od_item', new_trust_matrix_od_item)
-# print('len(testset)')
-# print(len(testset))
+print('new_trust_matrix_od_user.shape')
+print(new_trust_matrix_od_user)
+# new_trust_matrix_od_item = gen_trust_matrix_leave_one_out(trainset,algo, testset, ptype='item')
+# print(new_trust_matrix_od_user)
+# np.save('new_trust_matrix_od_user3', new_trust_matrix_od_user)
+# np.save('new_trust_matrix_od_item3', new_trust_matrix_od_item)
+# # print('len(testset)')
+# # print(len(testset))
 
 new_trust_matrix_agree_user = agreement_enhanced_on_estimate(trainset, algo, testset, 2.5, ptype='user', estrui='est')
-new_trust_matrix_agree_item = agreement_enhanced_on_estimate(trainset, algo, testset, 2.5, ptype='item', estrui='est')
+# new_trust_matrix_agree_item = agreement_enhanced_on_estimate(trainset, algo, testset, 2.5, ptype='item', estrui='est')
+# np.save('new_trust_matrix_agree_user', new_trust_matrix_agree_user)
+# new_trust_matrix_agree_user = np.load('new_trust_matrix_agree_user.npy')
+print('new_trust_matrix_agree_user.shape')
+print(new_trust_matrix_agree_user)
+
 # print(new_trust_matrix_agree)
-np.save('new_trust_matrix_agree_user', new_trust_matrix_od_user)
-np.save('new_trust_matrix_agree_item', new_trust_matrix_od_item)
+
+# np.save('new_trust_matrix_agree_item3', new_trust_matrix_od_item)
 
 # print('time taken to make trust matrices')
 print(time.time() - start)
@@ -271,16 +299,20 @@ print(time.time() - start)
 # plt.show()
 
 
-# new_trust_matrix_agree = np.load('new_trust_matrix_agree_it.npy')
-# new_trust_matrix_od = np.load('new_trust_matrix_od_it.npy')
-# print('new_trust_matrix_od.shape')
-# print(new_trust_matrix_od.shape)
+
+# new_trust_matrix_od = np.load('new_trust_matrix_od_item.npy')
+# new_trust_matrix_agree_user = np.load('new_trust_matrix_agree_user.npy')
+# new_trust_matrix_od_user = np.load('new_trust_matrix_od_user.npy')
+
+
+
 
 algo.fit(trainset)
-print(algo.sim.shape)
-# algo.sim = new_trust_matrix_od
+
+# print(algo.sim.shape)
+
 # algo.sim = (2*(new_trust_matrix_od + algo.sim))/(new_trust_matrix_od + algo.sim)
-p = algo.test(testset)
+
 # df = pd.DataFrame(p,columns=['uid', 'iid', 'rui', 'est', 'details'])
 
 
@@ -289,9 +321,23 @@ p = algo.test(testset)
 # print(sim)
 
 # print(df)
+p = algo.test(testset)
+print('normal')
+rmse(p)
+mae(p)
 
-print(rmse(p))
 
+algo.sim = new_trust_matrix_od_user
+p = algo.test(testset)
+print('new_trust_matrix_od_user')
+rmse(p)
+mae(p)
+
+algo.sim = new_trust_matrix_agree_user
+p = algo.test(testset)
+print('new_trust_matrix_agree_user')
+rmse(p)
+mae(p)
 
 # trust_matix = np.load('data/ml-100k/agree/trust_matix_user.npy')
 
