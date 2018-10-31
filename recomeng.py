@@ -65,31 +65,12 @@ class RecomEng:
             # nums = ratings.T
         print('ptype')
         print(ptype)
-        if ptype == 'item':
-            testset = testset.T
-            ratings = ratings.T
 
         similarity = 1 - pairwise_distances(ratings, metric='cosine')
-        testsim = 1 - pairwise_distances(testset, metric='cosine')
-        
-        print('ratings.shape')
-        print(ratings.shape)
-        print('testset.shape')
-        print(testset.shape)
-        print('testsim.shape')
-        print(testsim.shape)
-
-        if ptype == 'item':
-            testset = testset.T
-
-        prediction = predict(testset, testsim, ptype)
-
+        prediction = testset
+        # print('prediction.shape')
+        # print(prediction.shape)
         trust_matrix = np.zeros((ratings.shape[0],ratings.shape[0]))
-
-        # if(ptype == 'item'):
-        #     prediction = predict(testset.T, testsim, ptype)
-        #     trust_matrix = np.zeros((ratings.shape[1],ratings.shape[1]))
-
         print('trust_matrix.shape')
         print(trust_matrix.shape)
         for x in range(ratings.shape[0]):
@@ -103,8 +84,11 @@ class RecomEng:
             if ptype == 'item':
                 ratings_new = ratings_new.T
 
-            xhat_predict = predict(ratings_new, similarity_new,ptype)
-            # print(np.any(np.isnan(xhat_predict)))
+            xhat_predict = predict(ratings_new, similarity_new, ptype)
+            # print('xhat_predict.shape')
+            # print(xhat_predict.shape)
+            if ptype == 'item':
+                xhat_predict = xhat_predict.T
 
             predic_diff = abs(prediction - xhat_predict)
             predic_diff[np.isnan(predic_diff)] = 0
@@ -125,12 +109,8 @@ class RecomEng:
         return trust_matrix
 
     def pitsmarsh_trust(ratings, max_r, ptype='user'):
-        if(ptype == 'item'):
-            ratings = ratings.T
         
         trust_matrix = np.zeros((ratings.shape[0], ratings.shape[0]))
-        # if(ptype == 'item'):
-        #     trust_matrix = np.zeros((ratings.shape[1], ratings.shape[1]))
         for a in range(ratings.shape[0]):
             for b in range(ratings.shape[0]):
                 if (a!=b):
