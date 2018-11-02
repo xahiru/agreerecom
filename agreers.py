@@ -103,9 +103,9 @@ start = time.time()
 # agreement(rating_matrix, 2.5)
 # trust_matrix = rec.gen_trust_matrix_leave_one_out(rating_matrix, n_users, rec.predict, 'user')
 
-
-# np.save('train_data_matrix_sample.npy', train_data_matrix)
-# np.save('test_data_matrix_sample.npy', test_data_matrix)
+print('saving train_data_matrix3 test_data_matrix_3')
+np.save('train_data_matrix3.npy', train_data_matrix)
+np.save('test_data_matrix_3.npy', test_data_matrix)
 # np.save('data/ml-100k/agree/train_data_matrix.npy', train_data_matrix)
 # np.save('data/ml-100k/agree/test_data_matrix.npy', test_data_matrix)
 
@@ -119,8 +119,8 @@ start = time.time()
 # plt.show()
 
 ptype_list = ['user','item']
-# alog_list = ['pits']
-alog_list = ['agree','odn', 'pits']
+alog_list = ['odn']
+# alog_list = ['agree','odn', 'pits']
 alpha = 2.5
 beta = 0.2
 alpha_beta = 0
@@ -147,7 +147,7 @@ for alog in alog_list:
             trust_matrix = np.zeros((n_items,n_items))
 
         if alog == 'agree':
-            trust_matrix = agreement(train_data_matrix,alpha)
+            trust_matrix = agreement(test_data_matrix,alpha)
             alpha_beta = alpha
         elif alog == 'odn':
             # print(ptype)
@@ -160,8 +160,8 @@ for alog in alog_list:
         # print(ptype)
         # print(trust_matrix.shape)
 
-        np.save('data/ml-100k/'+str(alog)+'/trust_matix_'+str(ptype)+'_plain.npy', trust_matrix)
-        print('loaded '+ptype+' matrix size' + str(np.load('data/ml-100k/'+str(alog)+'/trust_matix_'+str(ptype)+'_plain.npy').shape))
+        np.save('data/ml-100k/'+str(alog)+'/trust_matix_'+str(ptype)+'_test.npy', trust_matrix)
+        print('loaded '+ptype+' matrix size' + str(np.load('data/ml-100k/'+str(alog)+'/trust_matix_'+str(ptype)+'_test.npy').shape))
         # np.save('data/ml-100k/'+str(alog)+'/trust_matix_'+str(ptype)+'alpha_beta'+str(alpha_beta)+'.npy', trust_matrix)
 
 
