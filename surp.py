@@ -261,9 +261,9 @@ def pitsmarsh_trust(trainset, max_r, ptype='user'):
     print(trust_matrix.shape)
     return trust_matrix
 
-def agreement_enhanced_on_estimate(trainset, algo, testset, alpha, ptype='user', estrui='est'):
+def agreement_enhanced_on_estimate(trainset, algo, alpha, ptype='user', estrui='est'):
     print('======================== agreement_enhanced_on_estimate |START|========================')
-    
+    testset = trainset.build_testset()
     # alpha = trainset.global_mean
     ratings = np.zeros((trainset.n_users, trainset.n_items))
     
@@ -316,6 +316,13 @@ def agreement_enhanced_on_estimate(trainset, algo, testset, alpha, ptype='user',
         # df.iid.astype(int)
         print(df)
         print(x)
+
+        # predictions = np.zeros((trainset.n_users, trainset.n_items))
+
+        for t in p:
+            ratings[t['uid'], t['iid']] = t['rui']
+        print(ratings)
+            
         # df.uid.astype(int)
         # df.plot()
         # df.plot(x='uid', y='rui')
@@ -453,7 +460,7 @@ start = time.time()
 # # print('len(testset)')
 # # print(len(testset))
 
-# new_trust_matrix_agree_user = agreement_enhanced_on_estimate(trainset, algo, testset, 2.5, ptype='user', estrui='est')
+new_trust_matrix_agree_user = agreement_enhanced_on_estimate(trainset, algo, 2.5, ptype='item', estrui='est')
 # new_trust_matrix_agree_item = agreement_enhanced_on_estimate(trainset, algo, testset, 2.5, ptype='item', estrui='est')
 # np.save('new_trust_matrix_agree_user', new_trust_matrix_agree_user)
 # new_trust_matrix_agree_user = np.load('new_trust_matrix_agree_user.npy')
@@ -471,86 +478,42 @@ print(time.time() - start)
 # plt.show()
 
 
+# ###################################################################### uncommment followings for eveluation
 
-# new_trust_matrix_od = np.load('new_trust_matrix_od_item.npy')
-# new_trust_matrix_agree_user = np.load('new_trust_matrix_agree_user.npy')
-# new_trust_matrix_od_user = np.load('new_trust_matrix_od_user.npy')
-
+# algo.fit(trainset)
 
 
 
-algo.fit(trainset)
-
-# print(algo.sim.shape)
-
-# algo.sim = (2*(new_trust_matrix_od + algo.sim))/(new_trust_matrix_od + algo.sim)
-
-# df = pd.DataFrame(p,columns=['uid', 'iid', 'rui', 'est', 'details'])
-
-
-sim = algo.sim
-
-# print(sim)
-
-# print(df)
-p = algo.test(testset2)
-print('normal')
-rmse(p)
-mae(p)
-
-
-print('agreenormal_trust')
-agreenormal_trust = agreement_nomal(trainset,2.5, ptype='item')
-agreenormal_trust_old = cp.deepcopy(agreenormal_trust)
-algo.sim = agreenormal_trust_old
-p = algo.test(testset2)
-rmse(p)
-mae(p)
-
-
-print('agreenormal_trust + sim)/2')
-algo.sim = (agreenormal_trust + sim)/2
-p = algo.test(testset2)
-rmse(p)
-mae(p)
-
-print('pitsmarsh_trust')
-algo.sim = pitsmarsh_trust(trainset, 5, ptype='item')
-p = algo.test(testset2)
-rmse(p)
-mae(p)
-
-# plt.plot(agreenormal_trust)
-# plt.show()
-
-# print('gen_trust_matrix_leave_one_out.shape')
-# # print(new_trust_matrix_agree_user.shape)
-# gen_trust_matrix_leave_one_out = gen_trust_matrix_leave_one_out(trainset,algo, testset, ptype='item')
-# algo.sim = (2*(gen_trust_matrix_leave_one_out*sim))/(gen_trust_matrix_leave_one_out + sim)
+# sim = algo.sim
 # p = algo.test(testset2)
-# # print('new_trust_matrix_agree_user')
+# print('normal')
 # rmse(p)
 # mae(p)
 
-# trust_matix = np.load('data/ml-100k/agree/trust_matix_user.npy')
 
-# combined_sim_trust_user = (2*(trust_matix*sim))/(trust_matix + sim)
+# print('agreenormal_trust')
+# agreenormal_trust = agreement_nomal(trainset,2.5, ptype='item')
+# agreenormal_trust_old = cp.deepcopy(agreenormal_trust)
+# algo.sim = agreenormal_trust_old
+# p = algo.test(testset2)
+# rmse(p)
+# mae(p)
 
-# # combined_sim_trust_user = (sim + trust_matix)/2
 
-# algo.sim = combined_sim_trust_user
+# plt.matshow(agreenormal_trust);
+# plt.colorbar()
+# plt.show()
 
-# # print(trust_matix.shape)
 
-# predictions = algo.test(testset)
+# print('agreenormal_trust + sim)/2')
+# algo.sim = (agreenormal_trust + sim)/2
+# p = algo.test(testset2)
+# rmse(p)
+# mae(p)
 
-# accuracy.rmse(predictions)
-# accuracy.mae(predictions)
+# print('pitsmarsh_trust')
+# algo.sim = pitsmarsh_trust(trainset, 5, ptype='item')
+# p = algo.test(testset2)
+# rmse(p)
+# mae(p)
 
-# for trainset, testset in data.folds(): 
-#     algo.train(trainset)                             
-#     predictions = algo.test(testset)
-#     rmse(predictions)
-                                                                               
-#     dump.dump('./dump_file', predictions, algo)
-#this is the important file
