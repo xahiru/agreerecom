@@ -108,7 +108,7 @@ class RecomEng:
 
         return trust_matrix
 
-    def pitsmarsh_trust(ratings, max_r, ptype='user'):
+    def pitsmarsh_trust(ratings, max_r, ptype='user', metric='cosine'):
         
         trust_matrix = np.zeros((ratings.shape[0], ratings.shape[0]))
         for a in range(ratings.shape[0]):
@@ -130,8 +130,17 @@ class RecomEng:
                     # print(score)
                     trust_matrix[a,b] = score
                     # print(a,b)
-        print(trust_matrix.shape)
-        return trust_matrix
+                    ##### uncertainity part is missing here, add it
+                    #
+        # similarity = 1 - pairwise_distances(ratings, metric=metric)
+        # sim_backup = cp.deepcopy(similarity)
+        # uncertainity = cp.deepcopy(trust_matrix)
+        belief = (1 - trust_matrix) * (1 + similarity)
+        # disbilief = (1 - uncertainity) * (1 - sim_backup)
+        # print(trust_matrix.shape)
+        # return trust_matrix
+        print(belief)
+        return belief
 
     def agreement(ratings, alpha):
     #for each unique user iterate

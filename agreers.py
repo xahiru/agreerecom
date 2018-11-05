@@ -103,9 +103,9 @@ start = time.time()
 # agreement(rating_matrix, 2.5)
 # trust_matrix = rec.gen_trust_matrix_leave_one_out(rating_matrix, n_users, rec.predict, 'user')
 
-print('saving train_data_matrix3 test_data_matrix_3')
-np.save('train_data_matrix3.npy', train_data_matrix)
-np.save('test_data_matrix_3.npy', test_data_matrix)
+# print('saving train_data_matrix3 test_data_matrix_3')
+# np.save('train_data_matrix3.npy', train_data_matrix)
+# np.save('test_data_matrix_3.npy', test_data_matrix)
 # np.save('data/ml-100k/agree/train_data_matrix.npy', train_data_matrix)
 # np.save('data/ml-100k/agree/test_data_matrix.npy', test_data_matrix)
 
@@ -119,18 +119,18 @@ np.save('test_data_matrix_3.npy', test_data_matrix)
 # plt.show()
 
 ptype_list = ['user','item']
-alog_list = ['odn']
+alog_list = ['pits']
 # alog_list = ['agree','odn', 'pits']
 alpha = 2.5
 beta = 0.2
 alpha_beta = 0
 max_r = 5
 
-# n_users = 10
-# n_items = 100
+n_users = 10
+n_items = 100
 
-# train_data_matrix = train_data_matrix[:n_users,:n_items]
-# test_data_matrix = test_data_matrix[:n_users,:n_items]
+train_data_matrix = train_data_matrix[:n_users,:n_items]
+test_data_matrix = test_data_matrix[:n_users,:n_items]
 
 # train_data_matrix_orginal = train_data_matrix.copy()
 
