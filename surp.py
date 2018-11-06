@@ -24,6 +24,7 @@ from surprise import Dataset
 from surprise.model_selection import cross_validate
 from surprise import BaselineOnly
 
+from sklearn.metrics.pairwise import pairwise_distances
 import copy as cp
 # import random
 import matplotlib.pyplot as plt
@@ -108,9 +109,16 @@ testset = trainset.build_testset()
 
 # algo = KNNBasic()
 
+is_user = False # if false item else user
+
+if is_user == True:
+    ptype = 'user'
+else:
+    ptype = 'item'
+
 sim_options = {
-    'name': 'cosine',
-    'user_based': False
+    'name': 'pearson',
+    'user_based': is_user
 }
  
 algo = KNNBasic(sim_options=sim_options)
@@ -164,7 +172,7 @@ def gen_trust_matrix_leave_one_out(trainset, algo, testset, ptype='user'):
         df['err'] = abs(df.est - df.rui)
 
         
-        filtered_df = df.loc[df['err'] < 0.2]
+        filtered_df = df.loc[df['err'] < 0.2] #alpha = 0.2
 
     
         uid1 = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts().keys().tolist()
@@ -192,10 +200,13 @@ def gen_trust_matrix_leave_one_out(trainset, algo, testset, ptype='user'):
 # print(trainset.ur)
 
 
-def agreement_nomal(trainset, alpha, ptype='user'):
-    ratings = np.zeros((trainset.n_users, trainset.n_items))
-    for u,i,r in trainset.all_ratings():
-        ratings[u,i] =r    
+def agreement_nomal(trainset, alpha, ptype='user', istrainset=True):
+    if istrainset == True:
+        ratings = np.zeros((trainset.n_users, trainset.n_items))
+        for u,i,r in trainset.all_ratings():
+            ratings[u,i] =r
+    else:
+        ratings = trainset
 
     if ptype=='item':
         ratings = ratings.T
@@ -230,14 +241,17 @@ def agreement_nomal(trainset, alpha, ptype='user'):
     return trust_matrix
                     
 
-def pitsmarsh_trust(trainset, max_r, ptype='user'):
+def pitsmarsh_trust(trainset, algo, max_r, ptype='user'):
     ratings = np.zeros((trainset.n_users, trainset.n_items))
     for u,i,r in trainset.all_ratings():
         ratings[u,i] =r    
 
     if ptype=='item':
         ratings = ratings.T
-        
+
+    trainset2 = cp.deepcopy(trainset)
+    algo.fit(trainset2)
+
     trust_matrix = np.zeros((ratings.shape[0], ratings.shape[0]))
     for a in range(ratings.shape[0]):
         for b in range(ratings.shape[0]):
@@ -258,12 +272,20 @@ def pitsmarsh_trust(trainset, max_r, ptype='user'):
                     # print(score)
                 trust_matrix[a,b] = score
                     # print(a,b)
-    print(trust_matrix.shape)
-    return trust_matrix
+    # print(trust_matrix.shape)
+    sim = algo.sim
+    # similarity = 1 - pairwise_distances(ratings2, metric='cosine')
+    # sim_backup = cp.deepcopy(similarity)
+    # uncertainity = cp.deepcopy(trust_matrix)
+    belief = (1 - trust_matrix) * (1 + sim)
+    # disbilief = (1 - uncertainity) * (1 - sim_backup)
+    # print(belief)
+    return belief
+    # return trust_matrix
 
 def agreement_enhanced_on_estimate(trainset, algo, alpha, ptype='user', estrui='est'):
     print('======================== agreement_enhanced_on_estimate |START|========================')
-    testset = trainset.build_testset()
+    testset = trainset.build_testset() #trust is calculated for the same train n test set users
     # alpha = trainset.global_mean
     ratings = np.zeros((trainset.n_users, trainset.n_items))
     
@@ -314,144 +336,28 @@ def agreement_enhanced_on_estimate(trainset, algo, alpha, ptype='user', estrui='
         # df.sort_values(by=[sort_key])
         # df.sort_values(by=['iid'])
         # df.iid.astype(int)
-        print(df)
-        print(x)
+        # print(df)
+        # print(x)
 
-        # predictions = np.zeros((trainset.n_users, trainset.n_items))
+        predictions = np.zeros((trainset.n_users, trainset.n_items))
+        # print('predictions.shape')
+        # print(predictions.shape)
 
         for t in p:
-            ratings[t['uid'], t['iid']] = t['rui']
-        print(ratings)
-            
-        # df.uid.astype(int)
-        # df.plot()
-        # df.plot(x='uid', y='rui')
-        # plt.show()
-        
-        
-
-        # df = df.head(100)
-        # print('df')
-        # print(df)
-
-        df = df.loc[df[estrui] != 0] #removes items predicted 0 
-
-        a_idx = [int(row[0]) for row in a_row] #column indices
-        
-
-        if ptype == 'item':
-            print('item ' + str(x) +' rated by users')
-            print(a_idx)
-            # a_idx_raw = [int(row[0]) for row in a_row] 
-            a_idx_raw = [trainset.to_inner_uid(row) for row in a_idx]
-            # print('inner to_inner_uid a_idx')
-            print(a_idx)
-
-            commonset = df.loc[df.uid.astype(int).isin(np.intersect1d(df.uid.astype(int), a_idx))]
-        else:
-            print('user ' + str(x) +' rated items')
-            print(a_idx)
-            a_idx_raw = [trainset.to_inner_iid(row) for row in a_idx]
-            print(a_idx)
-
-            commonset = df.loc[df.iid.astype(int).isin(np.intersect1d(df.iid.astype(int), a_idx))]
-            
-        # alpha = commonset.loc[:,"est"].mean()
-        
-        print(commonset)
-        
-        idx_positive_count = commonset.loc[commonset[estrui] > alpha].uid.value_counts().keys().tolist()
-        positve_counts = commonset.loc[commonset[estrui] > alpha].uid.value_counts()
-        # print('positve_counts')
-        # print(positve_counts)
-
-        idx_negative_count = commonset.loc[commonset[estrui] < alpha].uid.value_counts().keys().tolist()
-        negatve_counts = commonset.loc[commonset[estrui] < alpha].uid.value_counts()
-        # print('negatve_counts')
-        # print(negatve_counts)
-
-        p_totals = commonset.loc[commonset.uid.astype(int).isin(idx_positive_count)].uid.value_counts()
-        n_totals = commonset.loc[commonset.uid.astype(int).isin(idx_negative_count)].uid.value_counts()
-        # print('p_totals')
-        # print(p_totals)
-        # print('n_totals')
-        # print(n_totals)
-        
-        new_list = [int(i)-1 for i in idx_positive_count]
-        new_list2 = [int(j)-1 for j in idx_negative_count]
-
-        positive_agreement =  positve_counts/p_totals
-        # print('positive_agreement')
-        # print(positive_agreement)
-        negative_agreement = negatve_counts/n_totals
-        # print('negative_agreement')
-        # print(negative_agreement)
-
-        print('new_list')
-        print(new_list)
-        print('new_list2')
-        print(new_list2)
-        comb_ind_row = np.intersect1d(new_list, new_list2)
-        print('comb_ind_row')
-        print(comb_ind_row)
-
-        
-       
-        
-        if len(comb_ind_row) > 0:
-            print("not zero")
-            trust_matrix_old = cp.deepcopy(trust_matrix)
-            trust_matrix = np.zeros((col_row_length, col_row_length))
-
-
-        else:
-            trust_matrix[x,new_list] = positive_agreement
-            trust_matrix[x,new_list2] = negative_agreement
-
-
-     
-        
-
-        
-        # posti_in_matx = np.nonzero(positive_agreement)
-        # print('posti_in_matx')
-        # print(posti_in_matx)
-        # neg_in_mat = np.nonzero(negative_agreement)
-        # print('neg_in_mat')
-        # print(neg_in_mat)
-        # comb_ind_row = np.intersect1d(new_list, new_list2)
-        # print('comb_ind_row')
-        # print(comb_ind_row)
-        # print('p_trust_matrix[comb_ind].shape')
-        # print(p_trust_matrix[comb_ind_row])
-        # print('n_trust_matrix[comb_ind].shape')
-        # print(n_trust_matrix[comb_ind_row])
-        # trust_matrix[x,comb_ind_row] = (p_trust_matrix[comb_ind_row] + n_trust_matrix[x,comb_ind_row])/2
-        # print('p_trust_matrix.shape')
-        # print(p_trust_matrix.shape)
-
-        # print('n_trust_matrix.shape')
-        # print(n_trust_matrix.shape)
-
-        # p_trust_matrix[comb_ind] = 0
-        # n_trust_matrix[comb_ind] = 0
-        # trust_matrix = trust_matrix + p_trust_matrix + n_trust_matrix
-        # print('trust_matrix.shape')
-        # print(trust_matrix.shape)
-        
-
-        # trust_matrix = trust_matrix + trust_matrix_old[np.logical_not(comb_ind)] + n_trust_matrix_old[np.logical_not(comb_ind)]
-
-        # print('=========== agreement_enhanced_on_estimate |Loop|iteration|===========')
+            predictions[trainset.to_inner_uid(t[0]), trainset.to_inner_iid(t[1])] = int(t[3]) # 3 is est, 2 is r_ui
+            # print(t)
+            # print(" 0 = "+str(t[0])+ " 1 = " +str(t[1])+ " 2 = " +str(t[3]))
+        trust_matrix = trust_matrix + agreement_nomal(predictions, alpha, ptype, istrainset=False)
     
     print('======================== agreement_enhanced_on_estimate |END|========================')
+    trust_matrix = trust_matrix / col_row_length
     return trust_matrix
 
 start = time.time()
-# new_trust_matrix_od_user = gen_trust_matrix_leave_one_out(trainset,algo, testset, ptype='item')
+new_trust_matrix_od_item_pearson = gen_trust_matrix_leave_one_out(trainset,algo, testset, ptype='item')
 # new_trust_matrix_od_item = gen_trust_matrix_leave_one_out(trainset,algo, testset, ptype='item')
 # print(new_trust_matrix_od_user)
-# np.save('new_trust_matrix_od_user', new_trust_matrix_od_user)
+np.save('new_trust_matrix_od_item_pearson', new_trust_matrix_od_item_pearson)
 # new_trust_matrix_od_user = np.load('new_trust_matrix_od_user.npy')
 # np.save('new_trust_matrix_od_item3', new_trust_matrix_od_item)
 
@@ -460,7 +366,7 @@ start = time.time()
 # # print('len(testset)')
 # # print(len(testset))
 
-new_trust_matrix_agree_user = agreement_enhanced_on_estimate(trainset, algo, 2.5, ptype='item', estrui='est')
+# new_trust_matrix_agree_user = agreement_enhanced_on_estimate(trainset, algo, 2.5, ptype='item', estrui='est')
 # new_trust_matrix_agree_item = agreement_enhanced_on_estimate(trainset, algo, testset, 2.5, ptype='item', estrui='est')
 # np.save('new_trust_matrix_agree_user', new_trust_matrix_agree_user)
 # new_trust_matrix_agree_user = np.load('new_trust_matrix_agree_user.npy')
@@ -478,42 +384,53 @@ print(time.time() - start)
 # plt.show()
 
 
-# ###################################################################### uncommment followings for eveluation
+###################################################################### uncommment followings for eveluation
 
-# algo.fit(trainset)
-
-
-
-# sim = algo.sim
-# p = algo.test(testset2)
-# print('normal')
-# rmse(p)
-# mae(p)
+algo.fit(trainset)
 
 
-# print('agreenormal_trust')
-# agreenormal_trust = agreement_nomal(trainset,2.5, ptype='item')
-# agreenormal_trust_old = cp.deepcopy(agreenormal_trust)
-# algo.sim = agreenormal_trust_old
-# p = algo.test(testset2)
-# rmse(p)
-# mae(p)
+
+sim = algo.sim
+sim2 = cp.deepcopy(sim)
+
+p = algo.test(testset2)
+print('normal')
+rmse(p)
+mae(p)
+
+
+print('agreenormal_trust')
+agreenormal_trust = agreement_nomal(trainset,2.5, ptype=ptype, istrainset=True)
+agreenormal_trust_old = cp.deepcopy(agreenormal_trust)
+algo.sim = agreenormal_trust_old
+p = algo.test(testset2)
+rmse(p)
+mae(p)
 
 
 # plt.matshow(agreenormal_trust);
 # plt.colorbar()
 # plt.show()
 
+print('agreenormal_trust + sim)/2')
+algo.sim = (agreenormal_trust + sim)/2
+# # algo.sim = (2*(agreenormal_trust*sim))/(agreenormal_trust + sim)
+p = algo.test(testset2)
+rmse(p)
+mae(p)
 
-# print('agreenormal_trust + sim)/2')
-# algo.sim = (agreenormal_trust + sim)/2
-# p = algo.test(testset2)
-# rmse(p)
-# mae(p)
 
-# print('pitsmarsh_trust')
-# algo.sim = pitsmarsh_trust(trainset, 5, ptype='item')
-# p = algo.test(testset2)
-# rmse(p)
-# mae(p)
+print('pitsmarsh_trust')
+# algo.sim = pitsmarsh_trust(trainset, 5, ptype=ptype)
+algo.sim = pitsmarsh_trust(trainset, algo, 5, ptype=ptype)
+p = algo.test(testset2)
+rmse(p)
+mae(p)
+
+print('odnovan_')
+# algo.sim = pitsmarsh_trust(trainset, 5, ptype=ptype)
+algo.sim = new_trust_matrix_od_item_pearson
+p = algo.test(testset2)
+rmse(p)
+mae(p)
 
