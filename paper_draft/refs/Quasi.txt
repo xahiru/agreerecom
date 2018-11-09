@@ -1,0 +1,10 @@
+@article{shambour2015effective,
+  title={An effective recommender system by unifying user and item trust information for B2B applications},
+  author={Shambour, Qusai and Lu, Jie},
+  journal={Journal of Computer and System Sciences},
+  volume={81},
+  number={7},
+  pages={1110--1126},
+  year={2015},
+  publisher={Elsevier}
+}

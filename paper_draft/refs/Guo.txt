@@ -1,0 +1,8 @@
+@inproceedings{guo2014ratings,
+  title={From ratings to trust: an empirical study of implicit trust in recommender systems},
+  author={Guo, Guibing and Zhang, Jie and Thalmann, Daniel and Basu, Anirban and Yorke-Smith, Neil},
+  booktitle={Proceedings of the 29th Annual ACM Symposium on Applied Computing},
+  pages={248--253},
+  year={2014},
+  organization={ACM}
+}
