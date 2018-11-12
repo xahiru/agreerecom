@@ -130,8 +130,6 @@ class RecomEng:
                     # print(score)
                     trust_matrix[a,b] = score
                     # print(a,b)
-                    ##### uncertainity part is missing here, add it
-                    #
         # similarity = 1 - pairwise_distances(ratings, metric=metric)
         # sim_backup = cp.deepcopy(similarity)
         # uncertainity = cp.deepcopy(trust_matrix)
