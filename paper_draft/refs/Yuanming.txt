@@ -1,0 +1,10 @@
+@article{li2013social,
+  title={A social recommender mechanism for e-commerce: Combining similarity, trust, and relationship},
+  author={Li, Yung-Ming and Wu, Chun-Te and Lai, Cheng-Yang},
+  journal={Decision Support Systems},
+  volume={55},
+  number={3},
+  pages={740--752},
+  year={2013},
+  publisher={Elsevier}
+}

@@ -1,0 +1,9 @@
+@inproceedings{golbeck2006filmtrust,
+  title={Filmtrust: Movie recommendations using trust in web-based social networks},
+  author={Golbeck, Jennifer and Hendler, James and others},
+  booktitle={Proceedings of the IEEE Consumer communications and networking conference},
+  volume={96},
+  number={1},
+  pages={282--286},
+  year={2006}
+}

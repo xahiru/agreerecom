@@ -1,0 +1,10 @@
+@article{huang2004applying,
+  title={Applying associative retrieval techniques to alleviate the sparsity problem in collaborative filtering},
+  author={Huang, Zan and Chen, Hsinchun and Zeng, Daniel},
+  journal={ACM Transactions on Information Systems (TOIS)},
+  volume={22},
+  number={1},
+  pages={116--142},
+  year={2004},
+  publisher={ACM}
+}

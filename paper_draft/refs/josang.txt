@@ -1,0 +1,10 @@
+@article{josang2007survey,
+  title={A survey of trust and reputation systems for online service provision},
+  author={J{\o}sang, Audun and Ismail, Roslan and Boyd, Colin},
+  journal={Decision support systems},
+  volume={43},
+  number={2},
+  pages={618--644},
+  year={2007},
+  publisher={Elsevier}
+}

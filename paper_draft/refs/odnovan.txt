@@ -1,0 +1,8 @@
+@inproceedings{o2005trust,
+  title={Trust in recommender systems},
+  author={O'Donovan, John and Smyth, Barry},
+  booktitle={Proceedings of the 10th international conference on Intelligent user interfaces},
+  pages={167--174},
+  year={2005},
+  organization={ACM}
+}

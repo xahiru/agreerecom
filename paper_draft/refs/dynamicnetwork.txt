@@ -1,0 +1,8 @@
+@inproceedings{carbone2003formal,
+  title={A formal model for trust in dynamic networks},
+  author={Carbone, Marco and Nielsen, Mogens and Sassone, Vladimiro},
+  booktitle={Software Engineering and Formal Methods, 2003. Proceedings. First International Conference on},
+  pages={54--61},
+  year={2003},
+  organization={IEEE}
+}
