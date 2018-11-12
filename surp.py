@@ -10,6 +10,7 @@ import time
 
 from surprise import SVD
 from surprise import KNNBasic
+from surprise import KNNWithMeans
 from surprise import Dataset                                                     
 from surprise import Reader                                                      
 from surprise import dump
@@ -109,7 +110,7 @@ testset = trainset.build_testset()
 
 # algo = KNNBasic()
 
-is_user = False # if false item else user
+is_user = True # if false item else user
 
 if is_user == True:
     ptype = 'user'
@@ -121,7 +122,8 @@ sim_options = {
     'user_based': is_user
 }
  
-algo = KNNBasic(sim_options=sim_options)
+# algo = KNNBasic(sim_options=sim_options)
+algo = KNNWithMeans(sim_options=sim_options) #defualt k=40
 # bsl_options = {'method': 'als',
 #                'n_epochs': 5,
 #                'reg_u': 12,
@@ -354,10 +356,10 @@ def agreement_enhanced_on_estimate(trainset, algo, alpha, ptype='user', estrui='
     return trust_matrix
 
 start = time.time()
-new_trust_matrix_od_item_pearson = gen_trust_matrix_leave_one_out(trainset,algo, testset, ptype='item')
-# new_trust_matrix_od_item = gen_trust_matrix_leave_one_out(trainset,algo, testset, ptype='item')
+# new_trust_matrix_od_item_pearson_knnm = gen_trust_matrix_leave_one_out(trainset,algo, testset, ptype=ptype)
+new_trust_matrix_od_user_pearson_knnm = gen_trust_matrix_leave_one_out(trainset,algo, testset, ptype=ptype)
 # print(new_trust_matrix_od_user)
-np.save('new_trust_matrix_od_item_pearson', new_trust_matrix_od_item_pearson)
+np.save('new_trust_matrix_od_user_pearson_knnm', new_trust_matrix_od_user_pearson_knnm)
 # new_trust_matrix_od_user = np.load('new_trust_matrix_od_user.npy')
 # np.save('new_trust_matrix_od_item3', new_trust_matrix_od_item)
 
@@ -377,6 +379,7 @@ np.save('new_trust_matrix_od_item_pearson', new_trust_matrix_od_item_pearson)
 
 # np.save('new_trust_matrix_agree_item3', new_trust_matrix_od_item)
 
+# new_trust_matrix_od_item_pearson = np.load('new_trust_matrix_od_item_pearson_knnm.npy')
 # print('time taken to make trust matrices')
 print(time.time() - start)
 # plt.matshow(new_trust_matrix);
@@ -429,7 +432,9 @@ mae(p)
 
 print('odnovan_')
 # algo.sim = pitsmarsh_trust(trainset, 5, ptype=ptype)
-algo.sim = new_trust_matrix_od_item_pearson
+# new_trust_matrix_od_item_pearson_cp = cp.deepcopy(new_trust_matrix_od_item_pearson)
+# algo.sim = (2*(new_trust_matrix_od_item_pearson*sim2))/(new_trust_matrix_od_item_pearson_cp + sim2)
+algo.sim = new_trust_matrix_od_user_pearson_knnm
 p = algo.test(testset2)
 rmse(p)
 mae(p)
