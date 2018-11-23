@@ -34,6 +34,11 @@ class AgreeTrust(AlgoBase):
 
         # Always call base method before doing anything.
         AlgoBase.__init__(self)
+    
+    def fit(self, trainset):
+
+        # Here again: call base method before doing anything.
+        AlgoBase.fit(self, 
 
     def fit(self, trainset):
 

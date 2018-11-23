@@ -40,39 +40,24 @@ import copy as cp
 
 class RecomEng:
 
-    # def __init__(self, data):
-    #     self.data = data
-    # #     self.rectype = rectype
-
     def predict(ratings, similarity, type='user'):
-        # print(ratings.shape)
-        # print(similarity.shape)
         if type == 'user':
             mean_user_rating = ratings.mean(axis=1)
             ratings_diff = (ratings - mean_user_rating[:, np.newaxis])
             pred = mean_user_rating[:, np.newaxis] + similarity.dot(ratings_diff) / np.array([np.abs(similarity).sum(axis=1)]).T
         elif type == 'item':
-            # ratings = ratings.T
             pred = ratings.dot(similarity) / np.array([np.abs(similarity).sum(axis=1)])
         pred[np.isnan(pred)] = 0
         pred[np.isinf(pred)] = 0
         return pred
 
+    #O'donovan's method
     def gen_trust_matrix_leave_one_out(ratings, predict, testset, ptype='user'):
         dim = 1
-        
-        #     # dim = 0
-            # nums = ratings.T
-        print('ptype')
-        print(ptype)
-
         similarity = 1 - pairwise_distances(ratings, metric='cosine')
         prediction = testset
-        # print('prediction.shape')
-        # print(prediction.shape)
         trust_matrix = np.zeros((ratings.shape[0],ratings.shape[0]))
-        print('trust_matrix.shape')
-        print(trust_matrix.shape)
+
         for x in range(ratings.shape[0]):
             ratings_new = ratings.copy()
             similarity_new = similarity.copy()
@@ -85,8 +70,7 @@ class RecomEng:
                 ratings_new = ratings_new.T
 
             xhat_predict = predict(ratings_new, similarity_new, ptype)
-            # print('xhat_predict.shape')
-            # print(xhat_predict.shape)
+
             if ptype == 'item':
                 xhat_predict = xhat_predict.T
 
@@ -95,21 +79,18 @@ class RecomEng:
     
             # - (xhat_predict == 0).astype(bool).sum(dim) removes #of zero entries from numerator value
             numerator = (xhat_predict < 0.2).astype(bool).sum(dim) - (xhat_predict == 0).astype(bool).sum(dim)
-            # print(numerator)
-
+            
             denominator = xhat_predict.astype(bool).sum(dim)
-            # print(denominator)
+            
             trust_row = numerator/denominator
             trust_row[np.isnan(trust_row)] = 0
             trust_row[np.isinf(trust_row)] = 0
-            # print(trust_row)
             
             trust_matrix[x] = trust_row
 
         return trust_matrix
 
     def pitsmarsh_trust(ratings, max_r, ptype='user', metric='cosine'):
-        
         trust_matrix = np.zeros((ratings.shape[0], ratings.shape[0]))
         for a in range(ratings.shape[0]):
             for b in range(ratings.shape[0]):
@@ -127,23 +108,14 @@ class RecomEng:
                     if(common != 0):
                         score = normalized_dif/common
 
-                    # print(score)
                     trust_matrix[a,b] = score
-                    # print(a,b)
-                    ##### uncertainity part is missing here, add it
-                    #
-        # similarity = 1 - pairwise_distances(ratings, metric=metric)
-        # sim_backup = cp.deepcopy(similarity)
-        # uncertainity = cp.deepcopy(trust_matrix)
+                    
         belief = (1 - trust_matrix) * (1 + similarity)
-        # disbilief = (1 - uncertainity) * (1 - sim_backup)
-        # print(trust_matrix.shape)
-        # return trust_matrix
-        print(belief)
         return belief
 
     def agreement(ratings, alpha):
-    #for each unique user iterate
+        trust_matrix = np.zeros((ratings.shape[0],ratings.shape[0]))
+        #for each unique user iterate
         for user_a in range(ratings.shape[0]):
             for user_b in range(ratings.shape[0]):
                 if user_a != user_b:

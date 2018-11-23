@@ -8,11 +8,9 @@ import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
 import time
 
-from surprise import SVD
 from surprise import KNNBasic
 from surprise import Dataset                                                     
 from surprise import Reader                                                      
-from surprise import dump
 from surprise.accuracy import rmse
 from surprise.accuracy import mae
 
