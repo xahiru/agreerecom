@@ -11,3 +11,4 @@ lib/
 *__pycache__/recomeng.cpython-36.pyc
 dump_file
 *.csv
+*.txt
