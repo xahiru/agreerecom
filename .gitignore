@@ -12,3 +12,4 @@ lib/
 dump_file
 *.csv
 *.txt
+*.docx
