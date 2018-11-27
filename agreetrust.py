@@ -22,7 +22,7 @@ import copy as cp
 
 ######################################### loading data #############################
 # https://surprise.readthedocs.io/en/v1.0.0/_modules/surprise/dataset.html
-
+#change the file path to the data file
 file_path = os.path.expanduser('~') + '/Code/paper/agree/agreerecom/data/ml-100k/u.data'
 reader = Reader(line_format='user item rating timestamp', sep='\t')
 data = Dataset.load_from_file(file_path, reader=reader)
