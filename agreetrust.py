@@ -8,6 +8,8 @@ import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
 import time
 
+import numba
+from numba import jit
 from surprise import KNNWithMeans
 from surprise import Dataset                                                     
 from surprise import Reader                                                      
@@ -23,9 +25,25 @@ import copy as cp
 ######################################### loading data #############################
 # https://surprise.readthedocs.io/en/v1.0.0/_modules/surprise/dataset.html
 #change the file path to the data file
-file_path = os.path.expanduser('~') + '/Code/paper/agree/agreerecom/data/ml-100k/u.data'
-reader = Reader(line_format='user item rating timestamp', sep='\t')
-data = Dataset.load_from_file(file_path, reader=reader)
+# file_path = os.path.expanduser('~') + '/Code/paper/agree/agreerecom/data/ml-100k/u.data'
+# reader = Reader(line_format='user item rating timestamp', sep='\t')
+# data = Dataset.load_from_file(file_path, reader=reader)
+datasetname = 'ml-100k'#'jester'#'ml-1m' ml-100k
+data_dir = 'data/'+datasetname+'/'
+if datasetname == 'ml-100k':
+    # file_path = os.path.expanduser('~') + '/Code/paper/agree/agreerecom/data/ml-100k/u1b.base'#for debugging n testing 
+    file_path = os.path.expanduser('~') + '/Code/paper/agree/agreerecom/data/ml-100k/u.data'
+    reader = Reader(line_format='user item rating timestamp', sep='\t')
+    data = Dataset.load_from_file(file_path, reader=reader)
+else:
+    data = Dataset.load_builtin(datasetname)
+    if datasetname == 'ml-1m':
+        data = data.head(100000)
+
+
+# data = Dataset.load_builtin('ml-1m')
+# trainset1, testset3 = train_test_split(data, test_size=.9, train_size=None, random_state=100, shuffle=True)
+# data = trainset1.all_ratings()
 
 #testset2 is used for final evaluation
 trainset, testset2 = train_test_split(data, test_size=.2, train_size=None, random_state=100, shuffle=True)
@@ -36,10 +54,16 @@ testset = trainset.build_testset()
 is_user = False # if false item else user
 load_rustmatrix_from_file = False
 save_models_to_file = False
+is_train_test_same_set = False
 
 max_r = 5
 beta = max_r/2
 alpha=0.2
+epsilon=0
+
+if datasetname == 'ml-100k':
+    max_r = 10
+    beta = 0
 
 if is_user == True:
     ptype = 'user'
@@ -58,7 +82,7 @@ algo = KNNWithMeans(sim_options=sim_options, verbose=False)
 
 def odonovan_trust(trainset, algo, testset, ptype='user', alpha=0.2):
     """Computes knn version of trust matrix proposed by J. O’Donovan and B. Smyth, in “Trust in recommender systems,” """
-    print('======================== odonovan_trust |START|========================')
+    # print('======================== odonovan_trust |START|========================')
     col_row_length = len(trainset.ur)
     
     if ptype == 'item':
@@ -73,7 +97,7 @@ def odonovan_trust(trainset, algo, testset, ptype='user', alpha=0.2):
         else:
             newset.ir[x] = []
         
-        algo.fit(newset)
+        algo.fit(newset)#
         p = algo.test(testset)
 
         df = pd.DataFrame(p,columns=['uid', 'iid', 'rui', 'est', 'details'])
@@ -93,11 +117,11 @@ def odonovan_trust(trainset, algo, testset, ptype='user', alpha=0.2):
 
         trust_matrix[x,new_list] = nu/den
     
-    print('======================== odonovan_trust |END|========================')
+    # print('======================== odonovan_trust |END|========================')
     return trust_matrix
 
-def agree_trust(trainset, beta, ptype='user', istrainset=True):
-    print('======================== agree_trust |START|========================')
+def agree_trust(trainset, beta, ptype='user', istrainset=True, activity=False):
+    # print('======================== agree_trust |START|========================')
     if istrainset == True:
         ratings = np.zeros((trainset.n_users, trainset.n_items))
         for u,i,r in trainset.all_ratings():
@@ -128,17 +152,27 @@ def agree_trust(trainset, beta, ptype='user', istrainset=True):
 
                         agreement = np.sum(np.logical_not(np.logical_xor(a_positive, b_positive)))
 
-                        trust = agreement/common_set_length
-
+                        # trust = agreement/common_set_length
+                        trust = agreement/(common_set_length+epsilon)
+                        # print('trust')
+                        # print(trust)
+                    # else:
+                        # trust = (np.mean(ratings[user_a], dtype=np.float64) + np.mean(ratings[user_b], dtype=np.float64))/2
+                        # print('mean')
+                        # print(trust)
+                    if activity == True:
+                        # print("activity")
+                        trust = trust*(len(np.nonzero(a_ratings))/(len(np.nonzero(a_ratings))+len(np.nonzero(b_ratings))))
+                                               
                     trust_matrix[user_a,user_b] = trust
-    print('======================== agree_trust |END|========================')
+    # print('======================== agree_trust |END|========================')
     return trust_matrix
                     
 
 def pitsmarsh_trust(trainset, algo, max_r, ptype='user'):
     """Computes trust matrix proposed G. Pitsilis and L. F. Marshall, in 
     'A model of trust derivation from evidence for use in recommendation systems.' """
-    print('======================== pitsmarsh_trust |START|========================')
+    # print('======================== pitsmarsh_trust |START|========================')
     ratings = np.zeros((trainset.n_users, trainset.n_items))
     for u,i,r in trainset.all_ratings():
         ratings[u,i] =r    
@@ -170,7 +204,7 @@ def pitsmarsh_trust(trainset, algo, max_r, ptype='user'):
 
     sim = algo.sim
     belief = (1 - trust_matrix) * (1 + sim)
-    print('======================== pitsmarsh_trust |END|========================')
+    # print('======================== pitsmarsh_trust |END|========================')
     return belief
 
 ######################################### saving data #############################
@@ -180,6 +214,8 @@ def save_models(alog_list):
     for alogr in alog_list:
         if alogr == 'agree_trust':
             trust_matrix = agree_trust(trainset, beta, ptype=ptype, istrainset=True)
+        if alogr == 'agree_activity':
+            trust_matrix = agree_trust(trainset, beta, ptype=ptype, istrainset=True, activity=True)
         elif alogr == 'sim_trust':
             trust_matrix = (agree_trust(trainset, beta, ptype=ptype, istrainset=True) + sim)/2
         elif alogr == 'pitsmarsh_trust':
@@ -193,29 +229,61 @@ def save_models(alog_list):
         #respective Folders should exists
         #example1 data/ml-100k/KNNwithMeans
         #example2 data/ml-100k/KNNwithMeans
-        np.save('data/ml-100k/'+str(alogr)+'/trust_matix_'+str(ptype)+'.npy', trust_matrix)
+        np.save(data_dir+str(alogr)+'/trust_matix_'+str(ptype)+'.npy', trust_matrix)
         trust_list.append(trust_matrix)
     return trust_list
 
 #########################################  eveluation #############################
-def evalall(aloglist, trust_list=None):
+def evalall(aloglist, trainset,testset,testset2, trust_list=None):
     # sim = algo.sim #save for sim_trust
+    if is_train_test_same_set == True:
+        testset2 = cp.deepcopy(testset)
+
     if trust_list==None:
         sim = algo.sim
         for x in aloglist:
+            print(x)
             if x == 'agree_trust':
+                start = time.time()
                 algo.sim = agree_trust(trainset, beta, ptype=ptype, istrainset=True)
+                total = start - time.time()
+                print(total)
+            if x == 'agree_activity':
+                start = time.time()
+                trust_matrix = agree_trust(trainset, beta, ptype=ptype, istrainset=True, activity=True)
+                total = start - time.time()
+                print(total)
             elif x == 'sim_trust':
+                start = time.time()
                 algo.sim = (agree_trust(trainset, beta, ptype=ptype, istrainset=True) + sim)/2
+                total = start - time.time()
+                print(total)
+            elif x == 'sim_trust_2':
+                start = time.time()
+                algo.sim = (agree_trust(trainset, beta, ptype=ptype, istrainset=True) + sim)/2
+                total = start - time.time()
+                print(total)
+            elif x == 'sim_trust_3':
+                start = time.time()
+                algo.sim = (agree_trust(trainset, beta, ptype=ptype, istrainset=True) + sim)/2
+                total = start - time.time()
+                print(total)
             elif x == 'pitsmarsh_trust':
+                start = time.time()
                 algo.sim = pitsmarsh_trust(trainset, algo, max_r, ptype=ptype)
+                total = start - time.time()
+                print(total)
             elif x == 'odnovan_trust':
+                start = time.time()
                 algo.sim = odonovan_trust(trainset,algo, testset, ptype=ptype, alpha=alpha)
+                total = start - time.time()
+                print(total)
             p = algo.test(testset2)
             rmse(p)
             mae(p)
     else:
         for x,t in zip(aloglist,trust_list):
+            # print(x)
             algo.sim = t
             p = algo.test(testset2)
             rmse(p)
@@ -223,17 +291,21 @@ def evalall(aloglist, trust_list=None):
 
 ######################################### running eveluation #############################
 
-aloglist = ['KNNWithMeans','agree_trust', 'sim_trust', 'pitsmarsh_trust','odnovan_trust']
+# aloglist = ['KNNWithMeans','agree_trust', 'sim_trust', 'pitsmarsh_trust','odnovan_trust']
+aloglist = ['KNNWithMeans', 'agree_trust', 'agree_activity']
 algo.fit(trainset)
+print(datasetname)
+print('epsilon ='+str(epsilon))
 
 if load_rustmatrix_from_file == True:
     trust_list = []
     for alogr in aloglist:
-        trust_matrix = np.load('data/ml-100k/'+str(alogr)+'/trust_matix_'+str(ptype)+'.npy')
+        # trust_matrix = np.load(data_dir+str(alogr)+'/trust_matix_'+str(ptype)+'.npy')
+        trust_matrix = np.load(data_dir+str(alogr)+'trust_matix_'+str(ptype)+'.npy')
         trust_list.append(trust_matrix) 
-    evalall(aloglist, trust_list)
+    evalall(aloglist,trainset,testset,testset2, trust_list)
 else:
     if save_models_to_file == True:
-        evalall(aloglist, save_models(aloglist))
+        evalall(aloglist,trainset,testset,testset2, save_models(aloglist))
     else:
-        evalall(aloglist)
+        evalall(aloglist, trainset,testset,testset2)
