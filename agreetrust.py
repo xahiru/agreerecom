@@ -2,7 +2,7 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 from __future__ import print_function
 import torch
-                                      
+
 import pickle
 import os
 
@@ -33,7 +33,7 @@ import copy as cp
 # data = Dataset.load_from_file(file_path, reader=reader)
 datasetname = 'ml-100k'#'jester'#'ml-1m' ml-100k
 data_dir = 'data/'+datasetname+'/'
-if datasetname == 'ml-100k':
+if datasetname == 'noml-100k':
     # file_path = os.path.expanduser('~') + '/Code/paper/agree/agreerecom/data/ml-100k/u1b.base'#for debugging n testing 
     file_path = os.path.expanduser('~') + '/Code/paper/agree/agreerecom/data/ml-100k/u.data'
     reader = Reader(line_format='user item rating timestamp', sep='\t')
@@ -127,6 +127,54 @@ def agree_trust(trainset, beta, ptype='user', istrainset=True, activity=False):
     # print('======================== agree_trust |START|========================')
     if istrainset == True:
         ratings = np.zeros((trainset.n_users, trainset.n_items))
+        for u,i,r in trainset.all_ratings():
+            ratings[u,i] =r
+    else:
+        ratings = trainset
+
+    if ptype=='item':
+        ratings = ratings.T
+
+    trust_matrix = np.zeros((ratings.shape[0], ratings.shape[0]))
+    
+    for user_a in range(ratings.shape[0]):
+            for user_b in range(ratings.shape[0]):
+                if user_a != user_b:
+                    a_ratings = ratings[user_a]
+                    b_ratings = ratings[user_b]
+
+                    commonset = np.intersect1d(np.nonzero(a_ratings), np.nonzero(b_ratings))
+                    
+                    common_set_length = len(commonset)
+
+                    trust = 0
+
+                    if(common_set_length > 0):
+                        a_positive = a_ratings[commonset] > beta
+                        b_positive = b_ratings[commonset] > beta
+
+                        agreement = np.sum(np.logical_not(np.logical_xor(a_positive, b_positive)))
+
+                        # trust = agreement/common_set_length
+                        trust = agreement/(common_set_length+epsilon)
+                        # print('trust')
+                        # print(trust)
+                    # else:
+                        # trust = (np.mean(ratings[user_a], dtype=np.float64) + np.mean(ratings[user_b], dtype=np.float64))/2
+                        # print('mean')
+                        # print(trust)
+                    if activity == True:
+                        # print("activity")
+                        trust = trust*(len(np.nonzero(a_ratings))/(len(np.nonzero(a_ratings))+len(np.nonzero(b_ratings))))
+                                               
+                    trust_matrix[user_a,user_b] = trust
+    # print('======================== agree_trust |END|========================')
+    return trust_matrix
+
+def agree_trust_torch(trainset, beta, ptype='user', istrainset=True, activity=False):
+    # print('======================== agree_trust |START|========================')
+    if istrainset == True:
+        ratings = torch.zeros(trainset.n_users, trainset.n_items, dtype=torch.long)
         for u,i,r in trainset.all_ratings():
             ratings[u,i] =r
     else:
