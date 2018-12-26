@@ -191,7 +191,12 @@ def agree_trust_torch(trainset, beta, ptype='user', istrainset=True, activity=Fa
                     a_ratings = ratings[user_a]
                     b_ratings = ratings[user_b]
 
-                    commonset = np.intersect1d(np.nonzero(a_ratings), np.nonzero(b_ratings))
+                    a_non_zero = np.nonzero(a_ratings)
+                    b_non_zero = np.nonzero(b_ratings)
+
+
+                    # commonset = np.intersect1d(np.nonzero(a_ratings), np.nonzero(b_ratings))
+                    commonset = np.intersect1d(a_non_zero, b_non_zero)
                     
                     common_set_length = len(commonset)
 
@@ -212,8 +217,10 @@ def agree_trust_torch(trainset, beta, ptype='user', istrainset=True, activity=Fa
                         # print('mean')
                         # print(trust)
                     if activity == True:
-                        # print("activity")
-                        trust = trust*(len(np.nonzero(a_ratings))/(len(np.nonzero(a_ratings))+len(np.nonzero(b_ratings))))
+                        # trust = trust*(len(np.nonzero(a_ratings))/(len(np.nonzero(a_ratings))+len(np.nonzero(b_ratings))))
+                        a_len = len(a_non_zero)
+                        b_len = len(b_non_zero)
+                        trust = trust*(a_len/(a_len+lb_len))
                                                
                     trust_matrix[user_a,user_b] = trust
     # print('======================== agree_trust |END|========================')
