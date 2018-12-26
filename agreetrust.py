@@ -347,6 +347,7 @@ aloglist = ['KNNWithMeans', 'agree_trust', 'agree_activity']
 algo.fit(trainset)
 print(datasetname)
 print('epsilon ='+str(epsilon))
+print(ptype)
 
 if load_rustmatrix_from_file == True:
     trust_list = []
