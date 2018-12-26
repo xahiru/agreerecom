@@ -31,7 +31,7 @@ import copy as cp
 # file_path = os.path.expanduser('~') + '/Code/paper/agree/agreerecom/data/ml-100k/u.data'
 # reader = Reader(line_format='user item rating timestamp', sep='\t')
 # data = Dataset.load_from_file(file_path, reader=reader)
-datasetname = 'ml-100k'#'jester'#'ml-1m' ml-100k
+datasetname = 'ml-1m'#'jester'#'ml-1m' ml-100k
 data_dir = 'data/'+datasetname+'/'
 if datasetname == 'noml-100k':
     # file_path = os.path.expanduser('~') + '/Code/paper/agree/agreerecom/data/ml-100k/u1b.base'#for debugging n testing 
@@ -41,7 +41,13 @@ if datasetname == 'noml-100k':
 else:
     data = Dataset.load_builtin(datasetname)
     if datasetname == 'ml-1m':
-        data = data.head(100000)
+        df = pd.DataFrame(ratings_dict)
+        # A reader is still needed but only the rating_scale param is requiered.
+        reader = Reader(rating_scale=(1, 5))
+        df = df.sample(n=100000)
+        # The columns must correspond to user id, item id and ratings (in that order).
+        data = Dataset.load_from_df(df[['userID', 'itemID', 'rating']], reader)
+        
 
 
 # data = Dataset.load_builtin('ml-1m')
@@ -424,7 +430,7 @@ def evalall(aloglist, trainset,testset,testset2, trust_list=None):
 
 # aloglist = ['KNNWithMeans','agree_trust', 'sim_trust', 'pitsmarsh_trust','odnovan_trust']
 # aloglist = ['agree_trust_torch', 'agree_trust_numba']
-aloglist = ['KNNWithMeans', 'agree_trust', 'agree_activity', 'sim_activity_trust']
+aloglist = ['KNNWithMeans', 'sim_trust', 'agree_trust', 'agree_activity', 'sim_activity_trust']
 algo.fit(trainset)
 print(datasetname)
 print('epsilon ='+str(epsilon))
