@@ -62,7 +62,7 @@ is_train_test_same_set = False
 max_r = 5
 beta = max_r/2
 alpha=0.2
-epsilon=0
+epsilon=0.9
 
 if datasetname == 'ml-100k':
     max_r = 10
@@ -183,7 +183,63 @@ def agree_trust_torch(trainset, beta, ptype='user', istrainset=True, activity=Fa
     if ptype=='item':
         ratings = ratings.T
 
-    trust_matrix = np.zeros((ratings.shape[0], ratings.shape[0]))
+    trust_matrix = torch.zeros(ratings.shape[0], ratings.shape[0], dtype=torch.long)
+    
+    for user_a in range(ratings.shape[0]):
+            for user_b in range(ratings.shape[0]):
+                if user_a != user_b:
+                    a_ratings = ratings[user_a]
+                    b_ratings = ratings[user_b]
+
+                    a_non_zero = np.nonzero(a_ratings)
+                    b_non_zero = np.nonzero(b_ratings)
+
+
+                    # commonset = np.intersect1d(np.nonzero(a_ratings), np.nonzero(b_ratings))
+                    commonset = np.intersect1d(a_non_zero, b_non_zero)
+                    
+                    common_set_length = len(commonset)
+
+                    trust = 0
+
+                    if(common_set_length > 0):
+                        a_positive = a_ratings[commonset] > beta
+                        b_positive = b_ratings[commonset] > beta
+
+                        agreement = np.sum(np.logical_not(np.logical_xor(a_positive, b_positive)))
+
+                        # trust = agreement/common_set_length
+                        trust = agreement/(common_set_length+epsilon)
+                        # print('trust')
+                        # print(trust)
+                    # else:
+                        # trust = (np.mean(ratings[user_a], dtype=np.float64) + np.mean(ratings[user_b], dtype=np.float64))/2
+                        # print('mean')
+                        # print(trust)
+                    if activity == True:
+                        # trust = trust*(len(np.nonzero(a_ratings))/(len(np.nonzero(a_ratings))+len(np.nonzero(b_ratings))))
+                        a_len = len(a_non_zero)
+                        b_len = len(b_non_zero)
+                        trust = trust*(a_len/(a_len+lb_len))
+                                               
+                    trust_matrix[user_a,user_b] = trust
+    # print('======================== agree_trust |END|========================')
+    return trust_matrix
+
+
+def agree_trust_numba(trainset, beta, ptype='user', istrainset=True, activity=False):
+    # print('======================== agree_trust |START|========================')
+    if istrainset == True:
+        ratings = torch.zeros(trainset.n_users, trainset.n_items, dtype=torch.long)
+        for u,i,r in trainset.all_ratings():
+            ratings[u,i] =r
+    else:
+        ratings = trainset
+
+    if ptype=='item':
+        ratings = ratings.T
+
+    trust_matrix = torch.zeros(ratings.shape[0], ratings.shape[0], dtype=torch.long)
     
     for user_a in range(ratings.shape[0]):
             for user_b in range(ratings.shape[0]):
@@ -276,6 +332,8 @@ def save_models(alog_list):
             trust_matrix = agree_trust(trainset, beta, ptype=ptype, istrainset=True, activity=True)
         elif alogr == 'sim_trust':
             trust_matrix = (agree_trust(trainset, beta, ptype=ptype, istrainset=True) + sim)/2
+        elif alogr == 'sim_activity':
+            trust_matrix = (agree_trust(trainset, beta, ptype=ptype, istrainset=True, activity=True) + sim)/2
         elif alogr == 'pitsmarsh_trust':
             trust_matrix = pitsmarsh_trust(trainset, algo, max_r, ptype=ptype)
         elif alogr == 'odnovan_trust':
@@ -306,6 +364,16 @@ def evalall(aloglist, trainset,testset,testset2, trust_list=None):
                 algo.sim = agree_trust(trainset, beta, ptype=ptype, istrainset=True)
                 total = start - time.time()
                 print(total)
+            if x == 'agree_trust_torch':
+                start = time.time()
+                algo.sim = agree_trust_torch(trainset, beta, ptype=ptype, istrainset=True)
+                total = start - time.time()
+                print(total)
+            if x == 'agree_trust_numba':
+                start = time.time()
+                algo.sim = agree_trust_numba(trainset, beta, ptype=ptype, istrainset=True)
+                total = start - time.time()
+                print(total)
             if x == 'agree_activity':
                 start = time.time()
                 trust_matrix = agree_trust(trainset, beta, ptype=ptype, istrainset=True, activity=True)
@@ -314,6 +382,11 @@ def evalall(aloglist, trainset,testset,testset2, trust_list=None):
             elif x == 'sim_trust':
                 start = time.time()
                 algo.sim = (agree_trust(trainset, beta, ptype=ptype, istrainset=True) + sim)/2
+                total = start - time.time()
+                print(total)
+            elif x == 'sim_activity_trust':
+                start = time.time()
+                algo.sim = (agree_trust(trainset, beta, ptype=ptype, istrainset=True, activity=True) + sim)/2
                 total = start - time.time()
                 print(total)
             elif x == 'sim_trust_2':
@@ -350,7 +423,8 @@ def evalall(aloglist, trainset,testset,testset2, trust_list=None):
 ######################################### running eveluation #############################
 
 # aloglist = ['KNNWithMeans','agree_trust', 'sim_trust', 'pitsmarsh_trust','odnovan_trust']
-aloglist = ['KNNWithMeans', 'agree_trust', 'agree_activity']
+# aloglist = ['agree_trust_torch', 'agree_trust_numba']
+aloglist = ['KNNWithMeans', 'agree_trust', 'agree_activity', 'sim_activity_trust']
 algo.fit(trainset)
 print(datasetname)
 print('epsilon ='+str(epsilon))
