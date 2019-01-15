@@ -17,7 +17,7 @@ from surprise import KNNWithMeans
 from surprise import Dataset                                                     
 from surprise import Reader                                                      
 from surprise.accuracy import rmse
-from surprise.accuracy import mae
+# from surprise.accuracy import mae
 
 from surprise import accuracy
 from surprise.model_selection import train_test_split
@@ -31,12 +31,14 @@ import copy as cp
 # file_path = os.path.expanduser('~') + '/Code/paper/agree/agreerecom/data/ml-100k/u.data'
 # reader = Reader(line_format='user item rating timestamp', sep='\t')
 # data = Dataset.load_from_file(file_path, reader=reader)
-datasetname = 'ml-1m'#'jester'#'ml-1m' ml-100k
+datasetname = 'ml-latest-small'#'jester'#'ml-1m' ml-100k ml-latest-small
 data_dir = 'data/'+datasetname+'/'
-if datasetname == 'noml-100k':
+if datasetname == 'ml-latest-small':
     # file_path = os.path.expanduser('~') + '/Code/paper/agree/agreerecom/data/ml-100k/u1b.base'#for debugging n testing 
-    file_path = os.path.expanduser('~') + '/Code/paper/agree/agreerecom/data/ml-100k/u.data'
-    reader = Reader(line_format='user item rating timestamp', sep='\t')
+    # file_path = os.path.expanduser('~') + '/Code/paper/agree/agreerecom/data/ml-100k/u.data'
+    file_path = os.path.expanduser('~') + '/Code/paper/agree/agreerecom/data/ml-latest-small/ratings.csv'
+    # reader = Reader(line_format='user item rating timestamp', sep=',')
+    reader = Reader(line_format='user item rating timestamp', sep=',', rating_scale=(1, 5), skip_lines=1)
     data = Dataset.load_from_file(file_path, reader=reader)
 else:
     data = Dataset.load_builtin(datasetname)
@@ -70,7 +72,7 @@ beta = max_r/2
 alpha=0.2
 epsilon=0.9
 
-if datasetname == 'ml-100k':
+if datasetname == 'jester':
     max_r = 10
     beta = 0
 
@@ -87,6 +89,9 @@ sim_options = {
  
 algo = KNNWithMeans(sim_options=sim_options, verbose=False)
 
+print(datasetname)
+print('epsilon ='+str(epsilon))
+print(ptype)
 ######################################### trust modelling functions #############################
 
 def odonovan_trust(trainset, algo, testset, ptype='user', alpha=0.2):
@@ -417,14 +422,14 @@ def evalall(aloglist, trainset,testset,testset2, trust_list=None):
                 print(total)
             p = algo.test(testset2)
             rmse(p)
-            mae(p)
+            # mae(p)
     else:
         for x,t in zip(aloglist,trust_list):
             # print(x)
             algo.sim = t
             p = algo.test(testset2)
             rmse(p)
-            mae(p)
+            # mae(p)
 
 ######################################### running eveluation #############################
 
@@ -432,9 +437,9 @@ def evalall(aloglist, trainset,testset,testset2, trust_list=None):
 # aloglist = ['agree_trust_torch', 'agree_trust_numba']
 aloglist = ['KNNWithMeans', 'sim_trust', 'agree_trust', 'agree_activity', 'sim_activity_trust']
 algo.fit(trainset)
-print(datasetname)
-print('epsilon ='+str(epsilon))
-print(ptype)
+# print(datasetname)
+# print('epsilon ='+str(epsilon))
+# print(ptype)
 
 if load_rustmatrix_from_file == True:
     trust_list = []
