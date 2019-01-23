@@ -15,7 +15,8 @@ import numpy as np
 max_r = 5
 beta = max_r/2
 alpha=0.2
-epsilon=0.9
+epsilon=0.1
+# epsilon=0.9 gives MAE 0.6988
 
 # file_path = os.path.expanduser('~') + '/Code/paper/agree/agreerecom/data/ml-100k/u1b.base'
 #     # reader = Reader(line_format='user item rating timestamp', sep=',')
@@ -27,9 +28,12 @@ datasetname = 'ml-20m'
 # datasetname = 'jester'
 data = Dataset.load_builtin(datasetname)
 # data = Dataset.load_builtin('jester')
-user_based = True
+user_based = False
 base_line = False
 k= 40
+
+if datasetname == 'jester':
+	beta = 0
 
 if user_based:
 	ptype = 'user'
@@ -48,6 +52,7 @@ if base_line != True:
 	tsim,activityma = agree_trust(trainset, beta, epsilon, ptype=ptype, istrainset=True, activity=False)
 	# mixsim = (sim *tsim) / 2
 	mixsim = sim *tsim *tsim
+	# mixsim = (sim * tsim) +activityma
 	# mixsim *= activityma
 	# # sim[min_index] = activityma[min_index]
 	algo.sim = mixsim
@@ -55,22 +60,40 @@ if base_line != True:
 predictions=algo.test(testset)
 print(datasetname)
 if base_line != True:
-	print('sim *tsim *tsim')
+	print('mixsim = sim *tsim *tsim')
+	# print('(sim * tsim) +activityma')
 else:
 	print('base_line')
 print(ptype)
 print(k)
+print('epsilon')
+print(epsilon)
 rmse(predictions)
 mae(predictions)
 
-# fig1 = plt.figure(1)
+# fig , ax = plt.subplots()
+# ax = fig.add_subplot(111)
+# ax.plot(sim)
 # plt.matshow(algo.sim);
 # plt.colorbar()
+# fig.show()
+
+# print(algo.counts)
+# plt.plot(algo.counts)
+# plt.ylabel('algo.counts')
 # plt.show()
 
-# plt.matshow(agreenormal_trust);
-# plt.colorbar()
+# print(activityma[30,40])
+# print(activityma[40,30])
+
+# print(activityma[30,54])
+# print(activityma[54,30])
+
+plt.matshow(algo.sim);
+plt.colorbar()
 # plt.show()
+plt.savefig(datasetname+user_based+'.png')
+
 
 # fig2 = plt.figure(2)
 # plt.matshow(mixsim);

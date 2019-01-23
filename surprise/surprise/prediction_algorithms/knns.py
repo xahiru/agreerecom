@@ -258,19 +258,19 @@ class KNNWithMeansC(SymmetricAlgo):
 
         self.k = k
         self.min_k = min_k
+        
 
-    def fit(self, trainset):
+    def fit(self, trainset, passedSim=None):
 
         SymmetricAlgo.fit(self, trainset)
-        self.sim = self.compute_similarities(verbose=self.verbose)
+        if passedSim is None:
+            self.sim = self.compute_similarities(verbose=self.verbose)
+        else:
+            self.sim = passedSim
 
         self.means = np.zeros(self.n_x)
-        self.counts = np.zeros(self.n_x)
         for x, ratings in iteritems(self.xr):
             self.means[x] = np.mean([r for (_, r) in ratings])
-            self.counts[x] = len(ratings)
-
-        self.counts = [x/sum(self.counts) for x in self.counts]
 
         return self
 
@@ -285,14 +285,13 @@ class KNNWithMeansC(SymmetricAlgo):
         k_neighbors = heapq.nlargest(self.k, neighbors, key=lambda t: t[1])
 
         est = self.means[x]
-        # est *= (1-self.counts[x])
 
         # compute weighted average
         sum_sim = sum_ratings = actual_k = 0
         for (nb, sim, r) in k_neighbors:
             if sim > 0:
                 sum_sim += sim
-                sum_ratings += sim * (r - (self.means[nb]* self.counts[x]))
+                sum_ratings += sim * (r - self.means[nb])
                 actual_k += 1
 
         if actual_k < self.min_k:

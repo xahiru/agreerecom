@@ -25,6 +25,8 @@ import numpy as np
 # import multiprocessing
 
 import time
+import copy as cp
+import pandas as pd
 
 
 from six.moves import range
@@ -137,6 +139,7 @@ def agree_trust(trainset, beta, epsilon, ptype='user', istrainset=True, activity
             # print(trust)
             # activity_val = a_count/(b_count+epsilon)
             activity_val = 1/(1+np.exp(-np.abs((a_count - b_count)/(a_count+b_count+epsilon))))
+            # activity_val = 1/(1+np.exp(-(a_count - b_count)/(a_count+b_count+epsilon)))
             # activity_val = 1-1/(1+np.exp(-np.abs(a_count - b_count)))
             # activity_val = 1/(activity_val+0.9)
             activity_matrix[user_a,user_b] = activity_val
@@ -196,3 +199,85 @@ def agree_trust_old(trainset, beta, epsilon, ptype='user', istrainset=True, acti
     # print('======================== agree_trust |END|========================')
     return trust_matrix
 
+def odonovan_trust_old(trainset, algo, ptype='user', alpha=0.2):
+    """Computes knn version of trust matrix proposed by J. O’Donovan and B. Smyth, in “Trust in recommender systems,” """
+    print('======================== odonovan_trust |START|========================')
+    
+    cdef int rows = trainset.n_users
+    cdef np.ndarray[np.double_t, ndim=2] trust_matrix,
+    
+    col_row_length = trainset.n_users
+
+    if ptype == 'item':
+        col_row_length = trainset.n_items
+
+    trust_matrix = np.zeros((rows, rows))
+
+    testset = trainset.build_testset()
+    algo.fit(trainset)
+    sim = algo.sim
+
+    for x in range(rows):
+        start = time.time()
+        newset = cp.deepcopy(trainset)
+        simc = cp.deepcopy(sim)
+        simc[x] = 0
+        if ptype == 'user':
+            newset.ur[x] = []
+        else:
+            newset.ir[x] = []
+    
+        algo.fit(newset, simc)
+        p = algo.test(testset)
+
+        # df = pd.DataFrame(p,columns=['uid', 'iid', 'rui', 'est', 'details'])
+
+        # df.sort_values(by=['uid'])
+        # df = df.loc[df['est'] != 0] #removes items predicted 0 
+        # df['err'] = abs(df.est - df.rui)
+
+        # filtered_df = df.loc[df['err'] < alpha] #alpha = 0.2
+
+        # uid1 = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts().keys().tolist()
+        # # new_list = [int(i)-1 for i in uid1]
+        # new_list = [newset.to_inner_uid(i)-1 for i in uid1]
+       
+
+        # den = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts()
+        
+
+        # uids = filtered_df.uid.value_counts().keys().tolist()
+        
+        # nu = filtered_df.uid.value_counts()
+        
+        # trust_matrix[x,new_list] = nu/den
+        print('time.time() - start')
+        print(time.time() - start)
+        # # if ptype == 'item':
+        # #     print('x')
+        # #     print(x)
+        # #     print('newset.to_raw_iid(x)')
+        # #     print(newset.to_raw_iid(x))
+        # #     print('newset.to_inner_iid(x)')
+        # #     print(newset.to_inner_iid(x))
+        # #     print('trainset.to_raw_iid(x)')
+        # #     print(trainset.to_raw_iid(x))
+        # #     print('trainset.to_inner_iid(x)')
+        # #     print(trainset.to_inner_iid(x))
+        # # else:
+        # #     print('x')
+        # #     print(x)
+        # #     print('newset.to_raw_uid(x)')
+        # #     print(newset.to_raw_uid(x))
+        # #     print('newset.to_inner_uid(x)')
+        # #     print(newset.to_inner_uid(x))
+        # #     print('trainset.to_raw_uid(x)')
+        # #     print(trainset.to_raw_uid(x))
+        # #     print('trainset.to_inner_uid(x)')
+        # #     print(trainset.to_inner_uid(x))
+
+        # print('nu/den')
+        # print(ttt)
+    
+    # print('======================== odonovan_trust |END|========================')
+    return trust_matrix

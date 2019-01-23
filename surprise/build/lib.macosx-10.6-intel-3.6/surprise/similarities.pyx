@@ -248,14 +248,14 @@ def pearson(n_x, yr, min_support):
 
     num_cores = multiprocessing.cpu_count()
 
-    print('starting the  first loop iteritems')
+    # print('starting the  first loop iteritems')
     # for y, y_ratings in yr.items():
-    print('length of yr')
-    a = len(yr)
-    print(a)
+    # print('length of yr')
+    # a = len(yr)
+    # print(a)
 
-    print('n_x')
-    print(n_x)
+    # print('n_x')
+    # print(n_x)
 
     for y, y_ratings in yr.items():
         
@@ -289,7 +289,7 @@ def pearson(n_x, yr, min_support):
                     sim[xi, xj] = num / denum
 
             sim[xj, xi] = sim[xi, xj]
-    print('done loops')
+    # print('done loops')
     print(time.time() - start)
     return sim
 
