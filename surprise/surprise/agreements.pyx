@@ -217,7 +217,7 @@ def odonovan_trust_old(trainset, algo, ptype='user', alpha=0.2):
     algo.fit(trainset)
     sim = algo.sim
 
-    for x in range(rows):
+    for x in range(2):
         start = time.time()
         newset = cp.deepcopy(trainset)
         simc = cp.deepcopy(sim)
@@ -253,7 +253,7 @@ def odonovan_trust_old(trainset, algo, ptype='user', alpha=0.2):
         trust_matrix[x,new_list] = nu/den
         print('time.time() - start')
         print(time.time() - start)
-        
+        git pull origin master -r
     
     # print('======================== odonovan_trust |END|========================')
     return trust_matrix
