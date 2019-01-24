@@ -217,7 +217,7 @@ def odonovan_trust_old(trainset, algo, ptype='user', alpha=0.2):
     algo.fit(trainset)
     sim = algo.sim
 
-    for x in range(2):
+    for x in range(rows):
         start = time.time()
         newset = cp.deepcopy(trainset)
         simc = cp.deepcopy(sim)

@@ -230,54 +230,30 @@ def odonovan_trust_old(trainset, algo, ptype='user', alpha=0.2):
         algo.fit(newset, simc)
         p = algo.test(testset)
 
-        # df = pd.DataFrame(p,columns=['uid', 'iid', 'rui', 'est', 'details'])
+        df = pd.DataFrame(p,columns=['uid', 'iid', 'rui', 'est', 'details'])
 
-        # df.sort_values(by=['uid'])
-        # df = df.loc[df['est'] != 0] #removes items predicted 0 
-        # df['err'] = abs(df.est - df.rui)
+        df.sort_values(by=['uid'])
+        df = df.loc[df['est'] != 0] #removes items predicted 0 
+        df['err'] = abs(df.est - df.rui)
 
-        # filtered_df = df.loc[df['err'] < alpha] #alpha = 0.2
+        filtered_df = df.loc[df['err'] < alpha] #alpha = 0.2
 
-        # uid1 = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts().keys().tolist()
-        # # new_list = [int(i)-1 for i in uid1]
-        # new_list = [newset.to_inner_uid(i)-1 for i in uid1]
+        uid1 = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts().keys().tolist()
+        # new_list = [int(i)-1 for i in uid1]
+        new_list = [newset.to_inner_uid(i)-1 for i in uid1]
        
 
-        # den = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts()
+        den = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts()
         
 
-        # uids = filtered_df.uid.value_counts().keys().tolist()
+        uids = filtered_df.uid.value_counts().keys().tolist()
         
-        # nu = filtered_df.uid.value_counts()
+        nu = filtered_df.uid.value_counts()
         
-        # trust_matrix[x,new_list] = nu/den
+        trust_matrix[x,new_list] = nu/den
         print('time.time() - start')
         print(time.time() - start)
-        # # if ptype == 'item':
-        # #     print('x')
-        # #     print(x)
-        # #     print('newset.to_raw_iid(x)')
-        # #     print(newset.to_raw_iid(x))
-        # #     print('newset.to_inner_iid(x)')
-        # #     print(newset.to_inner_iid(x))
-        # #     print('trainset.to_raw_iid(x)')
-        # #     print(trainset.to_raw_iid(x))
-        # #     print('trainset.to_inner_iid(x)')
-        # #     print(trainset.to_inner_iid(x))
-        # # else:
-        # #     print('x')
-        # #     print(x)
-        # #     print('newset.to_raw_uid(x)')
-        # #     print(newset.to_raw_uid(x))
-        # #     print('newset.to_inner_uid(x)')
-        # #     print(newset.to_inner_uid(x))
-        # #     print('trainset.to_raw_uid(x)')
-        # #     print(trainset.to_raw_uid(x))
-        # #     print('trainset.to_inner_uid(x)')
-        # #     print(trainset.to_inner_uid(x))
-
-        # print('nu/den')
-        # print(ttt)
+        
     
     # print('======================== odonovan_trust |END|========================')
     return trust_matrix
