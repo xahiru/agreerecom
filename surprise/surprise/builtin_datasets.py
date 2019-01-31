@@ -72,7 +72,7 @@ BUILTIN_DATASETS = {
             path=join(get_dataset_dir(), 'ml-20m/ratings.csv'),
             rating_scale=(0.5, 5.0),
             reader_params=dict(line_format='user item rating timestamp',
-                               sep=',', skip_lines=19900263)
+                               sep=',', skip_lines=19990263)
         ),
     'jester':
         BuiltinDataset(

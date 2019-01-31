@@ -105,6 +105,8 @@ class OdnovanAlgorithm(AlgoBase):
         self.algo.fit(trainset)
         print('OdnovanAlgorithm here')
         self.algo.sim = odonovan_trust_old(trainset, self.algo, ptype= self.ptype, alpha=self.alpha)
+        print('OdnovanAlgorithm fit done')
+        print(self.algo.sim.shape)
 
     def estimate(self, u, i):
         # KNNWithMeans.test()
@@ -116,33 +118,33 @@ class OdnovanAlgorithm(AlgoBase):
 num_cores = multiprocessing.cpu_count()
 
 ##### GRID search for parameter optimization
-param_grid = {'k': [10,20,30,40],'epsilon':[0.01,0.1,0.5,0.9], 'user_based': [False], 'beta':[0], 'sim_options': {'name': ['pearson'],
-                              # 'min_support': [1, 5],
-                              'user_based': [False]}}
-# param_grid = {'k': [10,20,30,40],'alog':[KNNWithMeansC], 'alpha':[0.1,0.2,0.5,0.9], 'user_based': [True], 'sim_options': {'name': ['pearson'],
+# param_grid = {'k': [10,20,30,40],'epsilon':[0.01,0.1,0.5,0.9], 'user_based': [False], 'beta':[0], 'sim_options': {'name': ['pearson'],
 #                               # 'min_support': [1, 5],
-#                               'user_based': [True]}}
+#                               'user_based': [False]}}
+# # param_grid = {'k': [10,20,30,40],'alog':[KNNWithMeansC], 'alpha':[0.1,0.2,0.5,0.9], 'user_based': [True], 'sim_options': {'name': ['pearson'],
+# #                               # 'min_support': [1, 5],
+# #                               'user_based': [True]}}
 
-gs = GridSearchCV(MyOwnAlgorithm, param_grid, measures=['rmse', 'mae'], cv=5, n_jobs=-1)
-# gs = GridSearchCV(OdnovanAlgorithm, param_grid, measures=['rmse', 'mae'], cv=5, n_jobs=-1)
+# gs = GridSearchCV(MyOwnAlgorithm, param_grid, measures=['rmse', 'mae'], cv=5, n_jobs=-1)
+# # gs = GridSearchCV(OdnovanAlgorithm, param_grid, measures=['rmse', 'mae'], cv=5, n_jobs=-1)
 
-gs.fit(data)
+# gs.fit(data)
 
-# best RMSE score
-print(gs.best_score['rmse'])
+# # best RMSE score
+# print(gs.best_score['rmse'])
 
-# combination of parameters that gave the best RMSE score
-print(gs.best_params['rmse'])
+# # combination of parameters that gave the best RMSE score
+# print(gs.best_params['rmse'])
 
-print(gs.best_score['mae'])
-print(gs.best_params['mae'])
+# print(gs.best_score['mae'])
+# print(gs.best_params['mae'])
 
 
 # #########
-# sim_options={'name':'pearson','user_based':False}
+sim_options={'name':'pearson','user_based':False}
 # cross_validate(MyOwnAlgorithm(k=40, alog=KNNWithMeans,user_based =False, beta=beta, epsilon=0.9, sim_options=sim_options), data, measures=['RMSE', 'MAE'], n_jobs=-1, cv=5, random_state=100, verbose=True)
 # cross_validate(KNNWithMeans(k=40,sim_options=sim_options), data, measures=['RMSE', 'MAE'],n_jobs=-1, cv=5, random_state=100, verbose=True)
-# cross_validate(OdnovanAlgorithm(alog=KNNWithMeansC, user_based=False, sim_options=sim_options, alpha=0.2), data, measures=['RMSE', 'MAE'], cv=5,random_state=100, verbose=True)
+cross_validate(OdnovanAlgorithm(alog=KNNWithMeansC, user_based=False, sim_options=sim_options, alpha=0.2), data, measures=['RMSE', 'MAE'], cv=5,random_state=100, verbose=True)
 ##
 # kf = KFold(n_splits=5)
 # algo = OdnovanAlgorithm(alog=KNNWithMeansC, sim_options=sim_options, user_based=True, alpha=0.2)

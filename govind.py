@@ -6,10 +6,12 @@ from surprise.accuracy import rmse
 from surprise.accuracy import mae
 from surprise.agreements import agree_trust
 from surprise.agreements import agree_trust_old
+from surprise.agreements import agree_trust_op
 import matplotlib.pyplot as plt
 import os
 from surprise import Reader
 import numpy as np
+import copy as cp
 
 ######################################### running parameters #############################
 max_r = 5
@@ -28,7 +30,7 @@ datasetname = 'ml-20m'
 # datasetname = 'jester'
 data = Dataset.load_builtin(datasetname)
 # data = Dataset.load_builtin('jester')
-user_based = False
+user_based = True
 base_line = False
 k= 40
 
@@ -49,18 +51,19 @@ algo.fit(trainset)
 
 if base_line != True:
 	sim = algo.sim
-	tsim,activityma = agree_trust(trainset, beta, epsilon, ptype=ptype, istrainset=True, activity=False)
-	# mixsim = (sim *tsim) / 2
-	mixsim = sim *tsim *tsim
-	# mixsim = (sim * tsim) +activityma
-	# mixsim *= activityma
-	# # sim[min_index] = activityma[min_index]
-	algo.sim = mixsim
+	# sim2 = cp.deepcopy(sim)
+
+	# tsim,activityma = agree_trust(trainset, beta, epsilon, ptype=ptype, istrainset=True, activity=False)
+	# mixsim = sim *tsim *tsim
+	# algo.sim = mixsim
+	tr, comon, noncom = agree_trust_op(trainset, beta, epsilon, algo.sim, ptype=ptype, istrainset=True, activity=False)
+	algo.sim = (sim * tr * tr) + (noncom)
+	# algo.sim = (sim * tr) + (noncom *sim2)
 
 predictions=algo.test(testset)
 print(datasetname)
 if base_line != True:
-	print('mixsim = sim *tsim *tsim')
+	print('((sim * tr) + (noncom *sim2))')
 	# print('(sim * tsim) +activityma')
 else:
 	print('base_line')
@@ -89,10 +92,28 @@ mae(predictions)
 # print(activityma[30,54])
 # print(activityma[54,30])
 
-plt.matshow(algo.sim);
+print(noncom[30,40])
+print(noncom[40,30])
+
+print(noncom[30,54])
+print(noncom[54,30])
+
+plt.matshow(comon);
 plt.colorbar()
 # plt.show()
-plt.savefig(datasetname+user_based+'.png')
+plt.savefig(datasetname+str(user_based)+'comon.png')
+
+plt.matshow(tsim);
+plt.colorbar()
+# plt.show()
+plt.savefig(datasetname+str(user_based)+'tsim.png')
+
+
+plt.matshow(noncom);
+plt.colorbar()
+# plt.show()
+plt.savefig(datasetname+str(user_based)+'noncom.png')
+
 
 
 # fig2 = plt.figure(2)
