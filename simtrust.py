@@ -27,8 +27,8 @@ print(start)
 # reader = Reader(line_format='user item rating') #sep='\t',
 # file_path = os.path.expanduser('~/.surprise_data/jester/jester_ratings.dat')
 # data = Dataset.load_from_file(file_path, rating_scale=(-10, 10), reader=reader)
-# datasetname = 'ml-20m'
-datasetname = 'jester'
+datasetname = 'ml-20m'
+# datasetname = 'jester'
 
 data = Dataset.load_builtin(datasetname)
 # data = Dataset.load_builtin('ml-20m')
@@ -73,13 +73,14 @@ class MyOwnAlgorithm(AlgoBase):
         # self.sim = self.compute_similarities(verbose=self.verbose)
         self.algo.fit(trainset)
         sim = self.algo.sim
-        tsim,activityma = agree_trust(trainset, self.beta, self.epsilon, ptype=self.ptype, istrainset=True, activity=False)
+        # tsim,activityma = agree_trust(trainset, self.beta, self.epsilon, ptype=self.ptype, istrainset=True, activity=False)
 
-        mixsim = (sim * tsim) +activityma
-        self.algo.sim = mixsim
+        # mixsim = (sim * tsim *tsim) 
+        # self.algo.sim = mixsim
 
-        # self.algo.sim = agree_trust_op(trainset, self.beta, self.epsilon, self.algo.sim, ptype=self.ptype, istrainset=True, activity=False)
-
+        tr, comon, noncom = agree_trust_op(trainset, self.beta, self.epsilon, self.algo.sim, ptype=self.ptype, istrainset=True, activity=False)
+        self.algo.sim = tr*tr - noncom #works best for movie lens data sets
+        # self.algo.sim = tr*tr*tr*tr*tr*tr*tr*tr*tr*tr #+ (noncom*noncom*noncom*noncom) no good for jester user based
         return self
 
     def estimate(self, u, i):
@@ -104,7 +105,7 @@ class OdnovanAlgorithm(AlgoBase):
         AlgoBase.fit(self, trainset)
         self.algo.fit(trainset)
         print('OdnovanAlgorithm here')
-        self.algo.sim = odonovan_trust_old(trainset, self.algo, ptype= self.ptype, alpha=self.alpha)
+        self.algo.sim = odonovan_trust_old(trainset, self.algo, ptype=self.ptype, alpha=self.alpha)
         print('OdnovanAlgorithm fit done')
         print(self.algo.sim.shape)
 
@@ -142,18 +143,37 @@ num_cores = multiprocessing.cpu_count()
 
 # #########
 sim_options={'name':'pearson','user_based':False}
-# cross_validate(MyOwnAlgorithm(k=40, alog=KNNWithMeans,user_based =False, beta=beta, epsilon=0.9, sim_options=sim_options), data, measures=['RMSE', 'MAE'], n_jobs=-1, cv=5, random_state=100, verbose=True)
-# cross_validate(KNNWithMeans(k=40,sim_options=sim_options), data, measures=['RMSE', 'MAE'],n_jobs=-1, cv=5, random_state=100, verbose=True)
-cross_validate(OdnovanAlgorithm(alog=KNNWithMeansC, user_based=False, sim_options=sim_options, alpha=0.2), data, measures=['RMSE', 'MAE'], cv=5,random_state=100, verbose=True)
-##
-# kf = KFold(n_splits=5)
-# algo = OdnovanAlgorithm(alog=KNNWithMeansC, sim_options=sim_options, user_based=True, alpha=0.2)
+cross_validate(MyOwnAlgorithm(k=40, alog=KNNWithMeans,user_based =False, beta=beta, epsilon=0, sim_options=sim_options), data, measures=['RMSE', 'MAE'], n_jobs=-1, cv=5, verbose=True)
+# cross_validate(KNNWithMeans(k=40,sim_options=sim_options), data, measures=['RMSE', 'MAE'],n_jobs=-1, cv=5, verbose=True)
+# cross_validate(OdnovanAlgorithm(alog=KNNWithMeansC, user_based=True, sim_options=sim_options, alpha=0.2), data, measures=['RMSE', 'MAE'] , cv=2, verbose=True)
+# cross_validate(OdnovanAlgorithm(alog=KNNWithMeans, user_based=False, sim_options=sim_options, alpha=0.2), data, measures=['RMSE', 'MAE'] , cv=2, verbose=True)
+
+# # ##
+# kf = KFold(n_splits=5,  random_state=100)
+# # algo = OdnovanAlgorithm(alog=KNNWithMeansC, sim_options=sim_options, user_based=False, alpha=0.2)
+# algo = MyOwnAlgorithm(k=40, alog=KNNWithMeans,user_based =False, beta=beta, epsilon=0.1, sim_options=sim_options)
+# # algo = KNNWithMeans(k=40,sim_options=sim_options)
+
+# sum_rmse = 0
+# sum_mae = 0
+# kt = 0
 
 # for trainset, testset in kf.split(data):
-# # #     # train and test algorithm.
+# # # # #     # train and test algorithm.
+# #     algo.fit(trainset, testset)
 #     algo.fit(trainset)
 #     predictions = algo.test(testset)
 
-#     # Compute and print Root Mean Squared Error
-#     accuracy.rmse(predictions, verbose=True)
+# # #     # Compute and print Root Mean Squared Error
+#     sum_rmse+= rmse(predictions, verbose=False)
+#     sum_mae+= mae(predictions, verbose=False)
+#     kt += 1
+
+# mean_mae = sum_mae/kt
+# mean_rmse = sum_rmse/kt
+
+# print('mean_rmse')
+# print(mean_rmse)
+# print('mean_mae')
+# print(mean_mae)
 

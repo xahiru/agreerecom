@@ -290,54 +290,101 @@ def odonovan_trust_old(trainset, algo, ptype='user', alpha=0.2):
     cdef int rows = trainset.n_users
     cdef np.ndarray[np.double_t, ndim=2] trust_matrix,
     
-    col_row_length = trainset.n_users
 
     if ptype == 'item':
-        col_row_length = trainset.n_items
+        rows = trainset.n_items
 
     trust_matrix = np.zeros((rows, rows))
+    print('trainset.n_items')
+    print(rows)
+    print('trainset.n_users')
+    print(trainset.n_users)
 
     testset = trainset.build_testset()
-    algo.fit(trainset)
-    sim = algo.sim
+    # algo.fit(trainset)
+    # sim = algo.sim
+
+    # print(sim.shape)
+    # print('sim.shape')
 
     for x in range(rows):
+        # print('x')
+        # print(x)
         start = time.time()
         newset = cp.deepcopy(trainset)
-        simc = cp.deepcopy(sim)
-        simc[x] = 0
+        # simc = cp.deepcopy(sim)
+        # simc[x] = 0
+        # print('simc')
+        # print(simc)
         if ptype == 'user':
             newset.ur[x] = []
         else:
             newset.ir[x] = []
     
-        algo.fit(newset, simc)
+        # algo.fit(newset, simc)
+        algo.fit(trainset)
         p = algo.test(testset)
 
         df = pd.DataFrame(p,columns=['uid', 'iid', 'rui', 'est', 'details'])
+        # df['uid'] = df['uid'].astype('category').cat.codes
+        # print(df)
 
-        df.sort_values(by=['uid'])
+        # df.sort_values(by=['uid'])
         df = df.loc[df['est'] != 0] #removes items predicted 0 
         df['err'] = abs(df.est - df.rui)
 
         filtered_df = df.loc[df['err'] < alpha] #alpha = 0.2
+        # print('filtered_df.uid.unique()')
+        # print(filtered_df.uid.unique())
 
-        uid1 = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts().keys().tolist()
-        # new_list = [int(i)-1 for i in uid1]
-        new_list = [newset.to_inner_uid(i)-1 for i in uid1]
+        # uid1 = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts().keys().tolist()
+        # print('uid1')
+        # print(uid1)
+        # # new_list = [int(i) for i in uid1]
+        if ptype == 'user':
+            new_list = [trainset.to_inner_uid(i) for i in filtered_df.uid.unique()] #raw indices of trust matrix (user,user)
+            nu = filtered_df.uid.value_counts().tolist() #numerator is a subset of denominator
+            den = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts().tolist()
+            results = [int(n) / int(d) for n,d in zip(nu, den)]
+            # print('den')
+            # print(den)
+            # print('nu')
+            # print(nu)
+        else:
+            new_list = [trainset.to_inner_iid(i) for i in filtered_df.iid.unique()] #raw indices of trust matrix (item,item)
+            nu = filtered_df.iid.value_counts().tolist()
+            den = df.loc[df['iid'].isin(filtered_df.iid.unique())].iid.value_counts()
+            results = [int(n) / int(d) for n,d in zip(nu, den)]
+
+        
+        # print(new_list)
+        # print('len(new_list)')
+        # print(len(new_list))
+        # # print('sim.shape')
+        # # print(sim.shape)
        
 
-        den = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts()
+        # den = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts().tolist()
+        # print('den')
+        # print(den)
         
 
-        uids = filtered_df.uid.value_counts().keys().tolist()
+        # uid = filtered_df.uid.value_counts().keys().tolist()
         
-        nu = filtered_df.uid.value_counts()
+        # nu = filtered_df.uid.value_counts()
         
-        trust_matrix[x,new_list] = nu/den
-        print('time.time() - start')
-        print(time.time() - start)
+        trust_matrix[x,new_list] = results
+        trust_matrix[x,x] = 1
+        # print('trust_matrix[x,new_list]')
+        # print(trust_matrix[x,new_list])
+        # print('trust_matrix[x,:]')
+        # print(trust_matrix[x,:])
+
+        # print('time.time() - start')
+        # print(time.time() - start)
         
     
-    # print('======================== odonovan_trust |END|========================')
+    print('======================== odonovan_trust |END|========================')
+    # print(trust_matrix)
     return trust_matrix
+
