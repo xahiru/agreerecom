@@ -27,8 +27,8 @@ print(start)
 # reader = Reader(line_format='user item rating') #sep='\t',
 # file_path = os.path.expanduser('~/.surprise_data/jester/jester_ratings.dat')
 # data = Dataset.load_from_file(file_path, rating_scale=(-10, 10), reader=reader)
-datasetname = 'ml-20m'
-# datasetname = 'jester'
+# datasetname = 'ml-20m'
+datasetname = 'jester'
 
 data = Dataset.load_builtin(datasetname)
 # data = Dataset.load_builtin('ml-20m')
@@ -79,8 +79,8 @@ class MyOwnAlgorithm(AlgoBase):
         # self.algo.sim = mixsim
 
         tr, comon, noncom = agree_trust_op(trainset, self.beta, self.epsilon, self.algo.sim, ptype=self.ptype, istrainset=True, activity=False)
-        self.algo.sim = tr*tr - noncom #works best for movie lens data sets
-        # self.algo.sim = tr*tr*tr*tr*tr*tr*tr*tr*tr*tr #+ (noncom*noncom*noncom*noncom) no good for jester user based
+        # self.algo.sim = tr*tr - noncom #works best for movie lens data sets
+        self.algo.sim = tr- (0.6*noncom)#*tr*tr#*tr*tr*tr*tr*tr*tr*tr  #+ (noncom*noncom*noncom*noncom) no good for jester user based
         return self
 
     def estimate(self, u, i):
@@ -93,7 +93,7 @@ class MyOwnAlgorithm(AlgoBase):
 
 class OdnovanAlgorithm(AlgoBase):
     def __init__(self, k=40, min_k=1, alog=KNNWithMeans,user_based =True, alpha=0.2, sim_options={}, verbose=True, **kwargs):
-        self.algo = alog(k=k,sim_options=sim_options,verbose=True)
+        self.algo = alog(k=k,sim_options=sim_options,verbose=verbose)
         self.alpha = alpha
         # self.testset = testset
         if user_based:
@@ -105,7 +105,11 @@ class OdnovanAlgorithm(AlgoBase):
         AlgoBase.fit(self, trainset)
         self.algo.fit(trainset)
         print('OdnovanAlgorithm here')
+        start = time.time()
         self.algo.sim = odonovan_trust_old(trainset, self.algo, ptype=self.ptype, alpha=self.alpha)
+        print('OdnovanAlgorithm fit time')
+        print('time.time() - start')
+        print(time.time() - start)
         print('OdnovanAlgorithm fit done')
         print(self.algo.sim.shape)
 
@@ -142,38 +146,51 @@ num_cores = multiprocessing.cpu_count()
 
 
 # #########
-sim_options={'name':'pearson','user_based':False}
-cross_validate(MyOwnAlgorithm(k=40, alog=KNNWithMeans,user_based =False, beta=beta, epsilon=0, sim_options=sim_options), data, measures=['RMSE', 'MAE'], n_jobs=-1, cv=5, verbose=True)
+user_based = True
+sim_options={'name':'pearson','user_based':user_based}
+# cross_validate(MyOwnAlgorithm(k=40, alog=KNNWithMeans,user_based =False, beta=beta, epsilon=0, sim_options=sim_options), data, measures=['RMSE', 'MAE'], n_jobs=-1, cv=5, verbose=True)
 # cross_validate(KNNWithMeans(k=40,sim_options=sim_options), data, measures=['RMSE', 'MAE'],n_jobs=-1, cv=5, verbose=True)
 # cross_validate(OdnovanAlgorithm(alog=KNNWithMeansC, user_based=True, sim_options=sim_options, alpha=0.2), data, measures=['RMSE', 'MAE'] , cv=2, verbose=True)
 # cross_validate(OdnovanAlgorithm(alog=KNNWithMeans, user_based=False, sim_options=sim_options, alpha=0.2), data, measures=['RMSE', 'MAE'] , cv=2, verbose=True)
 
 # # ##
-# kf = KFold(n_splits=5,  random_state=100)
-# # algo = OdnovanAlgorithm(alog=KNNWithMeansC, sim_options=sim_options, user_based=False, alpha=0.2)
-# algo = MyOwnAlgorithm(k=40, alog=KNNWithMeans,user_based =False, beta=beta, epsilon=0.1, sim_options=sim_options)
-# # algo = KNNWithMeans(k=40,sim_options=sim_options)
+kf = KFold(n_splits=5,  random_state=100)
+algo = OdnovanAlgorithm(alog=KNNWithMeans, sim_options=sim_options, user_based=user_based, alpha=0.2, verbose=False)
+# algo = MyOwnAlgorithm(k=40, alog=KNNWithMeans,user_based =user_based, beta=beta, epsilon=0.1, sim_options=sim_options)
+# algo = KNNWithMeans(k=40,sim_options=sim_options)
 
-# sum_rmse = 0
-# sum_mae = 0
-# kt = 0
+sum_rmse = 0
+sum_mae = 0
+kt = 0
 
-# for trainset, testset in kf.split(data):
-# # # # #     # train and test algorithm.
-# #     algo.fit(trainset, testset)
-#     algo.fit(trainset)
-#     predictions = algo.test(testset)
+for trainset, testset in kf.split(data):
+# # # #     # train and test algorithm.
+#     algo.fit(trainset, testset)
+    start = time.time()
+    algo.fit(trainset)
+    print(time.time() - start)
+    # if kt == 0:
+    np.save(datasetname+str(kt)+'user_based_True_Odtrust_matix_.npy', algo.algo.sim)
+    start = time.time()
+    predictions = algo.test(testset)
+    print(time.time() - start)
 
-# # #     # Compute and print Root Mean Squared Error
-#     sum_rmse+= rmse(predictions, verbose=False)
-#     sum_mae+= mae(predictions, verbose=False)
-#     kt += 1
+    # #     # Compute and print Root Mean Squared Error
+    m_rmse = rmse(predictions, verbose=False)
+    sum_rmse+= m_rmse
+    m_mae = mae(predictions, verbose=False)
+    sum_mae += m_mae
+    kt += 1
+    print('m_rmse')
+    print(m_rmse)
+    print('m_mae')
+    print(m_mae)
 
-# mean_mae = sum_mae/kt
-# mean_rmse = sum_rmse/kt
-
-# print('mean_rmse')
-# print(mean_rmse)
-# print('mean_mae')
-# print(mean_mae)
+mean_mae = sum_mae/kt
+mean_rmse = sum_rmse/kt
+print('OdnovanAlgorithm user_based = False')
+print('mean_rmse')
+print(mean_rmse)
+print('mean_mae')
+print(mean_mae)
 

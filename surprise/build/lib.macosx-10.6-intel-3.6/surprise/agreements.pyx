@@ -229,7 +229,7 @@ def agree_trust_op(trainset, beta, epsilon,sim, ptype='user', istrainset=True, a
                 activity_matrix_val[user_a,user_b] = 1/(1+np.exp(-np.abs(a_count+b_count/b)))
             trust_matrix_common[user_a,user_b] = common_set_length
         # activity_matrix[user_a, user_a] = 1
-    # print('======================== agree_trust_op |END|========================')
+    print('======================== agree_trust_op |END|========================')
     print('time.time() - start')
     print(time.time() - start)
     return trust_matrix, trust_matrix_common, activity_matrix_val
@@ -285,7 +285,7 @@ def agree_trust_old(trainset, beta, epsilon, ptype='user', istrainset=True, acti
 
 def odonovan_trust_old(trainset, algo, ptype='user', alpha=0.2):
     """Computes knn version of trust matrix proposed by J. O’Donovan and B. Smyth, in “Trust in recommender systems,” """
-    print('======================== odonovan_trust |START|========================')
+    # print('======================== odonovan_trust |START|========================')
     
     cdef int rows = trainset.n_users
     cdef np.ndarray[np.double_t, ndim=2] trust_matrix,
@@ -384,7 +384,7 @@ def odonovan_trust_old(trainset, algo, ptype='user', alpha=0.2):
         # print(time.time() - start)
         
     
-    print('======================== odonovan_trust |END|========================')
+    # print('======================== odonovan_trust |END|========================')
     # print(trust_matrix)
     return trust_matrix
 

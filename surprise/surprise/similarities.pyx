@@ -182,8 +182,8 @@ def msd(n_x, yr, min_support):
 
 
 def pearson(n_x, yr, min_support):
-    print('inside pearson function')
-    start = time.time()
+    # print('inside pearson function')
+    # start = time.time()
     """Compute the Pearson correlation coefficient between all pairs of users
     (or items).
 
@@ -290,7 +290,7 @@ def pearson(n_x, yr, min_support):
 
             sim[xj, xi] = sim[xi, xj]
     # print('done loops')
-    print(time.time() - start)
+    # print(time.time() - start)
     return sim
 
 # cpdef void s_simloop(np.double_t x, np.int_t fr, np.double_t sqi, np.double_t sqj, np.double_t si, np.double_t sj, double ri, double rj):
