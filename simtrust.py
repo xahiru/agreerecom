@@ -27,8 +27,8 @@ print(start)
 # reader = Reader(line_format='user item rating') #sep='\t',
 # file_path = os.path.expanduser('~/.surprise_data/jester/jester_ratings.dat')
 # data = Dataset.load_from_file(file_path, rating_scale=(-10, 10), reader=reader)
-# datasetname = 'ml-20m'
-datasetname = 'jester'
+datasetname = 'ml-20m'
+# datasetname = 'jester'
 
 data = Dataset.load_builtin(datasetname)
 # data = Dataset.load_builtin('ml-20m')
@@ -80,7 +80,7 @@ class MyOwnAlgorithm(AlgoBase):
 
         tr, comon, noncom = agree_trust_op(trainset, self.beta, self.epsilon, self.algo.sim, ptype=self.ptype, istrainset=True, activity=False)
         # self.algo.sim = tr*tr - noncom #works best for movie lens data sets
-        self.algo.sim = tr- (0.6*noncom)#*tr*tr#*tr*tr*tr*tr*tr*tr*tr  #+ (noncom*noncom*noncom*noncom) no good for jester user based
+        self.algo.sim = tr**0.5 - (0.6*noncom)#*tr*tr#*tr*tr*tr*tr*tr*tr*tr  #+ (noncom*noncom*noncom*noncom) no good for jester user based
         return self
 
     def estimate(self, u, i):
@@ -122,27 +122,27 @@ class OdnovanAlgorithm(AlgoBase):
 
 num_cores = multiprocessing.cpu_count()
 
-##### GRID search for parameter optimization
-# param_grid = {'k': [10,20,30,40],'epsilon':[0.01,0.1,0.5,0.9], 'user_based': [False], 'beta':[0], 'sim_options': {'name': ['pearson'],
+#### GRID search for parameter optimization
+# param_grid = {'k': [10,20,30,40],'epsilon':[0.01,0.1,0.5,0.9], 'user_based': [True], 'beta':[beta], 'sim_options': {'name': ['pearson'],
 #                               # 'min_support': [1, 5],
-#                               'user_based': [False]}}
-# # param_grid = {'k': [10,20,30,40],'alog':[KNNWithMeansC], 'alpha':[0.1,0.2,0.5,0.9], 'user_based': [True], 'sim_options': {'name': ['pearson'],
-# #                               # 'min_support': [1, 5],
-# #                               'user_based': [True]}}
+#                               'user_based': [True]}}
+param_grid = {'k': [40],'alog':[KNNWithMeans], 'alpha':[0.1,0.2,0.5,0.9], 'user_based': [True],'verbose':[False], 'sim_options': {'name': ['pearson'],
+                              # 'min_support': [1, 5],
+                              'user_based': [True]}}
 
 # gs = GridSearchCV(MyOwnAlgorithm, param_grid, measures=['rmse', 'mae'], cv=5, n_jobs=-1)
-# # gs = GridSearchCV(OdnovanAlgorithm, param_grid, measures=['rmse', 'mae'], cv=5, n_jobs=-1)
+gs = GridSearchCV(OdnovanAlgorithm, param_grid, measures=['rmse', 'mae'], cv=5, n_jobs=-1)
 
-# gs.fit(data)
+gs.fit(data)
 
-# # best RMSE score
-# print(gs.best_score['rmse'])
+# best RMSE score
+print(gs.best_score['rmse'])
 
-# # combination of parameters that gave the best RMSE score
-# print(gs.best_params['rmse'])
+# combination of parameters that gave the best RMSE score
+print(gs.best_params['rmse'])
 
-# print(gs.best_score['mae'])
-# print(gs.best_params['mae'])
+print(gs.best_score['mae'])
+print(gs.best_params['mae'])
 
 
 # #########
@@ -153,44 +153,44 @@ sim_options={'name':'pearson','user_based':user_based}
 # cross_validate(OdnovanAlgorithm(alog=KNNWithMeansC, user_based=True, sim_options=sim_options, alpha=0.2), data, measures=['RMSE', 'MAE'] , cv=2, verbose=True)
 # cross_validate(OdnovanAlgorithm(alog=KNNWithMeans, user_based=False, sim_options=sim_options, alpha=0.2), data, measures=['RMSE', 'MAE'] , cv=2, verbose=True)
 
-# # ##
-kf = KFold(n_splits=5,  random_state=100)
-algo = OdnovanAlgorithm(alog=KNNWithMeans, sim_options=sim_options, user_based=user_based, alpha=0.2, verbose=False)
-# algo = MyOwnAlgorithm(k=40, alog=KNNWithMeans,user_based =user_based, beta=beta, epsilon=0.1, sim_options=sim_options)
-# algo = KNNWithMeans(k=40,sim_options=sim_options)
+# # # ##
+# kf = KFold(n_splits=5,  random_state=100)
+# algo = OdnovanAlgorithm(alog=KNNWithMeans, sim_options=sim_options, user_based=user_based, alpha=0.2, verbose=False)
+# # algo = MyOwnAlgorithm(k=40, alog=KNNWithMeans,user_based =user_based, beta=beta, epsilon=0.1, sim_options=sim_options)
+# # algo = KNNWithMeans(k=40,sim_options=sim_options)
 
-sum_rmse = 0
-sum_mae = 0
-kt = 0
+# sum_rmse = 0
+# sum_mae = 0
+# kt = 0
 
-for trainset, testset in kf.split(data):
-# # # #     # train and test algorithm.
-#     algo.fit(trainset, testset)
-    start = time.time()
-    algo.fit(trainset)
-    print(time.time() - start)
-    # if kt == 0:
-    np.save(datasetname+str(kt)+'user_based_True_Odtrust_matix_.npy', algo.algo.sim)
-    start = time.time()
-    predictions = algo.test(testset)
-    print(time.time() - start)
+# for trainset, testset in kf.split(data):
+# # # # #     # train and test algorithm.
+# #     algo.fit(trainset, testset)
+#     start = time.time()
+#     algo.fit(trainset)
+#     print(time.time() - start)
+#     # if kt == 0:
+#     # np.save(datasetname+str(kt)+'user_based_True_Odtrust_matix_.npy', algo.algo.sim)
+#     start = time.time()
+#     predictions = algo.test(testset)
+#     print(time.time() - start)
 
-    # #     # Compute and print Root Mean Squared Error
-    m_rmse = rmse(predictions, verbose=False)
-    sum_rmse+= m_rmse
-    m_mae = mae(predictions, verbose=False)
-    sum_mae += m_mae
-    kt += 1
-    print('m_rmse')
-    print(m_rmse)
-    print('m_mae')
-    print(m_mae)
+#     # #     # Compute and print Root Mean Squared Error
+#     m_rmse = rmse(predictions, verbose=False)
+#     sum_rmse+= m_rmse
+#     m_mae = mae(predictions, verbose=False)
+#     sum_mae += m_mae
+#     kt += 1
+#     print('m_rmse')
+#     print(m_rmse)
+#     print('m_mae')
+#     print(m_mae)
 
-mean_mae = sum_mae/kt
-mean_rmse = sum_rmse/kt
-print('OdnovanAlgorithm user_based = False')
-print('mean_rmse')
-print(mean_rmse)
-print('mean_mae')
-print(mean_mae)
+# mean_mae = sum_mae/kt
+# mean_rmse = sum_rmse/kt
+# print('OdnovanAlgorithm user_based = True')
+# print('mean_rmse')
+# print(mean_rmse)
+# print('mean_mae')
+# print(mean_mae)
 
