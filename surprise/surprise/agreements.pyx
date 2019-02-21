@@ -226,10 +226,187 @@ def agree_trust_op(trainset, beta, epsilon,sim, ptype='user', istrainset=True, a
             b = a_count+b_count
             if b > 0:
                 # activity_matrix_val[user_a,user_b] = np.abs(a/b)
-                activity_matrix_val[user_a,user_b] = 1/(1+np.exp(-np.abs(a_count+b_count/b)))
+                activity_matrix_val[user_a,user_b] = 1/(1+np.exp(-np.abs(a_count-b_count/b)))
             trust_matrix_common[user_a,user_b] = common_set_length
         # activity_matrix[user_a, user_a] = 1
     print('======================== agree_trust_op |END|========================')
+    print('time.time() - start')
+    print(time.time() - start)
+    return trust_matrix, trust_matrix_common, activity_matrix_val
+
+#this method is same as agree_trust exepce line 146 and returns
+def agree_trust_opitmal(trainset, beta, epsilon,sim, ptype='user', istrainset=True, activity=False):
+    print('======================== agree_trust_opitmal|START|========================')
+    start = time.time()
+    cdef np.ndarray[np.double_t, ndim=2] trust_matrix, trust_matrix_common, activity_matrix, activity_matrix_val
+    cdef int user_a, user_b, common_set_length, i, j, lenA, lenB, a_positive, b_positive, agreement, a_count, b_count, shorts_length
+    cdef np.ndarray[np.double_t, ndim=1] a_ratings, b_ratings
+    cdef np.ndarray[np.double_t, ndim=2] ratings
+    cdef double a_val, b_val, trust, activity_val
+
+    
+    if istrainset == True:
+        ratings = np.zeros((trainset.n_users, trainset.n_items))
+        for u,i,r in trainset.all_ratings():
+            ratings[u,i] =r
+    else:
+        ratings = trainset
+
+    if ptype=='item':
+        ratings = ratings.T
+
+    n_x = ratings.shape[0]
+    trust_matrix = np.zeros((n_x, n_x), np.double)
+    activity_matrix = np.zeros((n_x, n_x), np.double)
+    activity_matrix_val = np.zeros((n_x, n_x), np.double)
+    trust_matrix_common = np.zeros((n_x, n_x), np.double)
+
+    
+    for user_a in range(n_x):
+        trust_matrix[user_a, user_a] = 1
+        for user_b in range(user_a):
+        # for user_b in range(user_a + 1, n_x):
+            a_ratings = ratings[user_a]
+            b_ratings = ratings[user_b]
+            # print('a_ratings')
+            # print(a_ratings)
+            # print('b_ratings')
+            # print(b_ratings)
+            
+            i = 0
+            common_set_length = 0
+            lenA = a_ratings.shape[0]
+            lenB = b_ratings.shape[0]
+            a_count = 0
+            b_count = 0
+
+            agreement = 0
+
+            while (i < lenA):
+                a_val = a_ratings[i]
+                b_val = b_ratings[i]
+                if a_val != 0 and b_val != 0:
+                    common_set_length += 1
+                    if a_val > beta and b_val > beta:
+                        agreement += 1
+                    elif a_val < beta and b_val < beta:
+                        agreement += 1
+                    elif a_val == beta and b_val == beta:#in ml-100k this will never be true for beta 2.5 since ratings are integers
+                        agreement += 1
+                elif a_val != 0:
+                    a_count += 1
+                elif b_val != 0:
+                    b_count += 1
+                i += 1
+
+
+            trust = 0
+            activity_val = 0
+            if agreement > 0:
+                trust = agreement/(common_set_length)
+
+            # activity_val = 1/(1+np.exp(-np.abs((a_count - b_count)/(a_count+b_count+epsilon))))
+
+            trust_matrix[user_a,user_b] = trust
+            trust_matrix[user_b,user_a] = trust
+            b = a_count+b_count
+            if b > 0:
+                # activity_matrix_val[user_a,user_b] = np.abs(a/b)
+                activity_matrix_val[user_a,user_b] = 1/(1+np.exp(-np.abs(a_count-b_count/b)))
+                activity_matrix_val[user_b,user_a] = 1/(1+np.exp(-np.abs(b_count-a_count/b)))
+            trust_matrix_common[user_a,user_b] = common_set_length
+        # activity_matrix[user_a, user_a] = 1
+    print('======================== agree_trust_opitmal |END|========================')
+    print('time.time() - start')
+    print(time.time() - start)
+    return trust_matrix, trust_matrix_common, activity_matrix_val
+
+#this method is same as agree_trust exepce line 146 and returns
+def agree_trust_opitmal_a_b(trainset, beta, epsilon,sim, ptype='user', istrainset=True, activity=False):
+    print('======================== agree_trust_opitmal_a_b|START|========================')
+    start = time.time()
+    cdef np.ndarray[np.double_t, ndim=2] trust_matrix, trust_matrix_common, activity_matrix, activity_matrix_val
+    cdef int user_a, user_b, common_set_length, i, j, lenA, lenB, a_positive, b_positive, agreement, a_count, b_count, shorts_length
+    cdef np.ndarray[np.double_t, ndim=1] a_ratings, b_ratings
+    cdef np.ndarray[np.double_t, ndim=2] ratings
+    cdef double a_val, b_val, trust, activity_val
+
+    
+    if istrainset == True:
+        ratings = np.zeros((trainset.n_users, trainset.n_items))
+        for u,i,r in trainset.all_ratings():
+            ratings[u,i] =r
+    else:
+        ratings = trainset
+
+    if ptype=='item':
+        ratings = ratings.T
+
+    n_x = ratings.shape[0]
+    trust_matrix = np.zeros((n_x, n_x), np.double)
+    activity_matrix = np.zeros((n_x, n_x), np.double)
+    activity_matrix_val = np.zeros((n_x, n_x), np.double)
+    trust_matrix_common = np.zeros((n_x, n_x), np.double)
+
+    
+    for user_a in range(n_x):
+        trust_matrix[user_a, user_a] = 1
+        for user_b in range(user_a):
+        # for user_b in range(user_a + 1, n_x):
+            a_ratings = ratings[user_a]
+            b_ratings = ratings[user_b]
+            # print('a_ratings')
+            # print(a_ratings)
+            # print('b_ratings')
+            # print(b_ratings)
+            
+            i = 0
+            common_set_length = 0
+            lenA = a_ratings.shape[0]
+            lenB = b_ratings.shape[0]
+            a_count = 0
+            b_count = 0
+
+            agreement = 0
+
+            while (i < lenA):
+                a_val = a_ratings[i]
+                b_val = b_ratings[i]
+                if a_val != 0 and b_val != 0:
+                    common_set_length += 1
+                    if a_val > beta and b_val > beta:
+                        agreement += 1
+                    elif a_val < beta and b_val < beta:
+                        agreement += 1
+                    elif a_val == beta and b_val == beta:#in ml-100k this will never be true for beta 2.5 since ratings are integers
+                        agreement += 1
+                elif a_val != 0:
+                    a_count += 1
+                elif b_val != 0:
+                    b_count += 1
+                i += 1
+
+
+            trust = 0
+            activity_val = 0
+            if agreement > 0:
+                trust = agreement/(common_set_length)
+
+            # activity_val = 1/(1+np.exp(-np.abs((a_count - b_count)/(a_count+b_count+epsilon))))
+            
+            trust_matrix[user_a,user_b] = trust
+            trust_matrix[user_b,user_a] = trust
+            b = a_count+b_count
+            if b > 0:
+                
+                # activity_matrix_val[user_a,user_b] = a_count/b
+                # activity_matrix_val[user_b,user_a] = b_count/b
+                activity_matrix_val[user_a,user_b] = 1/(1+np.exp(-np.abs(a_count/b)))
+                activity_matrix_val[user_b,user_a] = 1/(1+np.exp(-np.abs(b_count/b)))
+            trust_matrix_common[user_a,user_b] = common_set_length
+            trust_matrix_common[user_b,user_a] = common_set_length
+        # activity_matrix[user_a, user_a] = 1
+    print('======================== agree_trust_opitmal_a_b |END|========================')
     print('time.time() - start')
     print(time.time() - start)
     return trust_matrix, trust_matrix_common, activity_matrix_val
