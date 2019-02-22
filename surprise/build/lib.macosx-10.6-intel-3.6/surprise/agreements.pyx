@@ -368,7 +368,7 @@ def agree_trust_opitmal_a_b(trainset, beta, epsilon,sim, ptype='user', istrainse
             b_count = 0
 
             agreement = 0
-
+            #here in comparison lenA or lenB doesnt matter since we're looking for common length here
             while (i < lenA):
                 a_val = a_ratings[i]
                 b_val = b_ratings[i]
@@ -404,6 +404,7 @@ def agree_trust_opitmal_a_b(trainset, beta, epsilon,sim, ptype='user', istrainse
                 activity_matrix_val[user_a,user_b] = 1/(1+np.exp(-np.abs(a_count/b)))
                 activity_matrix_val[user_b,user_a] = 1/(1+np.exp(-np.abs(b_count/b)))
             trust_matrix_common[user_a,user_b] = common_set_length
+            trust_matrix_common[user_b,user_a] = common_set_length
         # activity_matrix[user_a, user_a] = 1
     print('======================== agree_trust_opitmal_a_b |END|========================')
     print('time.time() - start')
@@ -461,7 +462,8 @@ def agree_trust_old(trainset, beta, epsilon, ptype='user', istrainset=True, acti
 
 def odonovan_trust_old(trainset, algo, ptype='user', alpha=0.2):
     """Computes knn version of trust matrix proposed by J. O’Donovan and B. Smyth, in “Trust in recommender systems,” """
-    # print('======================== odonovan_trust |START|========================')
+    if algo.verbose:
+        print('======================== odonovan_trust |START|========================')
     
     cdef int rows = trainset.n_users
     cdef np.ndarray[np.double_t, ndim=2] trust_matrix,
@@ -471,10 +473,11 @@ def odonovan_trust_old(trainset, algo, ptype='user', alpha=0.2):
         rows = trainset.n_items
 
     trust_matrix = np.zeros((rows, rows))
-    print('trainset.n_items')
-    print(rows)
-    print('trainset.n_users')
-    print(trainset.n_users)
+    if algo.verbose:
+        print('trainset.n_items')
+        print(rows)
+        print('trainset.n_users')
+        print(trainset.n_users)
 
     testset = trainset.build_testset()
     # algo.fit(trainset)
@@ -498,20 +501,22 @@ def odonovan_trust_old(trainset, algo, ptype='user', alpha=0.2):
             newset.ir[x] = []
     
         # algo.fit(newset, simc)
-        algo.fit(trainset)
+        algo.fit(newset)
         p = algo.test(testset)
 
         df = pd.DataFrame(p,columns=['uid', 'iid', 'rui', 'est', 'details'])
         # df['uid'] = df['uid'].astype('category').cat.codes
-        # print(df)
+        # print(df['est'])
+        # print(df.loc[df['est'] == 0])
 
         # df.sort_values(by=['uid'])
         df = df.loc[df['est'] != 0] #removes items predicted 0 
         df['err'] = abs(df.est - df.rui)
+        # print(df)
 
         filtered_df = df.loc[df['err'] < alpha] #alpha = 0.2
-        # print('filtered_df.uid.unique()')
-        # print(filtered_df.uid.unique())
+        # print('filtered_df')
+        # print(filtered_df)
 
         # uid1 = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts().keys().tolist()
         # print('uid1')
@@ -533,9 +538,11 @@ def odonovan_trust_old(trainset, algo, ptype='user', alpha=0.2):
             results = [int(n) / int(d) for n,d in zip(nu, den)]
 
         
+        
+        # print('nu')
+        # print(nu)
+        # print('new_list')
         # print(new_list)
-        # print('len(new_list)')
-        # print(len(new_list))
         # # print('sim.shape')
         # # print(sim.shape)
        
@@ -550,6 +557,7 @@ def odonovan_trust_old(trainset, algo, ptype='user', alpha=0.2):
         # nu = filtered_df.uid.value_counts()
         
         trust_matrix[x,new_list] = results
+        # print(results)
         trust_matrix[x,x] = 1
         # print('trust_matrix[x,new_list]')
         # print(trust_matrix[x,new_list])
@@ -559,8 +567,8 @@ def odonovan_trust_old(trainset, algo, ptype='user', alpha=0.2):
         # print('time.time() - start')
         # print(time.time() - start)
         
-    
-    # print('======================== odonovan_trust |END|========================')
+    if algo.verbose:
+        print('======================== odonovan_trust |END|========================')
     # print(trust_matrix)
     return trust_matrix
 

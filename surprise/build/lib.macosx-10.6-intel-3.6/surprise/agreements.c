@@ -1840,6 +1840,7 @@ static const char __pyx_k_nonzero[] = "nonzero";
 static const char __pyx_k_ratings[] = "ratings";
 static const char __pyx_k_results[] = "results";
 static const char __pyx_k_testset[] = "testset";
+static const char __pyx_k_verbose[] = "verbose";
 static const char __pyx_k_activity[] = "activity";
 static const char __pyx_k_deepcopy[] = "deepcopy";
 static const char __pyx_k_new_list[] = "new_list";
@@ -1880,12 +1881,14 @@ static const char __pyx_k_agree_trust_START[] = "======================== agree_
 static const char __pyx_k_common_set_length[] = "common_set_length";
 static const char __pyx_k_agree_trust_op_END[] = "======================== agree_trust_op |END|========================";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
+static const char __pyx_k_odonovan_trust_END[] = "======================== odonovan_trust |END|========================";
 static const char __pyx_k_odonovan_trust_old[] = "odonovan_trust_old";
 static const char __pyx_k_activity_matrix_val[] = "activity_matrix_val";
 static const char __pyx_k_agree_trust_opitmal[] = "agree_trust_opitmal";
 static const char __pyx_k_surprise_agreements[] = "surprise.agreements";
 static const char __pyx_k_trust_matrix_common[] = "trust_matrix_common";
 static const char __pyx_k_agree_trust_op_START[] = "======================== agree_trust_op|START|========================";
+static const char __pyx_k_odonovan_trust_START[] = "======================== odonovan_trust |START|========================";
 static const char __pyx_k_agree_trust_old_START[] = "======================== agree_trust_old |START|========================";
 static const char __pyx_k_agree_trust_opitmal_END[] = "======================== agree_trust_opitmal |END|========================";
 static const char __pyx_k_agree_trust_opitmal_a_b[] = "agree_trust_opitmal_a_b";
@@ -1994,6 +1997,8 @@ static PyObject *__pyx_n_s_nu;
 static PyObject *__pyx_n_s_numpy;
 static PyObject *__pyx_kp_u_numpy_core_multiarray_failed_to;
 static PyObject *__pyx_kp_u_numpy_core_umath_failed_to_impor;
+static PyObject *__pyx_kp_u_odonovan_trust_END;
+static PyObject *__pyx_kp_u_odonovan_trust_START;
 static PyObject *__pyx_n_s_odonovan_trust_old;
 static PyObject *__pyx_n_s_p;
 static PyObject *__pyx_n_s_pandas;
@@ -2040,6 +2045,7 @@ static PyObject *__pyx_n_u_user;
 static PyObject *__pyx_n_s_user_a;
 static PyObject *__pyx_n_s_user_b;
 static PyObject *__pyx_n_s_value_counts;
+static PyObject *__pyx_n_s_verbose;
 static PyObject *__pyx_n_s_x;
 static PyObject *__pyx_n_s_zeros;
 static PyObject *__pyx_n_s_zip;
@@ -2073,17 +2079,19 @@ static PyObject *__pyx_tuple__16;
 static PyObject *__pyx_tuple__17;
 static PyObject *__pyx_tuple__18;
 static PyObject *__pyx_tuple__19;
+static PyObject *__pyx_tuple__20;
 static PyObject *__pyx_tuple__21;
 static PyObject *__pyx_tuple__23;
 static PyObject *__pyx_tuple__25;
 static PyObject *__pyx_tuple__27;
 static PyObject *__pyx_tuple__29;
-static PyObject *__pyx_codeobj__20;
+static PyObject *__pyx_tuple__31;
 static PyObject *__pyx_codeobj__22;
 static PyObject *__pyx_codeobj__24;
 static PyObject *__pyx_codeobj__26;
 static PyObject *__pyx_codeobj__28;
 static PyObject *__pyx_codeobj__30;
+static PyObject *__pyx_codeobj__32;
 /* Late includes */
 
 /* "surprise/agreements.pyx":39
@@ -8080,6 +8088,8 @@ static PyObject *__pyx_pf_8surprise_10agreements_6agree_trust_opitmal_a_b(CYTHON
   Py_ssize_t __pyx_t_35;
   Py_ssize_t __pyx_t_36;
   Py_ssize_t __pyx_t_37;
+  Py_ssize_t __pyx_t_38;
+  Py_ssize_t __pyx_t_39;
   __Pyx_RefNannySetupContext("agree_trust_opitmal_a_b", 0);
   __pyx_pybuffer_trust_matrix.pybuffer.buf = NULL;
   __pyx_pybuffer_trust_matrix.refcount = 0;
@@ -9176,14 +9186,14 @@ static PyObject *__pyx_pf_8surprise_10agreements_6agree_trust_opitmal_a_b(CYTHON
  *             b_count = 0
  * 
  *             agreement = 0             # <<<<<<<<<<<<<<
- * 
+ *             #here in comparison lenA or lenB doesnt matter since we're looking for common length here
  *             while (i < lenA):
  */
       __pyx_v_agreement = 0;
 
       /* "surprise/agreements.pyx":372
  *             agreement = 0
- * 
+ *             #here in comparison lenA or lenB doesnt matter since we're looking for common length here
  *             while (i < lenA):             # <<<<<<<<<<<<<<
  *                 a_val = a_ratings[i]
  *                 b_val = b_ratings[i]
@@ -9193,7 +9203,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_6agree_trust_opitmal_a_b(CYTHON
         if (!__pyx_t_4) break;
 
         /* "surprise/agreements.pyx":373
- * 
+ *             #here in comparison lenA or lenB doesnt matter since we're looking for common length here
  *             while (i < lenA):
  *                 a_val = a_ratings[i]             # <<<<<<<<<<<<<<
  *                 b_val = b_ratings[i]
@@ -9685,7 +9695,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_6agree_trust_opitmal_a_b(CYTHON
  *                 activity_matrix_val[user_a,user_b] = 1/(1+np.exp(-np.abs(a_count/b)))
  *                 activity_matrix_val[user_b,user_a] = 1/(1+np.exp(-np.abs(b_count/b)))             # <<<<<<<<<<<<<<
  *             trust_matrix_common[user_a,user_b] = common_set_length
- *         # activity_matrix[user_a, user_a] = 1
+ *             trust_matrix_common[user_b,user_a] = common_set_length
  */
         __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 405, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
@@ -9775,8 +9785,8 @@ static PyObject *__pyx_pf_8surprise_10agreements_6agree_trust_opitmal_a_b(CYTHON
  *                 activity_matrix_val[user_a,user_b] = 1/(1+np.exp(-np.abs(a_count/b)))
  *                 activity_matrix_val[user_b,user_a] = 1/(1+np.exp(-np.abs(b_count/b)))
  *             trust_matrix_common[user_a,user_b] = common_set_length             # <<<<<<<<<<<<<<
+ *             trust_matrix_common[user_b,user_a] = common_set_length
  *         # activity_matrix[user_a, user_a] = 1
- *     print('======================== agree_trust_opitmal_a_b |END|========================')
  */
       __pyx_t_36 = __pyx_v_user_a;
       __pyx_t_37 = __pyx_v_user_b;
@@ -9794,6 +9804,30 @@ static PyObject *__pyx_pf_8surprise_10agreements_6agree_trust_opitmal_a_b(CYTHON
         __PYX_ERR(0, 406, __pyx_L1_error)
       }
       *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_trust_matrix_common.rcbuffer->pybuffer.buf, __pyx_t_36, __pyx_pybuffernd_trust_matrix_common.diminfo[0].strides, __pyx_t_37, __pyx_pybuffernd_trust_matrix_common.diminfo[1].strides) = __pyx_v_common_set_length;
+
+      /* "surprise/agreements.pyx":407
+ *                 activity_matrix_val[user_b,user_a] = 1/(1+np.exp(-np.abs(b_count/b)))
+ *             trust_matrix_common[user_a,user_b] = common_set_length
+ *             trust_matrix_common[user_b,user_a] = common_set_length             # <<<<<<<<<<<<<<
+ *         # activity_matrix[user_a, user_a] = 1
+ *     print('======================== agree_trust_opitmal_a_b |END|========================')
+ */
+      __pyx_t_38 = __pyx_v_user_b;
+      __pyx_t_39 = __pyx_v_user_a;
+      __pyx_t_8 = -1;
+      if (__pyx_t_38 < 0) {
+        __pyx_t_38 += __pyx_pybuffernd_trust_matrix_common.diminfo[0].shape;
+        if (unlikely(__pyx_t_38 < 0)) __pyx_t_8 = 0;
+      } else if (unlikely(__pyx_t_38 >= __pyx_pybuffernd_trust_matrix_common.diminfo[0].shape)) __pyx_t_8 = 0;
+      if (__pyx_t_39 < 0) {
+        __pyx_t_39 += __pyx_pybuffernd_trust_matrix_common.diminfo[1].shape;
+        if (unlikely(__pyx_t_39 < 0)) __pyx_t_8 = 1;
+      } else if (unlikely(__pyx_t_39 >= __pyx_pybuffernd_trust_matrix_common.diminfo[1].shape)) __pyx_t_8 = 1;
+      if (unlikely(__pyx_t_8 != -1)) {
+        __Pyx_RaiseBufferIndexError(__pyx_t_8);
+        __PYX_ERR(0, 407, __pyx_L1_error)
+      }
+      *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_trust_matrix_common.rcbuffer->pybuffer.buf, __pyx_t_38, __pyx_pybuffernd_trust_matrix_common.diminfo[0].strides, __pyx_t_39, __pyx_pybuffernd_trust_matrix_common.diminfo[1].strides) = __pyx_v_common_set_length;
 
       /* "surprise/agreements.pyx":354
  *     for user_a in range(n_x):
@@ -9815,38 +9849,38 @@ static PyObject *__pyx_pf_8surprise_10agreements_6agree_trust_opitmal_a_b(CYTHON
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "surprise/agreements.pyx":408
- *             trust_matrix_common[user_a,user_b] = common_set_length
+  /* "surprise/agreements.pyx":409
+ *             trust_matrix_common[user_b,user_a] = common_set_length
  *         # activity_matrix[user_a, user_a] = 1
  *     print('======================== agree_trust_opitmal_a_b |END|========================')             # <<<<<<<<<<<<<<
  *     print('time.time() - start')
  *     print(time.time() - start)
  */
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__8, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 408, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__8, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 409, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "surprise/agreements.pyx":409
+  /* "surprise/agreements.pyx":410
  *         # activity_matrix[user_a, user_a] = 1
  *     print('======================== agree_trust_opitmal_a_b |END|========================')
  *     print('time.time() - start')             # <<<<<<<<<<<<<<
  *     print(time.time() - start)
  *     return trust_matrix, trust_matrix_common, activity_matrix_val
  */
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 409, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 410, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "surprise/agreements.pyx":410
+  /* "surprise/agreements.pyx":411
  *     print('======================== agree_trust_opitmal_a_b |END|========================')
  *     print('time.time() - start')
  *     print(time.time() - start)             # <<<<<<<<<<<<<<
  *     return trust_matrix, trust_matrix_common, activity_matrix_val
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 410, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 411, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_time); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 410, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_time); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 411, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = NULL;
@@ -9861,18 +9895,18 @@ static PyObject *__pyx_pf_8surprise_10agreements_6agree_trust_opitmal_a_b(CYTHON
   }
   __pyx_t_3 = (__pyx_t_1) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_1) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 410, __pyx_L1_error)
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 411, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyNumber_Subtract(__pyx_t_3, __pyx_v_start); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 410, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Subtract(__pyx_t_3, __pyx_v_start); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 411, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 410, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 411, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "surprise/agreements.pyx":411
+  /* "surprise/agreements.pyx":412
  *     print('time.time() - start')
  *     print(time.time() - start)
  *     return trust_matrix, trust_matrix_common, activity_matrix_val             # <<<<<<<<<<<<<<
@@ -9880,7 +9914,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_6agree_trust_opitmal_a_b(CYTHON
  * def agree_trust_old(trainset, beta, epsilon, ptype='user', istrainset=True, activity=False):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 411, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 412, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_INCREF(((PyObject *)__pyx_v_trust_matrix));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_trust_matrix));
@@ -9953,7 +9987,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_6agree_trust_opitmal_a_b(CYTHON
   return __pyx_r;
 }
 
-/* "surprise/agreements.pyx":413
+/* "surprise/agreements.pyx":414
  *     return trust_matrix, trust_matrix_common, activity_matrix_val
  * 
  * def agree_trust_old(trainset, beta, epsilon, ptype='user', istrainset=True, activity=False):             # <<<<<<<<<<<<<<
@@ -10008,13 +10042,13 @@ static PyObject *__pyx_pw_8surprise_10agreements_9agree_trust_old(PyObject *__py
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_beta)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("agree_trust_old", 0, 3, 6, 1); __PYX_ERR(0, 413, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("agree_trust_old", 0, 3, 6, 1); __PYX_ERR(0, 414, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_epsilon)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("agree_trust_old", 0, 3, 6, 2); __PYX_ERR(0, 413, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("agree_trust_old", 0, 3, 6, 2); __PYX_ERR(0, 414, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -10036,7 +10070,7 @@ static PyObject *__pyx_pw_8surprise_10agreements_9agree_trust_old(PyObject *__py
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "agree_trust_old") < 0)) __PYX_ERR(0, 413, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "agree_trust_old") < 0)) __PYX_ERR(0, 414, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -10062,7 +10096,7 @@ static PyObject *__pyx_pw_8surprise_10agreements_9agree_trust_old(PyObject *__py
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("agree_trust_old", 0, 3, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 413, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("agree_trust_old", 0, 3, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 414, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("surprise.agreements.agree_trust_old", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -10116,46 +10150,46 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
   Py_ssize_t __pyx_t_21;
   __Pyx_RefNannySetupContext("agree_trust_old", 0);
 
-  /* "surprise/agreements.pyx":414
+  /* "surprise/agreements.pyx":415
  * 
  * def agree_trust_old(trainset, beta, epsilon, ptype='user', istrainset=True, activity=False):
  *     print('======================== agree_trust_old |START|========================')             # <<<<<<<<<<<<<<
  *     if istrainset == True:
  *         ratings = np.zeros((trainset.n_users, trainset.n_items))
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 414, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 415, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "surprise/agreements.pyx":415
+  /* "surprise/agreements.pyx":416
  * def agree_trust_old(trainset, beta, epsilon, ptype='user', istrainset=True, activity=False):
  *     print('======================== agree_trust_old |START|========================')
  *     if istrainset == True:             # <<<<<<<<<<<<<<
  *         ratings = np.zeros((trainset.n_users, trainset.n_items))
  *         for u,i,r in trainset.all_ratings():
  */
-  __pyx_t_1 = PyObject_RichCompare(__pyx_v_istrainset, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 415, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 415, __pyx_L1_error)
+  __pyx_t_1 = PyObject_RichCompare(__pyx_v_istrainset, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 416, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 416, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "surprise/agreements.pyx":416
+    /* "surprise/agreements.pyx":417
  *     print('======================== agree_trust_old |START|========================')
  *     if istrainset == True:
  *         ratings = np.zeros((trainset.n_users, trainset.n_items))             # <<<<<<<<<<<<<<
  *         for u,i,r in trainset.all_ratings():
  *             ratings[u,i] =r
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 416, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 417, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_zeros); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 416, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_zeros); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 417, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_trainset, __pyx_n_s_n_users); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 416, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_trainset, __pyx_n_s_n_users); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 417, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_trainset, __pyx_n_s_n_items); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 416, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_trainset, __pyx_n_s_n_items); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 417, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 416, __pyx_L1_error)
+    __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 417, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_GIVEREF(__pyx_t_3);
     PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_3);
@@ -10176,20 +10210,20 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
     __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6);
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 416, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 417, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_ratings = __pyx_t_1;
     __pyx_t_1 = 0;
 
-    /* "surprise/agreements.pyx":417
+    /* "surprise/agreements.pyx":418
  *     if istrainset == True:
  *         ratings = np.zeros((trainset.n_users, trainset.n_items))
  *         for u,i,r in trainset.all_ratings():             # <<<<<<<<<<<<<<
  *             ratings[u,i] =r
  *     else:
  */
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_trainset, __pyx_n_s_all_ratings); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 417, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_trainset, __pyx_n_s_all_ratings); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 418, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
@@ -10203,16 +10237,16 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
     }
     __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_4);
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 417, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 418, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     if (likely(PyList_CheckExact(__pyx_t_1)) || PyTuple_CheckExact(__pyx_t_1)) {
       __pyx_t_4 = __pyx_t_1; __Pyx_INCREF(__pyx_t_4); __pyx_t_7 = 0;
       __pyx_t_8 = NULL;
     } else {
-      __pyx_t_7 = -1; __pyx_t_4 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 417, __pyx_L1_error)
+      __pyx_t_7 = -1; __pyx_t_4 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 418, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_8 = Py_TYPE(__pyx_t_4)->tp_iternext; if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 417, __pyx_L1_error)
+      __pyx_t_8 = Py_TYPE(__pyx_t_4)->tp_iternext; if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 418, __pyx_L1_error)
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     for (;;) {
@@ -10220,17 +10254,17 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
         if (likely(PyList_CheckExact(__pyx_t_4))) {
           if (__pyx_t_7 >= PyList_GET_SIZE(__pyx_t_4)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_1 = PyList_GET_ITEM(__pyx_t_4, __pyx_t_7); __Pyx_INCREF(__pyx_t_1); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 417, __pyx_L1_error)
+          __pyx_t_1 = PyList_GET_ITEM(__pyx_t_4, __pyx_t_7); __Pyx_INCREF(__pyx_t_1); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 418, __pyx_L1_error)
           #else
-          __pyx_t_1 = PySequence_ITEM(__pyx_t_4, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 417, __pyx_L1_error)
+          __pyx_t_1 = PySequence_ITEM(__pyx_t_4, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 418, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           #endif
         } else {
           if (__pyx_t_7 >= PyTuple_GET_SIZE(__pyx_t_4)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_7); __Pyx_INCREF(__pyx_t_1); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 417, __pyx_L1_error)
+          __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_7); __Pyx_INCREF(__pyx_t_1); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 418, __pyx_L1_error)
           #else
-          __pyx_t_1 = PySequence_ITEM(__pyx_t_4, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 417, __pyx_L1_error)
+          __pyx_t_1 = PySequence_ITEM(__pyx_t_4, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 418, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           #endif
         }
@@ -10240,7 +10274,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 417, __pyx_L1_error)
+            else __PYX_ERR(0, 418, __pyx_L1_error)
           }
           break;
         }
@@ -10252,7 +10286,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
         if (unlikely(size != 3)) {
           if (size > 3) __Pyx_RaiseTooManyValuesError(3);
           else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-          __PYX_ERR(0, 417, __pyx_L1_error)
+          __PYX_ERR(0, 418, __pyx_L1_error)
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
         if (likely(PyTuple_CheckExact(sequence))) {
@@ -10268,17 +10302,17 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
         __Pyx_INCREF(__pyx_t_5);
         __Pyx_INCREF(__pyx_t_3);
         #else
-        __pyx_t_6 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 417, __pyx_L1_error)
+        __pyx_t_6 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 418, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
-        __pyx_t_5 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 417, __pyx_L1_error)
+        __pyx_t_5 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 418, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_3 = PySequence_ITEM(sequence, 2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 417, __pyx_L1_error)
+        __pyx_t_3 = PySequence_ITEM(sequence, 2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 418, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         #endif
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       } else {
         Py_ssize_t index = -1;
-        __pyx_t_9 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 417, __pyx_L1_error)
+        __pyx_t_9 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 418, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_9);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
         __pyx_t_10 = Py_TYPE(__pyx_t_9)->tp_iternext;
@@ -10288,7 +10322,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
         __Pyx_GOTREF(__pyx_t_5);
         index = 2; __pyx_t_3 = __pyx_t_10(__pyx_t_9); if (unlikely(!__pyx_t_3)) goto __pyx_L6_unpacking_failed;
         __Pyx_GOTREF(__pyx_t_3);
-        if (__Pyx_IternextUnpackEndCheck(__pyx_t_10(__pyx_t_9), 3) < 0) __PYX_ERR(0, 417, __pyx_L1_error)
+        if (__Pyx_IternextUnpackEndCheck(__pyx_t_10(__pyx_t_9), 3) < 0) __PYX_ERR(0, 418, __pyx_L1_error)
         __pyx_t_10 = NULL;
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
         goto __pyx_L7_unpacking_done;
@@ -10296,7 +10330,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
         __pyx_t_10 = NULL;
         if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-        __PYX_ERR(0, 417, __pyx_L1_error)
+        __PYX_ERR(0, 418, __pyx_L1_error)
         __pyx_L7_unpacking_done:;
       }
       __Pyx_XDECREF_SET(__pyx_v_u, __pyx_t_6);
@@ -10306,14 +10340,14 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
       __Pyx_XDECREF_SET(__pyx_v_r, __pyx_t_3);
       __pyx_t_3 = 0;
 
-      /* "surprise/agreements.pyx":418
+      /* "surprise/agreements.pyx":419
  *         ratings = np.zeros((trainset.n_users, trainset.n_items))
  *         for u,i,r in trainset.all_ratings():
  *             ratings[u,i] =r             # <<<<<<<<<<<<<<
  *     else:
  *         ratings = trainset
  */
-      __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 418, __pyx_L1_error)
+      __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 419, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_INCREF(__pyx_v_u);
       __Pyx_GIVEREF(__pyx_v_u);
@@ -10321,10 +10355,10 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
       __Pyx_INCREF(__pyx_v_i);
       __Pyx_GIVEREF(__pyx_v_i);
       PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_v_i);
-      if (unlikely(PyObject_SetItem(__pyx_v_ratings, __pyx_t_1, __pyx_v_r) < 0)) __PYX_ERR(0, 418, __pyx_L1_error)
+      if (unlikely(PyObject_SetItem(__pyx_v_ratings, __pyx_t_1, __pyx_v_r) < 0)) __PYX_ERR(0, 419, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "surprise/agreements.pyx":417
+      /* "surprise/agreements.pyx":418
  *     if istrainset == True:
  *         ratings = np.zeros((trainset.n_users, trainset.n_items))
  *         for u,i,r in trainset.all_ratings():             # <<<<<<<<<<<<<<
@@ -10334,7 +10368,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
     }
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "surprise/agreements.pyx":415
+    /* "surprise/agreements.pyx":416
  * def agree_trust_old(trainset, beta, epsilon, ptype='user', istrainset=True, activity=False):
  *     print('======================== agree_trust_old |START|========================')
  *     if istrainset == True:             # <<<<<<<<<<<<<<
@@ -10344,7 +10378,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
     goto __pyx_L3;
   }
 
-  /* "surprise/agreements.pyx":420
+  /* "surprise/agreements.pyx":421
  *             ratings[u,i] =r
  *     else:
  *         ratings = trainset             # <<<<<<<<<<<<<<
@@ -10357,29 +10391,29 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
   }
   __pyx_L3:;
 
-  /* "surprise/agreements.pyx":422
+  /* "surprise/agreements.pyx":423
  *         ratings = trainset
  * 
  *     if ptype=='item':             # <<<<<<<<<<<<<<
  *         ratings = ratings.T
  * 
  */
-  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_ptype, __pyx_n_u_item, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 422, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_ptype, __pyx_n_u_item, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 423, __pyx_L1_error)
   if (__pyx_t_2) {
 
-    /* "surprise/agreements.pyx":423
+    /* "surprise/agreements.pyx":424
  * 
  *     if ptype=='item':
  *         ratings = ratings.T             # <<<<<<<<<<<<<<
  * 
  *     trust_matrix = np.zeros((ratings.shape[0], ratings.shape[0]))
  */
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_ratings, __pyx_n_s_T); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 423, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_ratings, __pyx_n_s_T); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 424, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF_SET(__pyx_v_ratings, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "surprise/agreements.pyx":422
+    /* "surprise/agreements.pyx":423
  *         ratings = trainset
  * 
  *     if ptype=='item':             # <<<<<<<<<<<<<<
@@ -10388,29 +10422,29 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
  */
   }
 
-  /* "surprise/agreements.pyx":425
+  /* "surprise/agreements.pyx":426
  *         ratings = ratings.T
  * 
  *     trust_matrix = np.zeros((ratings.shape[0], ratings.shape[0]))             # <<<<<<<<<<<<<<
  * 
  *     for user_a in range(ratings.shape[0]):
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 425, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 426, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 425, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 426, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_ratings, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 425, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_ratings, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 426, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_5 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 425, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 426, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_ratings, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 425, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_ratings, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 426, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_6 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 425, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 426, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 425, __pyx_L1_error)
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 426, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_5);
   PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_5);
@@ -10431,24 +10465,24 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
   __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_6, __pyx_t_1) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_1);
   __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 425, __pyx_L1_error)
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 426, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_trust_matrix = __pyx_t_4;
   __pyx_t_4 = 0;
 
-  /* "surprise/agreements.pyx":427
+  /* "surprise/agreements.pyx":428
  *     trust_matrix = np.zeros((ratings.shape[0], ratings.shape[0]))
  * 
  *     for user_a in range(ratings.shape[0]):             # <<<<<<<<<<<<<<
  *             for user_b in range(ratings.shape[0]):
  *                 trust_matrix[user_b,user_b] = 1
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_range); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 427, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_range); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 428, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_ratings, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 427, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_ratings, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 428, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_6 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 427, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 428, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = NULL;
@@ -10464,16 +10498,16 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
   __pyx_t_4 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_1, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_6);
   __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 427, __pyx_L1_error)
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 428, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   if (likely(PyList_CheckExact(__pyx_t_4)) || PyTuple_CheckExact(__pyx_t_4)) {
     __pyx_t_3 = __pyx_t_4; __Pyx_INCREF(__pyx_t_3); __pyx_t_7 = 0;
     __pyx_t_8 = NULL;
   } else {
-    __pyx_t_7 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 427, __pyx_L1_error)
+    __pyx_t_7 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 428, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_8 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 427, __pyx_L1_error)
+    __pyx_t_8 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 428, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   for (;;) {
@@ -10481,17 +10515,17 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
       if (likely(PyList_CheckExact(__pyx_t_3))) {
         if (__pyx_t_7 >= PyList_GET_SIZE(__pyx_t_3)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_7); __Pyx_INCREF(__pyx_t_4); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 427, __pyx_L1_error)
+        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_7); __Pyx_INCREF(__pyx_t_4); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 428, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_3, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 427, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_3, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 428, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       } else {
         if (__pyx_t_7 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_7); __Pyx_INCREF(__pyx_t_4); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 427, __pyx_L1_error)
+        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_7); __Pyx_INCREF(__pyx_t_4); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 428, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_3, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 427, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_3, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 428, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       }
@@ -10501,7 +10535,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 427, __pyx_L1_error)
+          else __PYX_ERR(0, 428, __pyx_L1_error)
         }
         break;
       }
@@ -10510,18 +10544,18 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
     __Pyx_XDECREF_SET(__pyx_v_user_a, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "surprise/agreements.pyx":428
+    /* "surprise/agreements.pyx":429
  * 
  *     for user_a in range(ratings.shape[0]):
  *             for user_b in range(ratings.shape[0]):             # <<<<<<<<<<<<<<
  *                 trust_matrix[user_b,user_b] = 1
  *                 if user_a != user_b:
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_range); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 428, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_range); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 429, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_ratings, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 428, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_ratings, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 429, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_5 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 428, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 429, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_1 = NULL;
@@ -10537,16 +10571,16 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
     __pyx_t_4 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_1, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_5);
     __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 428, __pyx_L1_error)
+    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 429, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     if (likely(PyList_CheckExact(__pyx_t_4)) || PyTuple_CheckExact(__pyx_t_4)) {
       __pyx_t_6 = __pyx_t_4; __Pyx_INCREF(__pyx_t_6); __pyx_t_11 = 0;
       __pyx_t_12 = NULL;
     } else {
-      __pyx_t_11 = -1; __pyx_t_6 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 428, __pyx_L1_error)
+      __pyx_t_11 = -1; __pyx_t_6 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 429, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_12 = Py_TYPE(__pyx_t_6)->tp_iternext; if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 428, __pyx_L1_error)
+      __pyx_t_12 = Py_TYPE(__pyx_t_6)->tp_iternext; if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 429, __pyx_L1_error)
     }
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     for (;;) {
@@ -10554,17 +10588,17 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
         if (likely(PyList_CheckExact(__pyx_t_6))) {
           if (__pyx_t_11 >= PyList_GET_SIZE(__pyx_t_6)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_4 = PyList_GET_ITEM(__pyx_t_6, __pyx_t_11); __Pyx_INCREF(__pyx_t_4); __pyx_t_11++; if (unlikely(0 < 0)) __PYX_ERR(0, 428, __pyx_L1_error)
+          __pyx_t_4 = PyList_GET_ITEM(__pyx_t_6, __pyx_t_11); __Pyx_INCREF(__pyx_t_4); __pyx_t_11++; if (unlikely(0 < 0)) __PYX_ERR(0, 429, __pyx_L1_error)
           #else
-          __pyx_t_4 = PySequence_ITEM(__pyx_t_6, __pyx_t_11); __pyx_t_11++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 428, __pyx_L1_error)
+          __pyx_t_4 = PySequence_ITEM(__pyx_t_6, __pyx_t_11); __pyx_t_11++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 429, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_4);
           #endif
         } else {
           if (__pyx_t_11 >= PyTuple_GET_SIZE(__pyx_t_6)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_6, __pyx_t_11); __Pyx_INCREF(__pyx_t_4); __pyx_t_11++; if (unlikely(0 < 0)) __PYX_ERR(0, 428, __pyx_L1_error)
+          __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_6, __pyx_t_11); __Pyx_INCREF(__pyx_t_4); __pyx_t_11++; if (unlikely(0 < 0)) __PYX_ERR(0, 429, __pyx_L1_error)
           #else
-          __pyx_t_4 = PySequence_ITEM(__pyx_t_6, __pyx_t_11); __pyx_t_11++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 428, __pyx_L1_error)
+          __pyx_t_4 = PySequence_ITEM(__pyx_t_6, __pyx_t_11); __pyx_t_11++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 429, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_4);
           #endif
         }
@@ -10574,7 +10608,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 428, __pyx_L1_error)
+            else __PYX_ERR(0, 429, __pyx_L1_error)
           }
           break;
         }
@@ -10583,14 +10617,14 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
       __Pyx_XDECREF_SET(__pyx_v_user_b, __pyx_t_4);
       __pyx_t_4 = 0;
 
-      /* "surprise/agreements.pyx":429
+      /* "surprise/agreements.pyx":430
  *     for user_a in range(ratings.shape[0]):
  *             for user_b in range(ratings.shape[0]):
  *                 trust_matrix[user_b,user_b] = 1             # <<<<<<<<<<<<<<
  *                 if user_a != user_b:
  *                     a_ratings = ratings[user_a]
  */
-      __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 429, __pyx_L1_error)
+      __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 430, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_INCREF(__pyx_v_user_b);
       __Pyx_GIVEREF(__pyx_v_user_b);
@@ -10598,60 +10632,60 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
       __Pyx_INCREF(__pyx_v_user_b);
       __Pyx_GIVEREF(__pyx_v_user_b);
       PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_v_user_b);
-      if (unlikely(PyObject_SetItem(__pyx_v_trust_matrix, __pyx_t_4, __pyx_int_1) < 0)) __PYX_ERR(0, 429, __pyx_L1_error)
+      if (unlikely(PyObject_SetItem(__pyx_v_trust_matrix, __pyx_t_4, __pyx_int_1) < 0)) __PYX_ERR(0, 430, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "surprise/agreements.pyx":430
+      /* "surprise/agreements.pyx":431
  *             for user_b in range(ratings.shape[0]):
  *                 trust_matrix[user_b,user_b] = 1
  *                 if user_a != user_b:             # <<<<<<<<<<<<<<
  *                     a_ratings = ratings[user_a]
  *                     b_ratings = ratings[user_b]
  */
-      __pyx_t_4 = PyObject_RichCompare(__pyx_v_user_a, __pyx_v_user_b, Py_NE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 430, __pyx_L1_error)
-      __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 430, __pyx_L1_error)
+      __pyx_t_4 = PyObject_RichCompare(__pyx_v_user_a, __pyx_v_user_b, Py_NE); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 431, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 431, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       if (__pyx_t_2) {
 
-        /* "surprise/agreements.pyx":431
+        /* "surprise/agreements.pyx":432
  *                 trust_matrix[user_b,user_b] = 1
  *                 if user_a != user_b:
  *                     a_ratings = ratings[user_a]             # <<<<<<<<<<<<<<
  *                     b_ratings = ratings[user_b]
  * 
  */
-        __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_v_ratings, __pyx_v_user_a); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 431, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_v_ratings, __pyx_v_user_a); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 432, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_XDECREF_SET(__pyx_v_a_ratings, __pyx_t_4);
         __pyx_t_4 = 0;
 
-        /* "surprise/agreements.pyx":432
+        /* "surprise/agreements.pyx":433
  *                 if user_a != user_b:
  *                     a_ratings = ratings[user_a]
  *                     b_ratings = ratings[user_b]             # <<<<<<<<<<<<<<
  * 
  *                     commonset = np.intersect1d(np.nonzero(a_ratings), np.nonzero(b_ratings))
  */
-        __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_v_ratings, __pyx_v_user_b); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 432, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_v_ratings, __pyx_v_user_b); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 433, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_XDECREF_SET(__pyx_v_b_ratings, __pyx_t_4);
         __pyx_t_4 = 0;
 
-        /* "surprise/agreements.pyx":434
+        /* "surprise/agreements.pyx":435
  *                     b_ratings = ratings[user_b]
  * 
  *                     commonset = np.intersect1d(np.nonzero(a_ratings), np.nonzero(b_ratings))             # <<<<<<<<<<<<<<
  * 
  *                     common_set_length = len(commonset)
  */
-        __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 434, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 435, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_intersect1d); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 434, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_intersect1d); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 435, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_np); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 434, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_np); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 435, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_9);
-        __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_nonzero); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 434, __pyx_L1_error)
+        __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_nonzero); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 435, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_13);
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
         __pyx_t_9 = NULL;
@@ -10666,12 +10700,12 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
         }
         __pyx_t_5 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_13, __pyx_t_9, __pyx_v_a_ratings) : __Pyx_PyObject_CallOneArg(__pyx_t_13, __pyx_v_a_ratings);
         __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-        if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 434, __pyx_L1_error)
+        if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 435, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-        __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_np); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 434, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_np); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 435, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_9);
-        __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_nonzero); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 434, __pyx_L1_error)
+        __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_nonzero); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 435, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
         __pyx_t_9 = NULL;
@@ -10686,7 +10720,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
         }
         __pyx_t_13 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_14, __pyx_t_9, __pyx_v_b_ratings) : __Pyx_PyObject_CallOneArg(__pyx_t_14, __pyx_v_b_ratings);
         __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-        if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 434, __pyx_L1_error)
+        if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 435, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_13);
         __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
         __pyx_t_14 = NULL;
@@ -10704,7 +10738,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_1)) {
           PyObject *__pyx_temp[3] = {__pyx_t_14, __pyx_t_5, __pyx_t_13};
-          __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_15, 2+__pyx_t_15); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 434, __pyx_L1_error)
+          __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_15, 2+__pyx_t_15); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 435, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
           __Pyx_GOTREF(__pyx_t_4);
           __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -10714,7 +10748,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
           PyObject *__pyx_temp[3] = {__pyx_t_14, __pyx_t_5, __pyx_t_13};
-          __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_15, 2+__pyx_t_15); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 434, __pyx_L1_error)
+          __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_15, 2+__pyx_t_15); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 435, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
           __Pyx_GOTREF(__pyx_t_4);
           __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -10722,7 +10756,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
         } else
         #endif
         {
-          __pyx_t_9 = PyTuple_New(2+__pyx_t_15); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 434, __pyx_L1_error)
+          __pyx_t_9 = PyTuple_New(2+__pyx_t_15); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 435, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_9);
           if (__pyx_t_14) {
             __Pyx_GIVEREF(__pyx_t_14); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_14); __pyx_t_14 = NULL;
@@ -10733,7 +10767,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
           PyTuple_SET_ITEM(__pyx_t_9, 1+__pyx_t_15, __pyx_t_13);
           __pyx_t_5 = 0;
           __pyx_t_13 = 0;
-          __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_9, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 434, __pyx_L1_error)
+          __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_9, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 435, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_4);
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
         }
@@ -10741,20 +10775,20 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
         __Pyx_XDECREF_SET(__pyx_v_commonset, __pyx_t_4);
         __pyx_t_4 = 0;
 
-        /* "surprise/agreements.pyx":436
+        /* "surprise/agreements.pyx":437
  *                     commonset = np.intersect1d(np.nonzero(a_ratings), np.nonzero(b_ratings))
  * 
  *                     common_set_length = len(commonset)             # <<<<<<<<<<<<<<
  * 
  *                     trust = 0
  */
-        __pyx_t_16 = PyObject_Length(__pyx_v_commonset); if (unlikely(__pyx_t_16 == ((Py_ssize_t)-1))) __PYX_ERR(0, 436, __pyx_L1_error)
-        __pyx_t_4 = PyInt_FromSsize_t(__pyx_t_16); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 436, __pyx_L1_error)
+        __pyx_t_16 = PyObject_Length(__pyx_v_commonset); if (unlikely(__pyx_t_16 == ((Py_ssize_t)-1))) __PYX_ERR(0, 437, __pyx_L1_error)
+        __pyx_t_4 = PyInt_FromSsize_t(__pyx_t_16); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 437, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_XDECREF_SET(__pyx_v_common_set_length, __pyx_t_4);
         __pyx_t_4 = 0;
 
-        /* "surprise/agreements.pyx":438
+        /* "surprise/agreements.pyx":439
  *                     common_set_length = len(commonset)
  * 
  *                     trust = 0             # <<<<<<<<<<<<<<
@@ -10764,66 +10798,66 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
         __Pyx_INCREF(__pyx_int_0);
         __Pyx_XDECREF_SET(__pyx_v_trust, __pyx_int_0);
 
-        /* "surprise/agreements.pyx":440
+        /* "surprise/agreements.pyx":441
  *                     trust = 0
  * 
  *                     if(common_set_length > 0):             # <<<<<<<<<<<<<<
  *                         a_positive = a_ratings[commonset] > beta
  *                         b_positive = b_ratings[commonset] > beta
  */
-        __pyx_t_4 = PyObject_RichCompare(__pyx_v_common_set_length, __pyx_int_0, Py_GT); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 440, __pyx_L1_error)
-        __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 440, __pyx_L1_error)
+        __pyx_t_4 = PyObject_RichCompare(__pyx_v_common_set_length, __pyx_int_0, Py_GT); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 441, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 441, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         if (__pyx_t_2) {
 
-          /* "surprise/agreements.pyx":441
+          /* "surprise/agreements.pyx":442
  * 
  *                     if(common_set_length > 0):
  *                         a_positive = a_ratings[commonset] > beta             # <<<<<<<<<<<<<<
  *                         b_positive = b_ratings[commonset] > beta
  * 
  */
-          __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_v_a_ratings, __pyx_v_commonset); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 441, __pyx_L1_error)
+          __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_v_a_ratings, __pyx_v_commonset); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 442, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_4);
-          __pyx_t_1 = PyObject_RichCompare(__pyx_t_4, __pyx_v_beta, Py_GT); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 441, __pyx_L1_error)
+          __pyx_t_1 = PyObject_RichCompare(__pyx_t_4, __pyx_v_beta, Py_GT); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 442, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_XDECREF_SET(__pyx_v_a_positive, __pyx_t_1);
           __pyx_t_1 = 0;
 
-          /* "surprise/agreements.pyx":442
+          /* "surprise/agreements.pyx":443
  *                     if(common_set_length > 0):
  *                         a_positive = a_ratings[commonset] > beta
  *                         b_positive = b_ratings[commonset] > beta             # <<<<<<<<<<<<<<
  * 
  *                         agreement = np.sum(np.logical_not(np.logical_xor(a_positive, b_positive)))
  */
-          __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_b_ratings, __pyx_v_commonset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 442, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_b_ratings, __pyx_v_commonset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 443, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_4 = PyObject_RichCompare(__pyx_t_1, __pyx_v_beta, Py_GT); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 442, __pyx_L1_error)
+          __pyx_t_4 = PyObject_RichCompare(__pyx_t_1, __pyx_v_beta, Py_GT); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 443, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           __Pyx_XDECREF_SET(__pyx_v_b_positive, __pyx_t_4);
           __pyx_t_4 = 0;
 
-          /* "surprise/agreements.pyx":444
+          /* "surprise/agreements.pyx":445
  *                         b_positive = b_ratings[commonset] > beta
  * 
  *                         agreement = np.sum(np.logical_not(np.logical_xor(a_positive, b_positive)))             # <<<<<<<<<<<<<<
  * 
  *                         # trust = agreement/common_set_length
  */
-          __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 444, __pyx_L1_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 445, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_sum); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 444, __pyx_L1_error)
+          __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_sum); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 445, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_9);
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __Pyx_GetModuleGlobalName(__pyx_t_13, __pyx_n_s_np); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 444, __pyx_L1_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_13, __pyx_n_s_np); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 445, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_13);
-          __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_13, __pyx_n_s_logical_not); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 444, __pyx_L1_error)
+          __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_13, __pyx_n_s_logical_not); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 445, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_5);
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-          __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_np); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 444, __pyx_L1_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_np); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 445, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_14);
-          __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_logical_xor); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 444, __pyx_L1_error)
+          __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_logical_xor); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 445, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_17);
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
           __pyx_t_14 = NULL;
@@ -10841,7 +10875,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
           #if CYTHON_FAST_PYCALL
           if (PyFunction_Check(__pyx_t_17)) {
             PyObject *__pyx_temp[3] = {__pyx_t_14, __pyx_v_a_positive, __pyx_v_b_positive};
-            __pyx_t_13 = __Pyx_PyFunction_FastCall(__pyx_t_17, __pyx_temp+1-__pyx_t_15, 2+__pyx_t_15); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 444, __pyx_L1_error)
+            __pyx_t_13 = __Pyx_PyFunction_FastCall(__pyx_t_17, __pyx_temp+1-__pyx_t_15, 2+__pyx_t_15); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 445, __pyx_L1_error)
             __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
             __Pyx_GOTREF(__pyx_t_13);
           } else
@@ -10849,13 +10883,13 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
           #if CYTHON_FAST_PYCCALL
           if (__Pyx_PyFastCFunction_Check(__pyx_t_17)) {
             PyObject *__pyx_temp[3] = {__pyx_t_14, __pyx_v_a_positive, __pyx_v_b_positive};
-            __pyx_t_13 = __Pyx_PyCFunction_FastCall(__pyx_t_17, __pyx_temp+1-__pyx_t_15, 2+__pyx_t_15); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 444, __pyx_L1_error)
+            __pyx_t_13 = __Pyx_PyCFunction_FastCall(__pyx_t_17, __pyx_temp+1-__pyx_t_15, 2+__pyx_t_15); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 445, __pyx_L1_error)
             __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
             __Pyx_GOTREF(__pyx_t_13);
           } else
           #endif
           {
-            __pyx_t_18 = PyTuple_New(2+__pyx_t_15); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 444, __pyx_L1_error)
+            __pyx_t_18 = PyTuple_New(2+__pyx_t_15); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 445, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_18);
             if (__pyx_t_14) {
               __Pyx_GIVEREF(__pyx_t_14); PyTuple_SET_ITEM(__pyx_t_18, 0, __pyx_t_14); __pyx_t_14 = NULL;
@@ -10866,7 +10900,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
             __Pyx_INCREF(__pyx_v_b_positive);
             __Pyx_GIVEREF(__pyx_v_b_positive);
             PyTuple_SET_ITEM(__pyx_t_18, 1+__pyx_t_15, __pyx_v_b_positive);
-            __pyx_t_13 = __Pyx_PyObject_Call(__pyx_t_17, __pyx_t_18, NULL); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 444, __pyx_L1_error)
+            __pyx_t_13 = __Pyx_PyObject_Call(__pyx_t_17, __pyx_t_18, NULL); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 445, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_13);
             __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
           }
@@ -10884,7 +10918,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
           __pyx_t_1 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_17, __pyx_t_13) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_13);
           __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 444, __pyx_L1_error)
+          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 445, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
           __pyx_t_5 = NULL;
@@ -10900,28 +10934,28 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
           __pyx_t_4 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_9, __pyx_t_5, __pyx_t_1) : __Pyx_PyObject_CallOneArg(__pyx_t_9, __pyx_t_1);
           __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 444, __pyx_L1_error)
+          if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 445, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_4);
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
           __Pyx_XDECREF_SET(__pyx_v_agreement, __pyx_t_4);
           __pyx_t_4 = 0;
 
-          /* "surprise/agreements.pyx":447
+          /* "surprise/agreements.pyx":448
  * 
  *                         # trust = agreement/common_set_length
  *                         trust = agreement/(common_set_length+epsilon)             # <<<<<<<<<<<<<<
  *                         # print('trust')
  *                         # print(trust)
  */
-          __pyx_t_4 = PyNumber_Add(__pyx_v_common_set_length, __pyx_v_epsilon); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 447, __pyx_L1_error)
+          __pyx_t_4 = PyNumber_Add(__pyx_v_common_set_length, __pyx_v_epsilon); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 448, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_4);
-          __pyx_t_9 = __Pyx_PyNumber_Divide(__pyx_v_agreement, __pyx_t_4); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 447, __pyx_L1_error)
+          __pyx_t_9 = __Pyx_PyNumber_Divide(__pyx_v_agreement, __pyx_t_4); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 448, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_9);
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_DECREF_SET(__pyx_v_trust, __pyx_t_9);
           __pyx_t_9 = 0;
 
-          /* "surprise/agreements.pyx":440
+          /* "surprise/agreements.pyx":441
  *                     trust = 0
  * 
  *                     if(common_set_length > 0):             # <<<<<<<<<<<<<<
@@ -10930,28 +10964,28 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
  */
         }
 
-        /* "surprise/agreements.pyx":454
+        /* "surprise/agreements.pyx":455
  *                         # print('mean')
  *                         # print(trust)
  *                     if activity == True:             # <<<<<<<<<<<<<<
  *                         # print("activity")
  *                         trust = trust*(len(np.nonzero(a_ratings))/(len(np.nonzero(a_ratings))+len(np.nonzero(b_ratings))))
  */
-        __pyx_t_9 = PyObject_RichCompare(__pyx_v_activity, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_9); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 454, __pyx_L1_error)
-        __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_9); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 454, __pyx_L1_error)
+        __pyx_t_9 = PyObject_RichCompare(__pyx_v_activity, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_9); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 455, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_9); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 455, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
         if (__pyx_t_2) {
 
-          /* "surprise/agreements.pyx":456
+          /* "surprise/agreements.pyx":457
  *                     if activity == True:
  *                         # print("activity")
  *                         trust = trust*(len(np.nonzero(a_ratings))/(len(np.nonzero(a_ratings))+len(np.nonzero(b_ratings))))             # <<<<<<<<<<<<<<
  * 
  *                     trust_matrix[user_a,user_b] = trust
  */
-          __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 456, __pyx_L1_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 457, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_4);
-          __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_nonzero); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 456, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_nonzero); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 457, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
           __pyx_t_4 = NULL;
@@ -10966,14 +11000,14 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
           }
           __pyx_t_9 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_4, __pyx_v_a_ratings) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v_a_ratings);
           __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-          if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 456, __pyx_L1_error)
+          if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 457, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_9);
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __pyx_t_16 = PyObject_Length(__pyx_t_9); if (unlikely(__pyx_t_16 == ((Py_ssize_t)-1))) __PYX_ERR(0, 456, __pyx_L1_error)
+          __pyx_t_16 = PyObject_Length(__pyx_t_9); if (unlikely(__pyx_t_16 == ((Py_ssize_t)-1))) __PYX_ERR(0, 457, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-          __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 456, __pyx_L1_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 457, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_nonzero); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 456, __pyx_L1_error)
+          __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_nonzero); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 457, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_4);
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           __pyx_t_1 = NULL;
@@ -10988,14 +11022,14 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
           }
           __pyx_t_9 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_1, __pyx_v_a_ratings) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_a_ratings);
           __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-          if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 456, __pyx_L1_error)
+          if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 457, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_9);
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-          __pyx_t_19 = PyObject_Length(__pyx_t_9); if (unlikely(__pyx_t_19 == ((Py_ssize_t)-1))) __PYX_ERR(0, 456, __pyx_L1_error)
+          __pyx_t_19 = PyObject_Length(__pyx_t_9); if (unlikely(__pyx_t_19 == ((Py_ssize_t)-1))) __PYX_ERR(0, 457, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-          __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 456, __pyx_L1_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 457, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_4);
-          __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_nonzero); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 456, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_nonzero); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 457, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
           __pyx_t_4 = NULL;
@@ -11010,25 +11044,25 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
           }
           __pyx_t_9 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_4, __pyx_v_b_ratings) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v_b_ratings);
           __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-          if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 456, __pyx_L1_error)
+          if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 457, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_9);
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __pyx_t_20 = PyObject_Length(__pyx_t_9); if (unlikely(__pyx_t_20 == ((Py_ssize_t)-1))) __PYX_ERR(0, 456, __pyx_L1_error)
+          __pyx_t_20 = PyObject_Length(__pyx_t_9); if (unlikely(__pyx_t_20 == ((Py_ssize_t)-1))) __PYX_ERR(0, 457, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
           __pyx_t_21 = (__pyx_t_19 + __pyx_t_20);
           if (unlikely(__pyx_t_21 == 0)) {
             PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-            __PYX_ERR(0, 456, __pyx_L1_error)
+            __PYX_ERR(0, 457, __pyx_L1_error)
           }
-          __pyx_t_9 = PyFloat_FromDouble((((double)__pyx_t_16) / ((double)__pyx_t_21))); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 456, __pyx_L1_error)
+          __pyx_t_9 = PyFloat_FromDouble((((double)__pyx_t_16) / ((double)__pyx_t_21))); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 457, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_9);
-          __pyx_t_1 = PyNumber_Multiply(__pyx_v_trust, __pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 456, __pyx_L1_error)
+          __pyx_t_1 = PyNumber_Multiply(__pyx_v_trust, __pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 457, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
           __Pyx_DECREF_SET(__pyx_v_trust, __pyx_t_1);
           __pyx_t_1 = 0;
 
-          /* "surprise/agreements.pyx":454
+          /* "surprise/agreements.pyx":455
  *                         # print('mean')
  *                         # print(trust)
  *                     if activity == True:             # <<<<<<<<<<<<<<
@@ -11037,14 +11071,14 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
  */
         }
 
-        /* "surprise/agreements.pyx":458
+        /* "surprise/agreements.pyx":459
  *                         trust = trust*(len(np.nonzero(a_ratings))/(len(np.nonzero(a_ratings))+len(np.nonzero(b_ratings))))
  * 
  *                     trust_matrix[user_a,user_b] = trust             # <<<<<<<<<<<<<<
  *     # print('======================== agree_trust |END|========================')
  *     return trust_matrix
  */
-        __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 458, __pyx_L1_error)
+        __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 459, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_INCREF(__pyx_v_user_a);
         __Pyx_GIVEREF(__pyx_v_user_a);
@@ -11052,10 +11086,10 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
         __Pyx_INCREF(__pyx_v_user_b);
         __Pyx_GIVEREF(__pyx_v_user_b);
         PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_v_user_b);
-        if (unlikely(PyObject_SetItem(__pyx_v_trust_matrix, __pyx_t_1, __pyx_v_trust) < 0)) __PYX_ERR(0, 458, __pyx_L1_error)
+        if (unlikely(PyObject_SetItem(__pyx_v_trust_matrix, __pyx_t_1, __pyx_v_trust) < 0)) __PYX_ERR(0, 459, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "surprise/agreements.pyx":430
+        /* "surprise/agreements.pyx":431
  *             for user_b in range(ratings.shape[0]):
  *                 trust_matrix[user_b,user_b] = 1
  *                 if user_a != user_b:             # <<<<<<<<<<<<<<
@@ -11064,7 +11098,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
  */
       }
 
-      /* "surprise/agreements.pyx":428
+      /* "surprise/agreements.pyx":429
  * 
  *     for user_a in range(ratings.shape[0]):
  *             for user_b in range(ratings.shape[0]):             # <<<<<<<<<<<<<<
@@ -11074,7 +11108,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
     }
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-    /* "surprise/agreements.pyx":427
+    /* "surprise/agreements.pyx":428
  *     trust_matrix = np.zeros((ratings.shape[0], ratings.shape[0]))
  * 
  *     for user_a in range(ratings.shape[0]):             # <<<<<<<<<<<<<<
@@ -11084,7 +11118,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "surprise/agreements.pyx":460
+  /* "surprise/agreements.pyx":461
  *                     trust_matrix[user_a,user_b] = trust
  *     # print('======================== agree_trust |END|========================')
  *     return trust_matrix             # <<<<<<<<<<<<<<
@@ -11096,7 +11130,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
   __pyx_r = __pyx_v_trust_matrix;
   goto __pyx_L0;
 
-  /* "surprise/agreements.pyx":413
+  /* "surprise/agreements.pyx":414
  *     return trust_matrix, trust_matrix_common, activity_matrix_val
  * 
  * def agree_trust_old(trainset, beta, epsilon, ptype='user', istrainset=True, activity=False):             # <<<<<<<<<<<<<<
@@ -11139,12 +11173,12 @@ static PyObject *__pyx_pf_8surprise_10agreements_8agree_trust_old(CYTHON_UNUSED 
   return __pyx_r;
 }
 
-/* "surprise/agreements.pyx":462
+/* "surprise/agreements.pyx":463
  *     return trust_matrix
  * 
  * def odonovan_trust_old(trainset, algo, ptype='user', alpha=0.2):             # <<<<<<<<<<<<<<
  *     """Computes knn version of trust matrix proposed by J. ODonovan and B. Smyth, in Trust in recommender systems, """
- *     # print('======================== odonovan_trust |START|========================')
+ *     if algo.verbose:
  */
 
 /* Python wrapper */
@@ -11188,7 +11222,7 @@ static PyObject *__pyx_pw_8surprise_10agreements_11odonovan_trust_old(PyObject *
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_algo)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("odonovan_trust_old", 0, 2, 4, 1); __PYX_ERR(0, 462, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("odonovan_trust_old", 0, 2, 4, 1); __PYX_ERR(0, 463, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -11204,7 +11238,7 @@ static PyObject *__pyx_pw_8surprise_10agreements_11odonovan_trust_old(PyObject *
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "odonovan_trust_old") < 0)) __PYX_ERR(0, 462, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "odonovan_trust_old") < 0)) __PYX_ERR(0, 463, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -11225,7 +11259,7 @@ static PyObject *__pyx_pw_8surprise_10agreements_11odonovan_trust_old(PyObject *
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("odonovan_trust_old", 0, 2, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 462, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("odonovan_trust_old", 0, 2, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 463, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("surprise.agreements.odonovan_trust_old", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -11285,43 +11319,76 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
   __pyx_pybuffernd_trust_matrix.data = NULL;
   __pyx_pybuffernd_trust_matrix.rcbuffer = &__pyx_pybuffer_trust_matrix;
 
-  /* "surprise/agreements.pyx":466
- *     # print('======================== odonovan_trust |START|========================')
+  /* "surprise/agreements.pyx":465
+ * def odonovan_trust_old(trainset, algo, ptype='user', alpha=0.2):
+ *     """Computes knn version of trust matrix proposed by J. ODonovan and B. Smyth, in Trust in recommender systems, """
+ *     if algo.verbose:             # <<<<<<<<<<<<<<
+ *         print('======================== odonovan_trust |START|========================')
+ * 
+ */
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_algo, __pyx_n_s_verbose); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 465, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 465, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_2) {
+
+    /* "surprise/agreements.pyx":466
+ *     """Computes knn version of trust matrix proposed by J. ODonovan and B. Smyth, in Trust in recommender systems, """
+ *     if algo.verbose:
+ *         print('======================== odonovan_trust |START|========================')             # <<<<<<<<<<<<<<
+ * 
+ *     cdef int rows = trainset.n_users
+ */
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 466, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "surprise/agreements.pyx":465
+ * def odonovan_trust_old(trainset, algo, ptype='user', alpha=0.2):
+ *     """Computes knn version of trust matrix proposed by J. ODonovan and B. Smyth, in Trust in recommender systems, """
+ *     if algo.verbose:             # <<<<<<<<<<<<<<
+ *         print('======================== odonovan_trust |START|========================')
+ * 
+ */
+  }
+
+  /* "surprise/agreements.pyx":468
+ *         print('======================== odonovan_trust |START|========================')
  * 
  *     cdef int rows = trainset.n_users             # <<<<<<<<<<<<<<
  *     cdef np.ndarray[np.double_t, ndim=2] trust_matrix,
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_trainset, __pyx_n_s_n_users); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 466, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_trainset, __pyx_n_s_n_users); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 468, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 466, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_3 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 468, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v_rows = __pyx_t_2;
+  __pyx_v_rows = __pyx_t_3;
 
-  /* "surprise/agreements.pyx":470
+  /* "surprise/agreements.pyx":472
  * 
  * 
  *     if ptype == 'item':             # <<<<<<<<<<<<<<
  *         rows = trainset.n_items
  * 
  */
-  __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_v_ptype, __pyx_n_u_item, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 470, __pyx_L1_error)
-  if (__pyx_t_3) {
+  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_ptype, __pyx_n_u_item, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 472, __pyx_L1_error)
+  if (__pyx_t_2) {
 
-    /* "surprise/agreements.pyx":471
+    /* "surprise/agreements.pyx":473
  * 
  *     if ptype == 'item':
  *         rows = trainset.n_items             # <<<<<<<<<<<<<<
  * 
  *     trust_matrix = np.zeros((rows, rows))
  */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_trainset, __pyx_n_s_n_items); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 471, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_trainset, __pyx_n_s_n_items); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 473, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 471, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_3 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 473, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_v_rows = __pyx_t_2;
+    __pyx_v_rows = __pyx_t_3;
 
-    /* "surprise/agreements.pyx":470
+    /* "surprise/agreements.pyx":472
  * 
  * 
  *     if ptype == 'item':             # <<<<<<<<<<<<<<
@@ -11330,23 +11397,23 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
  */
   }
 
-  /* "surprise/agreements.pyx":473
+  /* "surprise/agreements.pyx":475
  *         rows = trainset.n_items
  * 
  *     trust_matrix = np.zeros((rows, rows))             # <<<<<<<<<<<<<<
- *     print('trainset.n_items')
- *     print(rows)
+ *     if algo.verbose:
+ *         print('trainset.n_items')
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 473, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 475, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_zeros); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 473, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_zeros); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 475, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_rows); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 473, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_rows); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 475, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_rows); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 473, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_rows); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 475, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_7 = PyTuple_New(2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 473, __pyx_L1_error)
+  __pyx_t_7 = PyTuple_New(2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 475, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_GIVEREF(__pyx_t_4);
   PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_4);
@@ -11367,16 +11434,16 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
   __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_6, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_7);
   __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 473, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 475, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 473, __pyx_L1_error)
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 475, __pyx_L1_error)
   __pyx_t_8 = ((PyArrayObject *)__pyx_t_1);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_trust_matrix.rcbuffer->pybuffer);
-    __pyx_t_2 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_trust_matrix.rcbuffer->pybuffer, (PyObject*)__pyx_t_8, &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack);
-    if (unlikely(__pyx_t_2 < 0)) {
+    __pyx_t_3 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_trust_matrix.rcbuffer->pybuffer, (PyObject*)__pyx_t_8, &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack);
+    if (unlikely(__pyx_t_3 < 0)) {
       PyErr_Fetch(&__pyx_t_9, &__pyx_t_10, &__pyx_t_11);
       if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_trust_matrix.rcbuffer->pybuffer, (PyObject*)__pyx_v_trust_matrix, &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {
         Py_XDECREF(__pyx_t_9); Py_XDECREF(__pyx_t_10); Py_XDECREF(__pyx_t_11);
@@ -11387,70 +11454,92 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
       __pyx_t_9 = __pyx_t_10 = __pyx_t_11 = 0;
     }
     __pyx_pybuffernd_trust_matrix.diminfo[0].strides = __pyx_pybuffernd_trust_matrix.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_trust_matrix.diminfo[0].shape = __pyx_pybuffernd_trust_matrix.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_trust_matrix.diminfo[1].strides = __pyx_pybuffernd_trust_matrix.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_trust_matrix.diminfo[1].shape = __pyx_pybuffernd_trust_matrix.rcbuffer->pybuffer.shape[1];
-    if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 473, __pyx_L1_error)
+    if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 475, __pyx_L1_error)
   }
   __pyx_t_8 = 0;
   __pyx_v_trust_matrix = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "surprise/agreements.pyx":474
- * 
- *     trust_matrix = np.zeros((rows, rows))
- *     print('trainset.n_items')             # <<<<<<<<<<<<<<
- *     print(rows)
- *     print('trainset.n_users')
- */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 474, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "surprise/agreements.pyx":475
- *     trust_matrix = np.zeros((rows, rows))
- *     print('trainset.n_items')
- *     print(rows)             # <<<<<<<<<<<<<<
- *     print('trainset.n_users')
- *     print(trainset.n_users)
- */
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_rows); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 475, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 475, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-
   /* "surprise/agreements.pyx":476
- *     print('trainset.n_items')
- *     print(rows)
- *     print('trainset.n_users')             # <<<<<<<<<<<<<<
- *     print(trainset.n_users)
+ * 
+ *     trust_matrix = np.zeros((rows, rows))
+ *     if algo.verbose:             # <<<<<<<<<<<<<<
+ *         print('trainset.n_items')
+ *         print(rows)
+ */
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_algo, __pyx_n_s_verbose); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 476, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 476, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_2) {
+
+    /* "surprise/agreements.pyx":477
+ *     trust_matrix = np.zeros((rows, rows))
+ *     if algo.verbose:
+ *         print('trainset.n_items')             # <<<<<<<<<<<<<<
+ *         print(rows)
+ *         print('trainset.n_users')
+ */
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__11, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 477, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "surprise/agreements.pyx":478
+ *     if algo.verbose:
+ *         print('trainset.n_items')
+ *         print(rows)             # <<<<<<<<<<<<<<
+ *         print('trainset.n_users')
+ *         print(trainset.n_users)
+ */
+    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_rows); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 478, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 478, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+
+    /* "surprise/agreements.pyx":479
+ *         print('trainset.n_items')
+ *         print(rows)
+ *         print('trainset.n_users')             # <<<<<<<<<<<<<<
+ *         print(trainset.n_users)
  * 
  */
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__11, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 476, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__12, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 479, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "surprise/agreements.pyx":477
- *     print(rows)
- *     print('trainset.n_users')
- *     print(trainset.n_users)             # <<<<<<<<<<<<<<
+    /* "surprise/agreements.pyx":480
+ *         print(rows)
+ *         print('trainset.n_users')
+ *         print(trainset.n_users)             # <<<<<<<<<<<<<<
  * 
  *     testset = trainset.build_testset()
  */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_trainset, __pyx_n_s_n_users); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 477, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 477, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_trainset, __pyx_n_s_n_users); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 480, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 480, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "surprise/agreements.pyx":479
- *     print(trainset.n_users)
+    /* "surprise/agreements.pyx":476
+ * 
+ *     trust_matrix = np.zeros((rows, rows))
+ *     if algo.verbose:             # <<<<<<<<<<<<<<
+ *         print('trainset.n_items')
+ *         print(rows)
+ */
+  }
+
+  /* "surprise/agreements.pyx":482
+ *         print(trainset.n_users)
  * 
  *     testset = trainset.build_testset()             # <<<<<<<<<<<<<<
  *     # algo.fit(trainset)
  *     # sim = algo.sim
  */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_trainset, __pyx_n_s_build_testset); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 479, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_trainset, __pyx_n_s_build_testset); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 482, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __pyx_t_7 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
@@ -11464,22 +11553,22 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
   }
   __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_7) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 479, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 482, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_v_testset = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "surprise/agreements.pyx":486
+  /* "surprise/agreements.pyx":489
  *     # print('sim.shape')
  * 
  *     for x in range(rows):             # <<<<<<<<<<<<<<
  *         # print('x')
  *         # print(x)
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_range); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 486, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_range); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 489, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_rows); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 486, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_rows); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 489, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __pyx_t_6 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
@@ -11494,16 +11583,16 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
   __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_6, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_7);
   __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 486, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 489, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   if (likely(PyList_CheckExact(__pyx_t_1)) || PyTuple_CheckExact(__pyx_t_1)) {
     __pyx_t_5 = __pyx_t_1; __Pyx_INCREF(__pyx_t_5); __pyx_t_12 = 0;
     __pyx_t_13 = NULL;
   } else {
-    __pyx_t_12 = -1; __pyx_t_5 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 486, __pyx_L1_error)
+    __pyx_t_12 = -1; __pyx_t_5 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 489, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_13 = Py_TYPE(__pyx_t_5)->tp_iternext; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 486, __pyx_L1_error)
+    __pyx_t_13 = Py_TYPE(__pyx_t_5)->tp_iternext; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 489, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   for (;;) {
@@ -11511,17 +11600,17 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
       if (likely(PyList_CheckExact(__pyx_t_5))) {
         if (__pyx_t_12 >= PyList_GET_SIZE(__pyx_t_5)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_5, __pyx_t_12); __Pyx_INCREF(__pyx_t_1); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 486, __pyx_L1_error)
+        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_5, __pyx_t_12); __Pyx_INCREF(__pyx_t_1); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 489, __pyx_L1_error)
         #else
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_5, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 486, __pyx_L1_error)
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_5, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 489, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         #endif
       } else {
         if (__pyx_t_12 >= PyTuple_GET_SIZE(__pyx_t_5)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_5, __pyx_t_12); __Pyx_INCREF(__pyx_t_1); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 486, __pyx_L1_error)
+        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_5, __pyx_t_12); __Pyx_INCREF(__pyx_t_1); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 489, __pyx_L1_error)
         #else
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_5, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 486, __pyx_L1_error)
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_5, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 489, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         #endif
       }
@@ -11531,7 +11620,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 486, __pyx_L1_error)
+          else __PYX_ERR(0, 489, __pyx_L1_error)
         }
         break;
       }
@@ -11540,16 +11629,16 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
     __Pyx_XDECREF_SET(__pyx_v_x, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "surprise/agreements.pyx":489
+    /* "surprise/agreements.pyx":492
  *         # print('x')
  *         # print(x)
  *         start = time.time()             # <<<<<<<<<<<<<<
  *         newset = cp.deepcopy(trainset)
  *         # simc = cp.deepcopy(sim)
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_time); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 489, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_time); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 492, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_time); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 489, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_time); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 492, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __pyx_t_7 = NULL;
@@ -11564,22 +11653,22 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
     }
     __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_7) : __Pyx_PyObject_CallNoArg(__pyx_t_6);
     __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 489, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 492, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_XDECREF_SET(__pyx_v_start, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "surprise/agreements.pyx":490
+    /* "surprise/agreements.pyx":493
  *         # print(x)
  *         start = time.time()
  *         newset = cp.deepcopy(trainset)             # <<<<<<<<<<<<<<
  *         # simc = cp.deepcopy(sim)
  *         # simc[x] = 0
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_cp); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 490, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_cp); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 493, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_deepcopy); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 490, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_deepcopy); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 493, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __pyx_t_6 = NULL;
@@ -11594,48 +11683,48 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
     }
     __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_6, __pyx_v_trainset) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_v_trainset);
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 490, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 493, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_XDECREF_SET(__pyx_v_newset, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "surprise/agreements.pyx":495
+    /* "surprise/agreements.pyx":498
  *         # print('simc')
  *         # print(simc)
  *         if ptype == 'user':             # <<<<<<<<<<<<<<
  *             newset.ur[x] = []
  *         else:
  */
-    __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_v_ptype, __pyx_n_u_user, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 495, __pyx_L1_error)
-    if (__pyx_t_3) {
+    __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_ptype, __pyx_n_u_user, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 498, __pyx_L1_error)
+    if (__pyx_t_2) {
 
-      /* "surprise/agreements.pyx":496
+      /* "surprise/agreements.pyx":499
  *         # print(simc)
  *         if ptype == 'user':
  *             newset.ur[x] = []             # <<<<<<<<<<<<<<
  *         else:
  *             newset.ir[x] = []
  */
-      __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 496, __pyx_L1_error)
+      __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 499, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_newset, __pyx_n_s_ur); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 496, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_newset, __pyx_n_s_ur); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 499, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      if (unlikely(PyObject_SetItem(__pyx_t_7, __pyx_v_x, __pyx_t_1) < 0)) __PYX_ERR(0, 496, __pyx_L1_error)
+      if (unlikely(PyObject_SetItem(__pyx_t_7, __pyx_v_x, __pyx_t_1) < 0)) __PYX_ERR(0, 499, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "surprise/agreements.pyx":495
+      /* "surprise/agreements.pyx":498
  *         # print('simc')
  *         # print(simc)
  *         if ptype == 'user':             # <<<<<<<<<<<<<<
  *             newset.ur[x] = []
  *         else:
  */
-      goto __pyx_L6;
+      goto __pyx_L8;
     }
 
-    /* "surprise/agreements.pyx":498
+    /* "surprise/agreements.pyx":501
  *             newset.ur[x] = []
  *         else:
  *             newset.ir[x] = []             # <<<<<<<<<<<<<<
@@ -11643,24 +11732,24 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
  *         # algo.fit(newset, simc)
  */
     /*else*/ {
-      __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 498, __pyx_L1_error)
+      __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 501, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_newset, __pyx_n_s_ir); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 498, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_newset, __pyx_n_s_ir); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 501, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      if (unlikely(PyObject_SetItem(__pyx_t_7, __pyx_v_x, __pyx_t_1) < 0)) __PYX_ERR(0, 498, __pyx_L1_error)
+      if (unlikely(PyObject_SetItem(__pyx_t_7, __pyx_v_x, __pyx_t_1) < 0)) __PYX_ERR(0, 501, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     }
-    __pyx_L6:;
+    __pyx_L8:;
 
-    /* "surprise/agreements.pyx":501
+    /* "surprise/agreements.pyx":504
  * 
  *         # algo.fit(newset, simc)
- *         algo.fit(trainset)             # <<<<<<<<<<<<<<
+ *         algo.fit(newset)             # <<<<<<<<<<<<<<
  *         p = algo.test(testset)
  * 
  */
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_algo, __pyx_n_s_fit); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 501, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_algo, __pyx_n_s_fit); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 504, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
@@ -11672,21 +11761,21 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
         __Pyx_DECREF_SET(__pyx_t_7, function);
       }
     }
-    __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_6, __pyx_v_trainset) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_v_trainset);
+    __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_6, __pyx_v_newset) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_v_newset);
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 501, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 504, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "surprise/agreements.pyx":502
+    /* "surprise/agreements.pyx":505
  *         # algo.fit(newset, simc)
- *         algo.fit(trainset)
+ *         algo.fit(newset)
  *         p = algo.test(testset)             # <<<<<<<<<<<<<<
  * 
  *         df = pd.DataFrame(p,columns=['uid', 'iid', 'rui', 'est', 'details'])
  */
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_algo, __pyx_n_s_test); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 502, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_algo, __pyx_n_s_test); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 505, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
@@ -11700,32 +11789,32 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
     }
     __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_6, __pyx_v_testset) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_v_testset);
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 502, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 505, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_XDECREF_SET(__pyx_v_p, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "surprise/agreements.pyx":504
+    /* "surprise/agreements.pyx":507
  *         p = algo.test(testset)
  * 
  *         df = pd.DataFrame(p,columns=['uid', 'iid', 'rui', 'est', 'details'])             # <<<<<<<<<<<<<<
  *         # df['uid'] = df['uid'].astype('category').cat.codes
- *         # print(df)
+ *         # print(df['est'])
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_pd); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 504, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_pd); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 507, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_DataFrame); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 504, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_DataFrame); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 507, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 504, __pyx_L1_error)
+    __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 507, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_INCREF(__pyx_v_p);
     __Pyx_GIVEREF(__pyx_v_p);
     PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_v_p);
-    __pyx_t_6 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 504, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 507, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_4 = PyList_New(5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 504, __pyx_L1_error)
+    __pyx_t_4 = PyList_New(5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 507, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_INCREF(__pyx_n_u_uid);
     __Pyx_GIVEREF(__pyx_n_u_uid);
@@ -11742,9 +11831,9 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
     __Pyx_INCREF(__pyx_n_u_details);
     __Pyx_GIVEREF(__pyx_n_u_details);
     PyList_SET_ITEM(__pyx_t_4, 4, __pyx_n_u_details);
-    if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_columns, __pyx_t_4) < 0) __PYX_ERR(0, 504, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_columns, __pyx_t_4) < 0) __PYX_ERR(0, 507, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_1, __pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 504, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_1, __pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 507, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -11752,90 +11841,90 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
     __Pyx_XDECREF_SET(__pyx_v_df, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "surprise/agreements.pyx":509
+    /* "surprise/agreements.pyx":513
  * 
  *         # df.sort_values(by=['uid'])
  *         df = df.loc[df['est'] != 0] #removes items predicted 0             # <<<<<<<<<<<<<<
  *         df['err'] = abs(df.est - df.rui)
- * 
+ *         # print(df)
  */
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_df, __pyx_n_s_loc); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 509, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_df, __pyx_n_s_loc); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 513, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_6 = __Pyx_PyObject_Dict_GetItem(__pyx_v_df, __pyx_n_u_est); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 509, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_Dict_GetItem(__pyx_v_df, __pyx_n_u_est); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 513, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_t_6, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 509, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_t_6, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 513, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_6 = __Pyx_PyObject_GetItem(__pyx_t_4, __pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 509, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_GetItem(__pyx_t_4, __pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 513, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF_SET(__pyx_v_df, __pyx_t_6);
     __pyx_t_6 = 0;
 
-    /* "surprise/agreements.pyx":510
+    /* "surprise/agreements.pyx":514
  *         # df.sort_values(by=['uid'])
  *         df = df.loc[df['est'] != 0] #removes items predicted 0
  *         df['err'] = abs(df.est - df.rui)             # <<<<<<<<<<<<<<
+ *         # print(df)
  * 
- *         filtered_df = df.loc[df['err'] < alpha] #alpha = 0.2
  */
-    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_df, __pyx_n_s_est); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 510, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_df, __pyx_n_s_est); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 514, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_df, __pyx_n_s_rui); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 510, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_df, __pyx_n_s_rui); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 514, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_4 = PyNumber_Subtract(__pyx_t_6, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 510, __pyx_L1_error)
+    __pyx_t_4 = PyNumber_Subtract(__pyx_t_6, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 514, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyNumber_Absolute(__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 510, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyNumber_Absolute(__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 514, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(PyObject_SetItem(__pyx_v_df, __pyx_n_u_err, __pyx_t_1) < 0)) __PYX_ERR(0, 510, __pyx_L1_error)
+    if (unlikely(PyObject_SetItem(__pyx_v_df, __pyx_n_u_err, __pyx_t_1) < 0)) __PYX_ERR(0, 514, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "surprise/agreements.pyx":512
- *         df['err'] = abs(df.est - df.rui)
+    /* "surprise/agreements.pyx":517
+ *         # print(df)
  * 
  *         filtered_df = df.loc[df['err'] < alpha] #alpha = 0.2             # <<<<<<<<<<<<<<
- *         # print('filtered_df.uid.unique()')
- *         # print(filtered_df.uid.unique())
+ *         # print('filtered_df')
+ *         # print(filtered_df)
  */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_df, __pyx_n_s_loc); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 512, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_df, __pyx_n_s_loc); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 517, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_4 = __Pyx_PyObject_Dict_GetItem(__pyx_v_df, __pyx_n_u_err); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 512, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Dict_GetItem(__pyx_v_df, __pyx_n_u_err); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 517, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_6 = PyObject_RichCompare(__pyx_t_4, __pyx_v_alpha, Py_LT); __Pyx_XGOTREF(__pyx_t_6); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 512, __pyx_L1_error)
+    __pyx_t_6 = PyObject_RichCompare(__pyx_t_4, __pyx_v_alpha, Py_LT); __Pyx_XGOTREF(__pyx_t_6); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 517, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_t_1, __pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 512, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_t_1, __pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 517, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_XDECREF_SET(__pyx_v_filtered_df, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "surprise/agreements.pyx":520
+    /* "surprise/agreements.pyx":525
  *         # print(uid1)
  *         # # new_list = [int(i) for i in uid1]
  *         if ptype == 'user':             # <<<<<<<<<<<<<<
  *             new_list = [trainset.to_inner_uid(i) for i in filtered_df.uid.unique()] #raw indices of trust matrix (user,user)
  *             nu = filtered_df.uid.value_counts().tolist() #numerator is a subset of denominator
  */
-    __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_v_ptype, __pyx_n_u_user, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 520, __pyx_L1_error)
-    if (__pyx_t_3) {
+    __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_ptype, __pyx_n_u_user, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 525, __pyx_L1_error)
+    if (__pyx_t_2) {
 
-      /* "surprise/agreements.pyx":521
+      /* "surprise/agreements.pyx":526
  *         # # new_list = [int(i) for i in uid1]
  *         if ptype == 'user':
  *             new_list = [trainset.to_inner_uid(i) for i in filtered_df.uid.unique()] #raw indices of trust matrix (user,user)             # <<<<<<<<<<<<<<
  *             nu = filtered_df.uid.value_counts().tolist() #numerator is a subset of denominator
  *             den = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts().tolist()
  */
-      __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 521, __pyx_L1_error)
+      __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 526, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_filtered_df, __pyx_n_s_uid); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 521, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_filtered_df, __pyx_n_s_uid); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 526, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_unique); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 521, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_unique); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 526, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __pyx_t_1 = NULL;
@@ -11850,16 +11939,16 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
       }
       __pyx_t_6 = (__pyx_t_1) ? __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_1) : __Pyx_PyObject_CallNoArg(__pyx_t_7);
       __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-      if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 521, __pyx_L1_error)
+      if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 526, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       if (likely(PyList_CheckExact(__pyx_t_6)) || PyTuple_CheckExact(__pyx_t_6)) {
         __pyx_t_7 = __pyx_t_6; __Pyx_INCREF(__pyx_t_7); __pyx_t_14 = 0;
         __pyx_t_15 = NULL;
       } else {
-        __pyx_t_14 = -1; __pyx_t_7 = PyObject_GetIter(__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 521, __pyx_L1_error)
+        __pyx_t_14 = -1; __pyx_t_7 = PyObject_GetIter(__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 526, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_15 = Py_TYPE(__pyx_t_7)->tp_iternext; if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 521, __pyx_L1_error)
+        __pyx_t_15 = Py_TYPE(__pyx_t_7)->tp_iternext; if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 526, __pyx_L1_error)
       }
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       for (;;) {
@@ -11867,17 +11956,17 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
           if (likely(PyList_CheckExact(__pyx_t_7))) {
             if (__pyx_t_14 >= PyList_GET_SIZE(__pyx_t_7)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_6 = PyList_GET_ITEM(__pyx_t_7, __pyx_t_14); __Pyx_INCREF(__pyx_t_6); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 521, __pyx_L1_error)
+            __pyx_t_6 = PyList_GET_ITEM(__pyx_t_7, __pyx_t_14); __Pyx_INCREF(__pyx_t_6); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 526, __pyx_L1_error)
             #else
-            __pyx_t_6 = PySequence_ITEM(__pyx_t_7, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 521, __pyx_L1_error)
+            __pyx_t_6 = PySequence_ITEM(__pyx_t_7, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 526, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_6);
             #endif
           } else {
             if (__pyx_t_14 >= PyTuple_GET_SIZE(__pyx_t_7)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_7, __pyx_t_14); __Pyx_INCREF(__pyx_t_6); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 521, __pyx_L1_error)
+            __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_7, __pyx_t_14); __Pyx_INCREF(__pyx_t_6); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 526, __pyx_L1_error)
             #else
-            __pyx_t_6 = PySequence_ITEM(__pyx_t_7, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 521, __pyx_L1_error)
+            __pyx_t_6 = PySequence_ITEM(__pyx_t_7, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 526, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_6);
             #endif
           }
@@ -11887,7 +11976,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
             PyObject* exc_type = PyErr_Occurred();
             if (exc_type) {
               if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-              else __PYX_ERR(0, 521, __pyx_L1_error)
+              else __PYX_ERR(0, 526, __pyx_L1_error)
             }
             break;
           }
@@ -11895,7 +11984,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
         }
         __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_6);
         __pyx_t_6 = 0;
-        __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_trainset, __pyx_n_s_to_inner_uid); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 521, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_trainset, __pyx_n_s_to_inner_uid); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 526, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __pyx_t_16 = NULL;
         if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -11909,26 +11998,26 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
         }
         __pyx_t_6 = (__pyx_t_16) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_16, __pyx_v_i) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v_i);
         __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
-        if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 521, __pyx_L1_error)
+        if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 526, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_6))) __PYX_ERR(0, 521, __pyx_L1_error)
+        if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_6))) __PYX_ERR(0, 526, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       }
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_XDECREF_SET(__pyx_v_new_list, ((PyObject*)__pyx_t_4));
       __pyx_t_4 = 0;
 
-      /* "surprise/agreements.pyx":522
+      /* "surprise/agreements.pyx":527
  *         if ptype == 'user':
  *             new_list = [trainset.to_inner_uid(i) for i in filtered_df.uid.unique()] #raw indices of trust matrix (user,user)
  *             nu = filtered_df.uid.value_counts().tolist() #numerator is a subset of denominator             # <<<<<<<<<<<<<<
  *             den = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts().tolist()
  *             results = [int(n) / int(d) for n,d in zip(nu, den)]
  */
-      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_filtered_df, __pyx_n_s_uid); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 522, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_filtered_df, __pyx_n_s_uid); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 527, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_value_counts); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 522, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_value_counts); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 527, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __pyx_t_6 = NULL;
@@ -11943,10 +12032,10 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
       }
       __pyx_t_7 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-      if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 522, __pyx_L1_error)
+      if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 527, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_tolist); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 522, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_tolist); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 527, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __pyx_t_7 = NULL;
@@ -11961,29 +12050,29 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
       }
       __pyx_t_4 = (__pyx_t_7) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_7) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 522, __pyx_L1_error)
+      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 527, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_XDECREF_SET(__pyx_v_nu, __pyx_t_4);
       __pyx_t_4 = 0;
 
-      /* "surprise/agreements.pyx":523
+      /* "surprise/agreements.pyx":528
  *             new_list = [trainset.to_inner_uid(i) for i in filtered_df.uid.unique()] #raw indices of trust matrix (user,user)
  *             nu = filtered_df.uid.value_counts().tolist() #numerator is a subset of denominator
  *             den = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts().tolist()             # <<<<<<<<<<<<<<
  *             results = [int(n) / int(d) for n,d in zip(nu, den)]
  *             # print('den')
  */
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_df, __pyx_n_s_loc); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 523, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_df, __pyx_n_s_loc); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 528, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_16 = __Pyx_PyObject_Dict_GetItem(__pyx_v_df, __pyx_n_u_uid); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 523, __pyx_L1_error)
+      __pyx_t_16 = __Pyx_PyObject_Dict_GetItem(__pyx_v_df, __pyx_n_u_uid); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 528, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_16);
-      __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_isin); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 523, __pyx_L1_error)
+      __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_isin); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 528, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_17);
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-      __pyx_t_18 = __Pyx_PyObject_GetAttrStr(__pyx_v_filtered_df, __pyx_n_s_uid); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 523, __pyx_L1_error)
+      __pyx_t_18 = __Pyx_PyObject_GetAttrStr(__pyx_v_filtered_df, __pyx_n_s_uid); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 528, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_18);
-      __pyx_t_19 = __Pyx_PyObject_GetAttrStr(__pyx_t_18, __pyx_n_s_unique); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 523, __pyx_L1_error)
+      __pyx_t_19 = __Pyx_PyObject_GetAttrStr(__pyx_t_18, __pyx_n_s_unique); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 528, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_19);
       __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
       __pyx_t_18 = NULL;
@@ -11998,7 +12087,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
       }
       __pyx_t_16 = (__pyx_t_18) ? __Pyx_PyObject_CallOneArg(__pyx_t_19, __pyx_t_18) : __Pyx_PyObject_CallNoArg(__pyx_t_19);
       __Pyx_XDECREF(__pyx_t_18); __pyx_t_18 = 0;
-      if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 523, __pyx_L1_error)
+      if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 528, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_16);
       __Pyx_DECREF(__pyx_t_19); __pyx_t_19 = 0;
       __pyx_t_19 = NULL;
@@ -12014,17 +12103,17 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
       __pyx_t_6 = (__pyx_t_19) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_19, __pyx_t_16) : __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_t_16);
       __Pyx_XDECREF(__pyx_t_19); __pyx_t_19 = 0;
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-      if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 523, __pyx_L1_error)
+      if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 528, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-      __pyx_t_17 = __Pyx_PyObject_GetItem(__pyx_t_7, __pyx_t_6); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 523, __pyx_L1_error)
+      __pyx_t_17 = __Pyx_PyObject_GetItem(__pyx_t_7, __pyx_t_6); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 528, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_17);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_17, __pyx_n_s_uid); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 523, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_17, __pyx_n_s_uid); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 528, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-      __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_value_counts); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 523, __pyx_L1_error)
+      __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_value_counts); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 528, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_17);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __pyx_t_6 = NULL;
@@ -12039,10 +12128,10 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
       }
       __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_17);
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 523, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 528, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-      __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_tolist); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 523, __pyx_L1_error)
+      __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_tolist); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 528, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_17);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __pyx_t_1 = NULL;
@@ -12057,22 +12146,22 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
       }
       __pyx_t_4 = (__pyx_t_1) ? __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_t_1) : __Pyx_PyObject_CallNoArg(__pyx_t_17);
       __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 523, __pyx_L1_error)
+      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 528, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
       __Pyx_XDECREF_SET(__pyx_v_den, __pyx_t_4);
       __pyx_t_4 = 0;
 
-      /* "surprise/agreements.pyx":524
+      /* "surprise/agreements.pyx":529
  *             nu = filtered_df.uid.value_counts().tolist() #numerator is a subset of denominator
  *             den = df.loc[df['uid'].isin(filtered_df.uid.unique())].uid.value_counts().tolist()
  *             results = [int(n) / int(d) for n,d in zip(nu, den)]             # <<<<<<<<<<<<<<
  *             # print('den')
  *             # print(den)
  */
-      __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 524, __pyx_L1_error)
+      __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 529, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_17 = PyTuple_New(2); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 524, __pyx_L1_error)
+      __pyx_t_17 = PyTuple_New(2); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 529, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_17);
       __Pyx_INCREF(__pyx_v_nu);
       __Pyx_GIVEREF(__pyx_v_nu);
@@ -12080,16 +12169,16 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
       __Pyx_INCREF(__pyx_v_den);
       __Pyx_GIVEREF(__pyx_v_den);
       PyTuple_SET_ITEM(__pyx_t_17, 1, __pyx_v_den);
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_zip, __pyx_t_17, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 524, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_zip, __pyx_t_17, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 529, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
       if (likely(PyList_CheckExact(__pyx_t_1)) || PyTuple_CheckExact(__pyx_t_1)) {
         __pyx_t_17 = __pyx_t_1; __Pyx_INCREF(__pyx_t_17); __pyx_t_14 = 0;
         __pyx_t_15 = NULL;
       } else {
-        __pyx_t_14 = -1; __pyx_t_17 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 524, __pyx_L1_error)
+        __pyx_t_14 = -1; __pyx_t_17 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 529, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_17);
-        __pyx_t_15 = Py_TYPE(__pyx_t_17)->tp_iternext; if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 524, __pyx_L1_error)
+        __pyx_t_15 = Py_TYPE(__pyx_t_17)->tp_iternext; if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 529, __pyx_L1_error)
       }
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       for (;;) {
@@ -12097,17 +12186,17 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
           if (likely(PyList_CheckExact(__pyx_t_17))) {
             if (__pyx_t_14 >= PyList_GET_SIZE(__pyx_t_17)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_1 = PyList_GET_ITEM(__pyx_t_17, __pyx_t_14); __Pyx_INCREF(__pyx_t_1); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 524, __pyx_L1_error)
+            __pyx_t_1 = PyList_GET_ITEM(__pyx_t_17, __pyx_t_14); __Pyx_INCREF(__pyx_t_1); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 529, __pyx_L1_error)
             #else
-            __pyx_t_1 = PySequence_ITEM(__pyx_t_17, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 524, __pyx_L1_error)
+            __pyx_t_1 = PySequence_ITEM(__pyx_t_17, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 529, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
             #endif
           } else {
             if (__pyx_t_14 >= PyTuple_GET_SIZE(__pyx_t_17)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_17, __pyx_t_14); __Pyx_INCREF(__pyx_t_1); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 524, __pyx_L1_error)
+            __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_17, __pyx_t_14); __Pyx_INCREF(__pyx_t_1); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 529, __pyx_L1_error)
             #else
-            __pyx_t_1 = PySequence_ITEM(__pyx_t_17, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 524, __pyx_L1_error)
+            __pyx_t_1 = PySequence_ITEM(__pyx_t_17, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 529, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
             #endif
           }
@@ -12117,7 +12206,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
             PyObject* exc_type = PyErr_Occurred();
             if (exc_type) {
               if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-              else __PYX_ERR(0, 524, __pyx_L1_error)
+              else __PYX_ERR(0, 529, __pyx_L1_error)
             }
             break;
           }
@@ -12129,7 +12218,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
           if (unlikely(size != 2)) {
             if (size > 2) __Pyx_RaiseTooManyValuesError(2);
             else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-            __PYX_ERR(0, 524, __pyx_L1_error)
+            __PYX_ERR(0, 529, __pyx_L1_error)
           }
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
           if (likely(PyTuple_CheckExact(sequence))) {
@@ -12142,63 +12231,63 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
           __Pyx_INCREF(__pyx_t_6);
           __Pyx_INCREF(__pyx_t_7);
           #else
-          __pyx_t_6 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 524, __pyx_L1_error)
+          __pyx_t_6 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 529, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_6);
-          __pyx_t_7 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 524, __pyx_L1_error)
+          __pyx_t_7 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 529, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_7);
           #endif
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
         } else {
           Py_ssize_t index = -1;
-          __pyx_t_16 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 524, __pyx_L1_error)
+          __pyx_t_16 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 529, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_16);
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           __pyx_t_20 = Py_TYPE(__pyx_t_16)->tp_iternext;
-          index = 0; __pyx_t_6 = __pyx_t_20(__pyx_t_16); if (unlikely(!__pyx_t_6)) goto __pyx_L12_unpacking_failed;
+          index = 0; __pyx_t_6 = __pyx_t_20(__pyx_t_16); if (unlikely(!__pyx_t_6)) goto __pyx_L14_unpacking_failed;
           __Pyx_GOTREF(__pyx_t_6);
-          index = 1; __pyx_t_7 = __pyx_t_20(__pyx_t_16); if (unlikely(!__pyx_t_7)) goto __pyx_L12_unpacking_failed;
+          index = 1; __pyx_t_7 = __pyx_t_20(__pyx_t_16); if (unlikely(!__pyx_t_7)) goto __pyx_L14_unpacking_failed;
           __Pyx_GOTREF(__pyx_t_7);
-          if (__Pyx_IternextUnpackEndCheck(__pyx_t_20(__pyx_t_16), 2) < 0) __PYX_ERR(0, 524, __pyx_L1_error)
+          if (__Pyx_IternextUnpackEndCheck(__pyx_t_20(__pyx_t_16), 2) < 0) __PYX_ERR(0, 529, __pyx_L1_error)
           __pyx_t_20 = NULL;
           __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-          goto __pyx_L13_unpacking_done;
-          __pyx_L12_unpacking_failed:;
+          goto __pyx_L15_unpacking_done;
+          __pyx_L14_unpacking_failed:;
           __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
           __pyx_t_20 = NULL;
           if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-          __PYX_ERR(0, 524, __pyx_L1_error)
-          __pyx_L13_unpacking_done:;
+          __PYX_ERR(0, 529, __pyx_L1_error)
+          __pyx_L15_unpacking_done:;
         }
         __Pyx_XDECREF_SET(__pyx_v_n, __pyx_t_6);
         __pyx_t_6 = 0;
         __Pyx_XDECREF_SET(__pyx_v_d, __pyx_t_7);
         __pyx_t_7 = 0;
-        __pyx_t_1 = __Pyx_PyNumber_Int(__pyx_v_n); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 524, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyNumber_Int(__pyx_v_n); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 529, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_7 = __Pyx_PyNumber_Int(__pyx_v_d); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 524, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyNumber_Int(__pyx_v_d); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 529, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_6 = __Pyx_PyNumber_Divide(__pyx_t_1, __pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 524, __pyx_L1_error)
+        __pyx_t_6 = __Pyx_PyNumber_Divide(__pyx_t_1, __pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 529, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_6))) __PYX_ERR(0, 524, __pyx_L1_error)
+        if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_6))) __PYX_ERR(0, 529, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       }
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
       __Pyx_XDECREF_SET(__pyx_v_results, ((PyObject*)__pyx_t_4));
       __pyx_t_4 = 0;
 
-      /* "surprise/agreements.pyx":520
+      /* "surprise/agreements.pyx":525
  *         # print(uid1)
  *         # # new_list = [int(i) for i in uid1]
  *         if ptype == 'user':             # <<<<<<<<<<<<<<
  *             new_list = [trainset.to_inner_uid(i) for i in filtered_df.uid.unique()] #raw indices of trust matrix (user,user)
  *             nu = filtered_df.uid.value_counts().tolist() #numerator is a subset of denominator
  */
-      goto __pyx_L7;
+      goto __pyx_L9;
     }
 
-    /* "surprise/agreements.pyx":530
+    /* "surprise/agreements.pyx":535
  *             # print(nu)
  *         else:
  *             new_list = [trainset.to_inner_iid(i) for i in filtered_df.iid.unique()] #raw indices of trust matrix (item,item)             # <<<<<<<<<<<<<<
@@ -12206,11 +12295,11 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
  *             den = df.loc[df['iid'].isin(filtered_df.iid.unique())].iid.value_counts()
  */
     /*else*/ {
-      __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 530, __pyx_L1_error)
+      __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 535, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_filtered_df, __pyx_n_s_iid); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 530, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_filtered_df, __pyx_n_s_iid); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 535, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_unique); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 530, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_unique); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 535, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __pyx_t_6 = NULL;
@@ -12225,16 +12314,16 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
       }
       __pyx_t_17 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_7);
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-      if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 530, __pyx_L1_error)
+      if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 535, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_17);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       if (likely(PyList_CheckExact(__pyx_t_17)) || PyTuple_CheckExact(__pyx_t_17)) {
         __pyx_t_7 = __pyx_t_17; __Pyx_INCREF(__pyx_t_7); __pyx_t_14 = 0;
         __pyx_t_15 = NULL;
       } else {
-        __pyx_t_14 = -1; __pyx_t_7 = PyObject_GetIter(__pyx_t_17); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 530, __pyx_L1_error)
+        __pyx_t_14 = -1; __pyx_t_7 = PyObject_GetIter(__pyx_t_17); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 535, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_15 = Py_TYPE(__pyx_t_7)->tp_iternext; if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 530, __pyx_L1_error)
+        __pyx_t_15 = Py_TYPE(__pyx_t_7)->tp_iternext; if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 535, __pyx_L1_error)
       }
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
       for (;;) {
@@ -12242,17 +12331,17 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
           if (likely(PyList_CheckExact(__pyx_t_7))) {
             if (__pyx_t_14 >= PyList_GET_SIZE(__pyx_t_7)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_17 = PyList_GET_ITEM(__pyx_t_7, __pyx_t_14); __Pyx_INCREF(__pyx_t_17); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 530, __pyx_L1_error)
+            __pyx_t_17 = PyList_GET_ITEM(__pyx_t_7, __pyx_t_14); __Pyx_INCREF(__pyx_t_17); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 535, __pyx_L1_error)
             #else
-            __pyx_t_17 = PySequence_ITEM(__pyx_t_7, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 530, __pyx_L1_error)
+            __pyx_t_17 = PySequence_ITEM(__pyx_t_7, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 535, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_17);
             #endif
           } else {
             if (__pyx_t_14 >= PyTuple_GET_SIZE(__pyx_t_7)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_17 = PyTuple_GET_ITEM(__pyx_t_7, __pyx_t_14); __Pyx_INCREF(__pyx_t_17); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 530, __pyx_L1_error)
+            __pyx_t_17 = PyTuple_GET_ITEM(__pyx_t_7, __pyx_t_14); __Pyx_INCREF(__pyx_t_17); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 535, __pyx_L1_error)
             #else
-            __pyx_t_17 = PySequence_ITEM(__pyx_t_7, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 530, __pyx_L1_error)
+            __pyx_t_17 = PySequence_ITEM(__pyx_t_7, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 535, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_17);
             #endif
           }
@@ -12262,7 +12351,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
             PyObject* exc_type = PyErr_Occurred();
             if (exc_type) {
               if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-              else __PYX_ERR(0, 530, __pyx_L1_error)
+              else __PYX_ERR(0, 535, __pyx_L1_error)
             }
             break;
           }
@@ -12270,7 +12359,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
         }
         __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_17);
         __pyx_t_17 = 0;
-        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_trainset, __pyx_n_s_to_inner_iid); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 530, __pyx_L1_error)
+        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_trainset, __pyx_n_s_to_inner_iid); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 535, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
         __pyx_t_1 = NULL;
         if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_6))) {
@@ -12284,26 +12373,26 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
         }
         __pyx_t_17 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_1, __pyx_v_i) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_v_i);
         __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-        if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 530, __pyx_L1_error)
+        if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 535, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_17);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-        if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_17))) __PYX_ERR(0, 530, __pyx_L1_error)
+        if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_17))) __PYX_ERR(0, 535, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
       }
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_XDECREF_SET(__pyx_v_new_list, ((PyObject*)__pyx_t_4));
       __pyx_t_4 = 0;
 
-      /* "surprise/agreements.pyx":531
+      /* "surprise/agreements.pyx":536
  *         else:
  *             new_list = [trainset.to_inner_iid(i) for i in filtered_df.iid.unique()] #raw indices of trust matrix (item,item)
  *             nu = filtered_df.iid.value_counts().tolist()             # <<<<<<<<<<<<<<
  *             den = df.loc[df['iid'].isin(filtered_df.iid.unique())].iid.value_counts()
  *             results = [int(n) / int(d) for n,d in zip(nu, den)]
  */
-      __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_v_filtered_df, __pyx_n_s_iid); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 531, __pyx_L1_error)
+      __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_v_filtered_df, __pyx_n_s_iid); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 536, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_17);
-      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_17, __pyx_n_s_value_counts); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 531, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_17, __pyx_n_s_value_counts); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 536, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
       __pyx_t_17 = NULL;
@@ -12318,10 +12407,10 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
       }
       __pyx_t_7 = (__pyx_t_17) ? __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_17) : __Pyx_PyObject_CallNoArg(__pyx_t_6);
       __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
-      if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 531, __pyx_L1_error)
+      if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 536, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_tolist); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 531, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_tolist); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 536, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __pyx_t_7 = NULL;
@@ -12336,29 +12425,29 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
       }
       __pyx_t_4 = (__pyx_t_7) ? __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_7) : __Pyx_PyObject_CallNoArg(__pyx_t_6);
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 531, __pyx_L1_error)
+      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 536, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_XDECREF_SET(__pyx_v_nu, __pyx_t_4);
       __pyx_t_4 = 0;
 
-      /* "surprise/agreements.pyx":532
+      /* "surprise/agreements.pyx":537
  *             new_list = [trainset.to_inner_iid(i) for i in filtered_df.iid.unique()] #raw indices of trust matrix (item,item)
  *             nu = filtered_df.iid.value_counts().tolist()
  *             den = df.loc[df['iid'].isin(filtered_df.iid.unique())].iid.value_counts()             # <<<<<<<<<<<<<<
  *             results = [int(n) / int(d) for n,d in zip(nu, den)]
  * 
  */
-      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_df, __pyx_n_s_loc); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 532, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_df, __pyx_n_s_loc); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 537, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_17 = __Pyx_PyObject_Dict_GetItem(__pyx_v_df, __pyx_n_u_iid); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 532, __pyx_L1_error)
+      __pyx_t_17 = __Pyx_PyObject_Dict_GetItem(__pyx_v_df, __pyx_n_u_iid); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 537, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_17);
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_17, __pyx_n_s_isin); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 532, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_17, __pyx_n_s_isin); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 537, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-      __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_v_filtered_df, __pyx_n_s_iid); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 532, __pyx_L1_error)
+      __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_v_filtered_df, __pyx_n_s_iid); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 537, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_16);
-      __pyx_t_19 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_unique); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 532, __pyx_L1_error)
+      __pyx_t_19 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_unique); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 537, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_19);
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
       __pyx_t_16 = NULL;
@@ -12373,7 +12462,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
       }
       __pyx_t_17 = (__pyx_t_16) ? __Pyx_PyObject_CallOneArg(__pyx_t_19, __pyx_t_16) : __Pyx_PyObject_CallNoArg(__pyx_t_19);
       __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
-      if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 532, __pyx_L1_error)
+      if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 537, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_17);
       __Pyx_DECREF(__pyx_t_19); __pyx_t_19 = 0;
       __pyx_t_19 = NULL;
@@ -12389,17 +12478,17 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
       __pyx_t_7 = (__pyx_t_19) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_19, __pyx_t_17) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_17);
       __Pyx_XDECREF(__pyx_t_19); __pyx_t_19 = 0;
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-      if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 532, __pyx_L1_error)
+      if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 537, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_t_6, __pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 532, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_t_6, __pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 537, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_iid); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 532, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_iid); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 537, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_value_counts); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 532, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_value_counts); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 537, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __pyx_t_7 = NULL;
@@ -12414,22 +12503,22 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
       }
       __pyx_t_4 = (__pyx_t_7) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_7) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 532, __pyx_L1_error)
+      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 537, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_XDECREF_SET(__pyx_v_den, __pyx_t_4);
       __pyx_t_4 = 0;
 
-      /* "surprise/agreements.pyx":533
+      /* "surprise/agreements.pyx":538
  *             nu = filtered_df.iid.value_counts().tolist()
  *             den = df.loc[df['iid'].isin(filtered_df.iid.unique())].iid.value_counts()
  *             results = [int(n) / int(d) for n,d in zip(nu, den)]             # <<<<<<<<<<<<<<
  * 
  * 
  */
-      __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 533, __pyx_L1_error)
+      __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 538, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 533, __pyx_L1_error)
+      __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 538, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_INCREF(__pyx_v_nu);
       __Pyx_GIVEREF(__pyx_v_nu);
@@ -12437,16 +12526,16 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
       __Pyx_INCREF(__pyx_v_den);
       __Pyx_GIVEREF(__pyx_v_den);
       PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_v_den);
-      __pyx_t_7 = __Pyx_PyObject_Call(__pyx_builtin_zip, __pyx_t_1, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 533, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_Call(__pyx_builtin_zip, __pyx_t_1, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 538, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       if (likely(PyList_CheckExact(__pyx_t_7)) || PyTuple_CheckExact(__pyx_t_7)) {
         __pyx_t_1 = __pyx_t_7; __Pyx_INCREF(__pyx_t_1); __pyx_t_14 = 0;
         __pyx_t_15 = NULL;
       } else {
-        __pyx_t_14 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 533, __pyx_L1_error)
+        __pyx_t_14 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 538, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_15 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 533, __pyx_L1_error)
+        __pyx_t_15 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 538, __pyx_L1_error)
       }
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       for (;;) {
@@ -12454,17 +12543,17 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
           if (likely(PyList_CheckExact(__pyx_t_1))) {
             if (__pyx_t_14 >= PyList_GET_SIZE(__pyx_t_1)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_7 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_14); __Pyx_INCREF(__pyx_t_7); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 533, __pyx_L1_error)
+            __pyx_t_7 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_14); __Pyx_INCREF(__pyx_t_7); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 538, __pyx_L1_error)
             #else
-            __pyx_t_7 = PySequence_ITEM(__pyx_t_1, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 533, __pyx_L1_error)
+            __pyx_t_7 = PySequence_ITEM(__pyx_t_1, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 538, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
             #endif
           } else {
             if (__pyx_t_14 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_7 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_14); __Pyx_INCREF(__pyx_t_7); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 533, __pyx_L1_error)
+            __pyx_t_7 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_14); __Pyx_INCREF(__pyx_t_7); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 538, __pyx_L1_error)
             #else
-            __pyx_t_7 = PySequence_ITEM(__pyx_t_1, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 533, __pyx_L1_error)
+            __pyx_t_7 = PySequence_ITEM(__pyx_t_1, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 538, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
             #endif
           }
@@ -12474,7 +12563,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
             PyObject* exc_type = PyErr_Occurred();
             if (exc_type) {
               if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-              else __PYX_ERR(0, 533, __pyx_L1_error)
+              else __PYX_ERR(0, 538, __pyx_L1_error)
             }
             break;
           }
@@ -12486,7 +12575,7 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
           if (unlikely(size != 2)) {
             if (size > 2) __Pyx_RaiseTooManyValuesError(2);
             else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-            __PYX_ERR(0, 533, __pyx_L1_error)
+            __PYX_ERR(0, 538, __pyx_L1_error)
           }
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
           if (likely(PyTuple_CheckExact(sequence))) {
@@ -12499,62 +12588,62 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
           __Pyx_INCREF(__pyx_t_6);
           __Pyx_INCREF(__pyx_t_17);
           #else
-          __pyx_t_6 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 533, __pyx_L1_error)
+          __pyx_t_6 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 538, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_6);
-          __pyx_t_17 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 533, __pyx_L1_error)
+          __pyx_t_17 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 538, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_17);
           #endif
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         } else {
           Py_ssize_t index = -1;
-          __pyx_t_19 = PyObject_GetIter(__pyx_t_7); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 533, __pyx_L1_error)
+          __pyx_t_19 = PyObject_GetIter(__pyx_t_7); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 538, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_19);
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
           __pyx_t_20 = Py_TYPE(__pyx_t_19)->tp_iternext;
-          index = 0; __pyx_t_6 = __pyx_t_20(__pyx_t_19); if (unlikely(!__pyx_t_6)) goto __pyx_L18_unpacking_failed;
+          index = 0; __pyx_t_6 = __pyx_t_20(__pyx_t_19); if (unlikely(!__pyx_t_6)) goto __pyx_L20_unpacking_failed;
           __Pyx_GOTREF(__pyx_t_6);
-          index = 1; __pyx_t_17 = __pyx_t_20(__pyx_t_19); if (unlikely(!__pyx_t_17)) goto __pyx_L18_unpacking_failed;
+          index = 1; __pyx_t_17 = __pyx_t_20(__pyx_t_19); if (unlikely(!__pyx_t_17)) goto __pyx_L20_unpacking_failed;
           __Pyx_GOTREF(__pyx_t_17);
-          if (__Pyx_IternextUnpackEndCheck(__pyx_t_20(__pyx_t_19), 2) < 0) __PYX_ERR(0, 533, __pyx_L1_error)
+          if (__Pyx_IternextUnpackEndCheck(__pyx_t_20(__pyx_t_19), 2) < 0) __PYX_ERR(0, 538, __pyx_L1_error)
           __pyx_t_20 = NULL;
           __Pyx_DECREF(__pyx_t_19); __pyx_t_19 = 0;
-          goto __pyx_L19_unpacking_done;
-          __pyx_L18_unpacking_failed:;
+          goto __pyx_L21_unpacking_done;
+          __pyx_L20_unpacking_failed:;
           __Pyx_DECREF(__pyx_t_19); __pyx_t_19 = 0;
           __pyx_t_20 = NULL;
           if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-          __PYX_ERR(0, 533, __pyx_L1_error)
-          __pyx_L19_unpacking_done:;
+          __PYX_ERR(0, 538, __pyx_L1_error)
+          __pyx_L21_unpacking_done:;
         }
         __Pyx_XDECREF_SET(__pyx_v_n, __pyx_t_6);
         __pyx_t_6 = 0;
         __Pyx_XDECREF_SET(__pyx_v_d, __pyx_t_17);
         __pyx_t_17 = 0;
-        __pyx_t_7 = __Pyx_PyNumber_Int(__pyx_v_n); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 533, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyNumber_Int(__pyx_v_n); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 538, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_17 = __Pyx_PyNumber_Int(__pyx_v_d); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 533, __pyx_L1_error)
+        __pyx_t_17 = __Pyx_PyNumber_Int(__pyx_v_d); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 538, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_17);
-        __pyx_t_6 = __Pyx_PyNumber_Divide(__pyx_t_7, __pyx_t_17); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 533, __pyx_L1_error)
+        __pyx_t_6 = __Pyx_PyNumber_Divide(__pyx_t_7, __pyx_t_17); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 538, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-        if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_6))) __PYX_ERR(0, 533, __pyx_L1_error)
+        if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_6))) __PYX_ERR(0, 538, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       }
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_XDECREF_SET(__pyx_v_results, ((PyObject*)__pyx_t_4));
       __pyx_t_4 = 0;
     }
-    __pyx_L7:;
+    __pyx_L9:;
 
-    /* "surprise/agreements.pyx":552
+    /* "surprise/agreements.pyx":559
  *         # nu = filtered_df.uid.value_counts()
  * 
  *         trust_matrix[x,new_list] = results             # <<<<<<<<<<<<<<
+ *         # print(results)
  *         trust_matrix[x,x] = 1
- *         # print('trust_matrix[x,new_list]')
  */
-    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 552, __pyx_L1_error)
+    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 559, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_INCREF(__pyx_v_x);
     __Pyx_GIVEREF(__pyx_v_x);
@@ -12562,17 +12651,17 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
     __Pyx_INCREF(__pyx_v_new_list);
     __Pyx_GIVEREF(__pyx_v_new_list);
     PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_v_new_list);
-    if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_trust_matrix), __pyx_t_4, __pyx_v_results) < 0)) __PYX_ERR(0, 552, __pyx_L1_error)
+    if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_trust_matrix), __pyx_t_4, __pyx_v_results) < 0)) __PYX_ERR(0, 559, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "surprise/agreements.pyx":553
- * 
+    /* "surprise/agreements.pyx":561
  *         trust_matrix[x,new_list] = results
+ *         # print(results)
  *         trust_matrix[x,x] = 1             # <<<<<<<<<<<<<<
  *         # print('trust_matrix[x,new_list]')
  *         # print(trust_matrix[x,new_list])
  */
-    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 553, __pyx_L1_error)
+    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 561, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_INCREF(__pyx_v_x);
     __Pyx_GIVEREF(__pyx_v_x);
@@ -12580,10 +12669,10 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
     __Pyx_INCREF(__pyx_v_x);
     __Pyx_GIVEREF(__pyx_v_x);
     PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_v_x);
-    if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_trust_matrix), __pyx_t_4, __pyx_int_1) < 0)) __PYX_ERR(0, 553, __pyx_L1_error)
+    if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_trust_matrix), __pyx_t_4, __pyx_int_1) < 0)) __PYX_ERR(0, 561, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "surprise/agreements.pyx":486
+    /* "surprise/agreements.pyx":489
  *     # print('sim.shape')
  * 
  *     for x in range(rows):             # <<<<<<<<<<<<<<
@@ -12593,8 +12682,41 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
   }
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "surprise/agreements.pyx":565
- *     # print('======================== odonovan_trust |END|========================')
+  /* "surprise/agreements.pyx":570
+ *         # print(time.time() - start)
+ * 
+ *     if algo.verbose:             # <<<<<<<<<<<<<<
+ *         print('======================== odonovan_trust |END|========================')
+ *     # print(trust_matrix)
+ */
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_algo, __pyx_n_s_verbose); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 570, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 570, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  if (__pyx_t_2) {
+
+    /* "surprise/agreements.pyx":571
+ * 
+ *     if algo.verbose:
+ *         print('======================== odonovan_trust |END|========================')             # <<<<<<<<<<<<<<
+ *     # print(trust_matrix)
+ *     return trust_matrix
+ */
+    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__13, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 571, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+
+    /* "surprise/agreements.pyx":570
+ *         # print(time.time() - start)
+ * 
+ *     if algo.verbose:             # <<<<<<<<<<<<<<
+ *         print('======================== odonovan_trust |END|========================')
+ *     # print(trust_matrix)
+ */
+  }
+
+  /* "surprise/agreements.pyx":573
+ *         print('======================== odonovan_trust |END|========================')
  *     # print(trust_matrix)
  *     return trust_matrix             # <<<<<<<<<<<<<<
  * 
@@ -12604,12 +12726,12 @@ static PyObject *__pyx_pf_8surprise_10agreements_10odonovan_trust_old(CYTHON_UNU
   __pyx_r = ((PyObject *)__pyx_v_trust_matrix);
   goto __pyx_L0;
 
-  /* "surprise/agreements.pyx":462
+  /* "surprise/agreements.pyx":463
  *     return trust_matrix
  * 
  * def odonovan_trust_old(trainset, algo, ptype='user', alpha=0.2):             # <<<<<<<<<<<<<<
  *     """Computes knn version of trust matrix proposed by J. ODonovan and B. Smyth, in Trust in recommender systems, """
- *     # print('======================== odonovan_trust |START|========================')
+ *     if algo.verbose:
  */
 
   /* function exit code */
@@ -12772,7 +12894,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  * 
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__12, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 272, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__14, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 272, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -12828,7 +12950,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  * 
  *             info.buf = PyArray_DATA(self)
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__13, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 276, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__15, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 276, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -13086,7 +13208,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  *                 if   t == NPY_BYTE:        f = "b"
  *                 elif t == NPY_UBYTE:       f = "B"
  */
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__14, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 306, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__16, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 306, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -13966,7 +14088,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  * 
  *         if ((child.byteorder == c'>' and little_endian) or
  */
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__15, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 856, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__17, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 856, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -14034,7 +14156,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  *             # One could encode it in the format string and have Cython
  *             # complain instead, BUT: < and > in format strings also imply
  */
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__14, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 860, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__16, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 860, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -14143,7 +14265,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  * 
  *             # Until ticket #99 is fixed, use integers to avoid warnings
  */
-        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__16, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 880, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__18, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 880, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_Raise(__pyx_t_4, 0, 0, 0);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -14771,7 +14893,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
  * 
  * cdef inline int import_umath() except -1:
  */
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__17, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1038, __pyx_L5_except_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__19, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1038, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_Raise(__pyx_t_8, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -14900,7 +15022,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
  * 
  * cdef inline int import_ufunc() except -1:
  */
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__18, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1044, __pyx_L5_except_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__20, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1044, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_Raise(__pyx_t_8, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -15026,7 +15148,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
  */
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__18, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1050, __pyx_L5_except_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__20, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1050, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_Raise(__pyx_t_8, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -15211,6 +15333,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_numpy, __pyx_k_numpy, sizeof(__pyx_k_numpy), 0, 0, 1, 1},
   {&__pyx_kp_u_numpy_core_multiarray_failed_to, __pyx_k_numpy_core_multiarray_failed_to, sizeof(__pyx_k_numpy_core_multiarray_failed_to), 0, 1, 0, 0},
   {&__pyx_kp_u_numpy_core_umath_failed_to_impor, __pyx_k_numpy_core_umath_failed_to_impor, sizeof(__pyx_k_numpy_core_umath_failed_to_impor), 0, 1, 0, 0},
+  {&__pyx_kp_u_odonovan_trust_END, __pyx_k_odonovan_trust_END, sizeof(__pyx_k_odonovan_trust_END), 0, 1, 0, 0},
+  {&__pyx_kp_u_odonovan_trust_START, __pyx_k_odonovan_trust_START, sizeof(__pyx_k_odonovan_trust_START), 0, 1, 0, 0},
   {&__pyx_n_s_odonovan_trust_old, __pyx_k_odonovan_trust_old, sizeof(__pyx_k_odonovan_trust_old), 0, 0, 1, 1},
   {&__pyx_n_s_p, __pyx_k_p, sizeof(__pyx_k_p), 0, 0, 1, 1},
   {&__pyx_n_s_pandas, __pyx_k_pandas, sizeof(__pyx_k_pandas), 0, 0, 1, 1},
@@ -15257,6 +15381,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_user_a, __pyx_k_user_a, sizeof(__pyx_k_user_a), 0, 0, 1, 1},
   {&__pyx_n_s_user_b, __pyx_k_user_b, sizeof(__pyx_k_user_b), 0, 0, 1, 1},
   {&__pyx_n_s_value_counts, __pyx_k_value_counts, sizeof(__pyx_k_value_counts), 0, 0, 1, 1},
+  {&__pyx_n_s_verbose, __pyx_k_verbose, sizeof(__pyx_k_verbose), 0, 0, 1, 1},
   {&__pyx_n_s_x, __pyx_k_x, sizeof(__pyx_k_x), 0, 0, 1, 1},
   {&__pyx_n_s_zeros, __pyx_k_zeros, sizeof(__pyx_k_zeros), 0, 0, 1, 1},
   {&__pyx_n_s_zip, __pyx_k_zip, sizeof(__pyx_k_zip), 0, 0, 1, 1},
@@ -15264,7 +15389,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
   __pyx_builtin_print = __Pyx_GetBuiltinName(__pyx_n_s_print); if (!__pyx_builtin_print) __PYX_ERR(0, 40, __pyx_L1_error)
-  __pyx_builtin_zip = __Pyx_GetBuiltinName(__pyx_n_s_zip); if (!__pyx_builtin_zip) __PYX_ERR(0, 524, __pyx_L1_error)
+  __pyx_builtin_zip = __Pyx_GetBuiltinName(__pyx_n_s_zip); if (!__pyx_builtin_zip) __PYX_ERR(0, 529, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(1, 272, __pyx_L1_error)
   __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(1, 285, __pyx_L1_error)
   __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(1, 856, __pyx_L1_error)
@@ -15355,49 +15480,71 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__7);
   __Pyx_GIVEREF(__pyx_tuple__7);
 
-  /* "surprise/agreements.pyx":408
- *             trust_matrix_common[user_a,user_b] = common_set_length
+  /* "surprise/agreements.pyx":409
+ *             trust_matrix_common[user_b,user_a] = common_set_length
  *         # activity_matrix[user_a, user_a] = 1
  *     print('======================== agree_trust_opitmal_a_b |END|========================')             # <<<<<<<<<<<<<<
  *     print('time.time() - start')
  *     print(time.time() - start)
  */
-  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_kp_u_agree_trust_opitmal_a_b_END); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 408, __pyx_L1_error)
+  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_kp_u_agree_trust_opitmal_a_b_END); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 409, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__8);
   __Pyx_GIVEREF(__pyx_tuple__8);
 
-  /* "surprise/agreements.pyx":414
+  /* "surprise/agreements.pyx":415
  * 
  * def agree_trust_old(trainset, beta, epsilon, ptype='user', istrainset=True, activity=False):
  *     print('======================== agree_trust_old |START|========================')             # <<<<<<<<<<<<<<
  *     if istrainset == True:
  *         ratings = np.zeros((trainset.n_users, trainset.n_items))
  */
-  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_u_agree_trust_old_START); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 414, __pyx_L1_error)
+  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_u_agree_trust_old_START); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 415, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__9);
   __Pyx_GIVEREF(__pyx_tuple__9);
 
-  /* "surprise/agreements.pyx":474
+  /* "surprise/agreements.pyx":466
+ *     """Computes knn version of trust matrix proposed by J. ODonovan and B. Smyth, in Trust in recommender systems, """
+ *     if algo.verbose:
+ *         print('======================== odonovan_trust |START|========================')             # <<<<<<<<<<<<<<
  * 
- *     trust_matrix = np.zeros((rows, rows))
- *     print('trainset.n_items')             # <<<<<<<<<<<<<<
- *     print(rows)
- *     print('trainset.n_users')
+ *     cdef int rows = trainset.n_users
  */
-  __pyx_tuple__10 = PyTuple_Pack(1, __pyx_kp_u_trainset_n_items); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(0, 474, __pyx_L1_error)
+  __pyx_tuple__10 = PyTuple_Pack(1, __pyx_kp_u_odonovan_trust_START); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(0, 466, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__10);
   __Pyx_GIVEREF(__pyx_tuple__10);
 
-  /* "surprise/agreements.pyx":476
- *     print('trainset.n_items')
- *     print(rows)
- *     print('trainset.n_users')             # <<<<<<<<<<<<<<
- *     print(trainset.n_users)
- * 
+  /* "surprise/agreements.pyx":477
+ *     trust_matrix = np.zeros((rows, rows))
+ *     if algo.verbose:
+ *         print('trainset.n_items')             # <<<<<<<<<<<<<<
+ *         print(rows)
+ *         print('trainset.n_users')
  */
-  __pyx_tuple__11 = PyTuple_Pack(1, __pyx_kp_u_trainset_n_users); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(0, 476, __pyx_L1_error)
+  __pyx_tuple__11 = PyTuple_Pack(1, __pyx_kp_u_trainset_n_items); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(0, 477, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__11);
   __Pyx_GIVEREF(__pyx_tuple__11);
+
+  /* "surprise/agreements.pyx":479
+ *         print('trainset.n_items')
+ *         print(rows)
+ *         print('trainset.n_users')             # <<<<<<<<<<<<<<
+ *         print(trainset.n_users)
+ * 
+ */
+  __pyx_tuple__12 = PyTuple_Pack(1, __pyx_kp_u_trainset_n_users); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(0, 479, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__12);
+  __Pyx_GIVEREF(__pyx_tuple__12);
+
+  /* "surprise/agreements.pyx":571
+ * 
+ *     if algo.verbose:
+ *         print('======================== odonovan_trust |END|========================')             # <<<<<<<<<<<<<<
+ *     # print(trust_matrix)
+ *     return trust_matrix
+ */
+  __pyx_tuple__13 = PyTuple_Pack(1, __pyx_kp_u_odonovan_trust_END); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(0, 571, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__13);
+  __Pyx_GIVEREF(__pyx_tuple__13);
 
   /* "../lib/python3.6/site-packages/Cython/Includes/numpy/__init__.pxd":272
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)
@@ -15406,9 +15553,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
  */
-  __pyx_tuple__12 = PyTuple_Pack(1, __pyx_kp_u_ndarray_is_not_C_contiguous); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(1, 272, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__12);
-  __Pyx_GIVEREF(__pyx_tuple__12);
+  __pyx_tuple__14 = PyTuple_Pack(1, __pyx_kp_u_ndarray_is_not_C_contiguous); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(1, 272, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__14);
+  __Pyx_GIVEREF(__pyx_tuple__14);
 
   /* "../lib/python3.6/site-packages/Cython/Includes/numpy/__init__.pxd":276
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
@@ -15417,9 +15564,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  *             info.buf = PyArray_DATA(self)
  */
-  __pyx_tuple__13 = PyTuple_Pack(1, __pyx_kp_u_ndarray_is_not_Fortran_contiguou); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(1, 276, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__13);
-  __Pyx_GIVEREF(__pyx_tuple__13);
+  __pyx_tuple__15 = PyTuple_Pack(1, __pyx_kp_u_ndarray_is_not_Fortran_contiguou); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(1, 276, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__15);
+  __Pyx_GIVEREF(__pyx_tuple__15);
 
   /* "../lib/python3.6/site-packages/Cython/Includes/numpy/__init__.pxd":306
  *                 if ((descr.byteorder == c'>' and little_endian) or
@@ -15428,9 +15575,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *                 if   t == NPY_BYTE:        f = "b"
  *                 elif t == NPY_UBYTE:       f = "B"
  */
-  __pyx_tuple__14 = PyTuple_Pack(1, __pyx_kp_u_Non_native_byte_order_not_suppor); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(1, 306, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__14);
-  __Pyx_GIVEREF(__pyx_tuple__14);
+  __pyx_tuple__16 = PyTuple_Pack(1, __pyx_kp_u_Non_native_byte_order_not_suppor); if (unlikely(!__pyx_tuple__16)) __PYX_ERR(1, 306, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__16);
+  __Pyx_GIVEREF(__pyx_tuple__16);
 
   /* "../lib/python3.6/site-packages/Cython/Includes/numpy/__init__.pxd":856
  * 
@@ -15439,9 +15586,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  *         if ((child.byteorder == c'>' and little_endian) or
  */
-  __pyx_tuple__15 = PyTuple_Pack(1, __pyx_kp_u_Format_string_allocated_too_shor); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(1, 856, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__15);
-  __Pyx_GIVEREF(__pyx_tuple__15);
+  __pyx_tuple__17 = PyTuple_Pack(1, __pyx_kp_u_Format_string_allocated_too_shor); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(1, 856, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__17);
+  __Pyx_GIVEREF(__pyx_tuple__17);
 
   /* "../lib/python3.6/site-packages/Cython/Includes/numpy/__init__.pxd":880
  *             t = child.type_num
@@ -15450,9 +15597,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  *             # Until ticket #99 is fixed, use integers to avoid warnings
  */
-  __pyx_tuple__16 = PyTuple_Pack(1, __pyx_kp_u_Format_string_allocated_too_shor_2); if (unlikely(!__pyx_tuple__16)) __PYX_ERR(1, 880, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__16);
-  __Pyx_GIVEREF(__pyx_tuple__16);
+  __pyx_tuple__18 = PyTuple_Pack(1, __pyx_kp_u_Format_string_allocated_too_shor_2); if (unlikely(!__pyx_tuple__18)) __PYX_ERR(1, 880, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__18);
+  __Pyx_GIVEREF(__pyx_tuple__18);
 
   /* "../lib/python3.6/site-packages/Cython/Includes/numpy/__init__.pxd":1038
  *         _import_array()
@@ -15461,9 +15608,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  * cdef inline int import_umath() except -1:
  */
-  __pyx_tuple__17 = PyTuple_Pack(1, __pyx_kp_u_numpy_core_multiarray_failed_to); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(1, 1038, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__17);
-  __Pyx_GIVEREF(__pyx_tuple__17);
+  __pyx_tuple__19 = PyTuple_Pack(1, __pyx_kp_u_numpy_core_multiarray_failed_to); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(1, 1038, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__19);
+  __Pyx_GIVEREF(__pyx_tuple__19);
 
   /* "../lib/python3.6/site-packages/Cython/Includes/numpy/__init__.pxd":1044
  *         _import_umath()
@@ -15472,9 +15619,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  * cdef inline int import_ufunc() except -1:
  */
-  __pyx_tuple__18 = PyTuple_Pack(1, __pyx_kp_u_numpy_core_umath_failed_to_impor); if (unlikely(!__pyx_tuple__18)) __PYX_ERR(1, 1044, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__18);
-  __Pyx_GIVEREF(__pyx_tuple__18);
+  __pyx_tuple__20 = PyTuple_Pack(1, __pyx_kp_u_numpy_core_umath_failed_to_impor); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(1, 1044, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__20);
+  __Pyx_GIVEREF(__pyx_tuple__20);
 
   /* "surprise/agreements.pyx":39
  * # @cython.cdivision(True)
@@ -15483,10 +15630,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     print('======================== agree_trust |START|========================')
  *     start = time.time()
  */
-  __pyx_tuple__19 = PyTuple_Pack(32, __pyx_n_s_trainset, __pyx_n_s_beta, __pyx_n_s_epsilon, __pyx_n_s_ptype, __pyx_n_s_istrainset, __pyx_n_s_activity, __pyx_n_s_start, __pyx_n_s_trust_matrix, __pyx_n_s_activity_matrix, __pyx_n_s_user_a, __pyx_n_s_user_b, __pyx_n_s_common_set_length, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_lenA, __pyx_n_s_lenB, __pyx_n_s_a_positive, __pyx_n_s_b_positive, __pyx_n_s_agreement, __pyx_n_s_a_count, __pyx_n_s_b_count, __pyx_n_s_shorts_length, __pyx_n_s_a_ratings, __pyx_n_s_b_ratings, __pyx_n_s_ratings, __pyx_n_s_a_val, __pyx_n_s_b_val, __pyx_n_s_trust, __pyx_n_s_activity_val, __pyx_n_s_u, __pyx_n_s_r, __pyx_n_s_n_x); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(0, 39, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__19);
-  __Pyx_GIVEREF(__pyx_tuple__19);
-  __pyx_codeobj__20 = (PyObject*)__Pyx_PyCode_New(6, 0, 32, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__19, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_surprise_agreements_pyx, __pyx_n_s_agree_trust, 39, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__20)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_tuple__21 = PyTuple_Pack(32, __pyx_n_s_trainset, __pyx_n_s_beta, __pyx_n_s_epsilon, __pyx_n_s_ptype, __pyx_n_s_istrainset, __pyx_n_s_activity, __pyx_n_s_start, __pyx_n_s_trust_matrix, __pyx_n_s_activity_matrix, __pyx_n_s_user_a, __pyx_n_s_user_b, __pyx_n_s_common_set_length, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_lenA, __pyx_n_s_lenB, __pyx_n_s_a_positive, __pyx_n_s_b_positive, __pyx_n_s_agreement, __pyx_n_s_a_count, __pyx_n_s_b_count, __pyx_n_s_shorts_length, __pyx_n_s_a_ratings, __pyx_n_s_b_ratings, __pyx_n_s_ratings, __pyx_n_s_a_val, __pyx_n_s_b_val, __pyx_n_s_trust, __pyx_n_s_activity_val, __pyx_n_s_u, __pyx_n_s_r, __pyx_n_s_n_x); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__21);
+  __Pyx_GIVEREF(__pyx_tuple__21);
+  __pyx_codeobj__22 = (PyObject*)__Pyx_PyCode_New(6, 0, 32, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__21, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_surprise_agreements_pyx, __pyx_n_s_agree_trust, 39, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__22)) __PYX_ERR(0, 39, __pyx_L1_error)
 
   /* "surprise/agreements.pyx":153
  * 
@@ -15495,10 +15642,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     print('======================== agree_trust_op|START|========================')
  *     start = time.time()
  */
-  __pyx_tuple__21 = PyTuple_Pack(36, __pyx_n_s_trainset, __pyx_n_s_beta, __pyx_n_s_epsilon, __pyx_n_s_sim, __pyx_n_s_ptype, __pyx_n_s_istrainset, __pyx_n_s_activity, __pyx_n_s_start, __pyx_n_s_trust_matrix, __pyx_n_s_trust_matrix_common, __pyx_n_s_activity_matrix, __pyx_n_s_activity_matrix_val, __pyx_n_s_user_a, __pyx_n_s_user_b, __pyx_n_s_common_set_length, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_lenA, __pyx_n_s_lenB, __pyx_n_s_a_positive, __pyx_n_s_b_positive, __pyx_n_s_agreement, __pyx_n_s_a_count, __pyx_n_s_b_count, __pyx_n_s_shorts_length, __pyx_n_s_a_ratings, __pyx_n_s_b_ratings, __pyx_n_s_ratings, __pyx_n_s_a_val, __pyx_n_s_b_val, __pyx_n_s_trust, __pyx_n_s_activity_val, __pyx_n_s_u, __pyx_n_s_r, __pyx_n_s_n_x, __pyx_n_s_b); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(0, 153, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__21);
-  __Pyx_GIVEREF(__pyx_tuple__21);
-  __pyx_codeobj__22 = (PyObject*)__Pyx_PyCode_New(7, 0, 36, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__21, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_surprise_agreements_pyx, __pyx_n_s_agree_trust_op, 153, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__22)) __PYX_ERR(0, 153, __pyx_L1_error)
+  __pyx_tuple__23 = PyTuple_Pack(36, __pyx_n_s_trainset, __pyx_n_s_beta, __pyx_n_s_epsilon, __pyx_n_s_sim, __pyx_n_s_ptype, __pyx_n_s_istrainset, __pyx_n_s_activity, __pyx_n_s_start, __pyx_n_s_trust_matrix, __pyx_n_s_trust_matrix_common, __pyx_n_s_activity_matrix, __pyx_n_s_activity_matrix_val, __pyx_n_s_user_a, __pyx_n_s_user_b, __pyx_n_s_common_set_length, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_lenA, __pyx_n_s_lenB, __pyx_n_s_a_positive, __pyx_n_s_b_positive, __pyx_n_s_agreement, __pyx_n_s_a_count, __pyx_n_s_b_count, __pyx_n_s_shorts_length, __pyx_n_s_a_ratings, __pyx_n_s_b_ratings, __pyx_n_s_ratings, __pyx_n_s_a_val, __pyx_n_s_b_val, __pyx_n_s_trust, __pyx_n_s_activity_val, __pyx_n_s_u, __pyx_n_s_r, __pyx_n_s_n_x, __pyx_n_s_b); if (unlikely(!__pyx_tuple__23)) __PYX_ERR(0, 153, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__23);
+  __Pyx_GIVEREF(__pyx_tuple__23);
+  __pyx_codeobj__24 = (PyObject*)__Pyx_PyCode_New(7, 0, 36, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__23, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_surprise_agreements_pyx, __pyx_n_s_agree_trust_op, 153, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__24)) __PYX_ERR(0, 153, __pyx_L1_error)
 
   /* "surprise/agreements.pyx":238
  * 
@@ -15507,10 +15654,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     print('======================== agree_trust_opitmal|START|========================')
  *     start = time.time()
  */
-  __pyx_tuple__23 = PyTuple_Pack(36, __pyx_n_s_trainset, __pyx_n_s_beta, __pyx_n_s_epsilon, __pyx_n_s_sim, __pyx_n_s_ptype, __pyx_n_s_istrainset, __pyx_n_s_activity, __pyx_n_s_start, __pyx_n_s_trust_matrix, __pyx_n_s_trust_matrix_common, __pyx_n_s_activity_matrix, __pyx_n_s_activity_matrix_val, __pyx_n_s_user_a, __pyx_n_s_user_b, __pyx_n_s_common_set_length, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_lenA, __pyx_n_s_lenB, __pyx_n_s_a_positive, __pyx_n_s_b_positive, __pyx_n_s_agreement, __pyx_n_s_a_count, __pyx_n_s_b_count, __pyx_n_s_shorts_length, __pyx_n_s_a_ratings, __pyx_n_s_b_ratings, __pyx_n_s_ratings, __pyx_n_s_a_val, __pyx_n_s_b_val, __pyx_n_s_trust, __pyx_n_s_activity_val, __pyx_n_s_u, __pyx_n_s_r, __pyx_n_s_n_x, __pyx_n_s_b); if (unlikely(!__pyx_tuple__23)) __PYX_ERR(0, 238, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__23);
-  __Pyx_GIVEREF(__pyx_tuple__23);
-  __pyx_codeobj__24 = (PyObject*)__Pyx_PyCode_New(7, 0, 36, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__23, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_surprise_agreements_pyx, __pyx_n_s_agree_trust_opitmal, 238, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__24)) __PYX_ERR(0, 238, __pyx_L1_error)
+  __pyx_tuple__25 = PyTuple_Pack(36, __pyx_n_s_trainset, __pyx_n_s_beta, __pyx_n_s_epsilon, __pyx_n_s_sim, __pyx_n_s_ptype, __pyx_n_s_istrainset, __pyx_n_s_activity, __pyx_n_s_start, __pyx_n_s_trust_matrix, __pyx_n_s_trust_matrix_common, __pyx_n_s_activity_matrix, __pyx_n_s_activity_matrix_val, __pyx_n_s_user_a, __pyx_n_s_user_b, __pyx_n_s_common_set_length, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_lenA, __pyx_n_s_lenB, __pyx_n_s_a_positive, __pyx_n_s_b_positive, __pyx_n_s_agreement, __pyx_n_s_a_count, __pyx_n_s_b_count, __pyx_n_s_shorts_length, __pyx_n_s_a_ratings, __pyx_n_s_b_ratings, __pyx_n_s_ratings, __pyx_n_s_a_val, __pyx_n_s_b_val, __pyx_n_s_trust, __pyx_n_s_activity_val, __pyx_n_s_u, __pyx_n_s_r, __pyx_n_s_n_x, __pyx_n_s_b); if (unlikely(!__pyx_tuple__25)) __PYX_ERR(0, 238, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__25);
+  __Pyx_GIVEREF(__pyx_tuple__25);
+  __pyx_codeobj__26 = (PyObject*)__Pyx_PyCode_New(7, 0, 36, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__25, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_surprise_agreements_pyx, __pyx_n_s_agree_trust_opitmal, 238, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__26)) __PYX_ERR(0, 238, __pyx_L1_error)
 
   /* "surprise/agreements.pyx":325
  * 
@@ -15519,34 +15666,34 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     print('======================== agree_trust_opitmal_a_b|START|========================')
  *     start = time.time()
  */
-  __pyx_tuple__25 = PyTuple_Pack(36, __pyx_n_s_trainset, __pyx_n_s_beta, __pyx_n_s_epsilon, __pyx_n_s_sim, __pyx_n_s_ptype, __pyx_n_s_istrainset, __pyx_n_s_activity, __pyx_n_s_start, __pyx_n_s_trust_matrix, __pyx_n_s_trust_matrix_common, __pyx_n_s_activity_matrix, __pyx_n_s_activity_matrix_val, __pyx_n_s_user_a, __pyx_n_s_user_b, __pyx_n_s_common_set_length, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_lenA, __pyx_n_s_lenB, __pyx_n_s_a_positive, __pyx_n_s_b_positive, __pyx_n_s_agreement, __pyx_n_s_a_count, __pyx_n_s_b_count, __pyx_n_s_shorts_length, __pyx_n_s_a_ratings, __pyx_n_s_b_ratings, __pyx_n_s_ratings, __pyx_n_s_a_val, __pyx_n_s_b_val, __pyx_n_s_trust, __pyx_n_s_activity_val, __pyx_n_s_u, __pyx_n_s_r, __pyx_n_s_n_x, __pyx_n_s_b); if (unlikely(!__pyx_tuple__25)) __PYX_ERR(0, 325, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__25);
-  __Pyx_GIVEREF(__pyx_tuple__25);
-  __pyx_codeobj__26 = (PyObject*)__Pyx_PyCode_New(7, 0, 36, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__25, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_surprise_agreements_pyx, __pyx_n_s_agree_trust_opitmal_a_b, 325, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__26)) __PYX_ERR(0, 325, __pyx_L1_error)
+  __pyx_tuple__27 = PyTuple_Pack(36, __pyx_n_s_trainset, __pyx_n_s_beta, __pyx_n_s_epsilon, __pyx_n_s_sim, __pyx_n_s_ptype, __pyx_n_s_istrainset, __pyx_n_s_activity, __pyx_n_s_start, __pyx_n_s_trust_matrix, __pyx_n_s_trust_matrix_common, __pyx_n_s_activity_matrix, __pyx_n_s_activity_matrix_val, __pyx_n_s_user_a, __pyx_n_s_user_b, __pyx_n_s_common_set_length, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_lenA, __pyx_n_s_lenB, __pyx_n_s_a_positive, __pyx_n_s_b_positive, __pyx_n_s_agreement, __pyx_n_s_a_count, __pyx_n_s_b_count, __pyx_n_s_shorts_length, __pyx_n_s_a_ratings, __pyx_n_s_b_ratings, __pyx_n_s_ratings, __pyx_n_s_a_val, __pyx_n_s_b_val, __pyx_n_s_trust, __pyx_n_s_activity_val, __pyx_n_s_u, __pyx_n_s_r, __pyx_n_s_n_x, __pyx_n_s_b); if (unlikely(!__pyx_tuple__27)) __PYX_ERR(0, 325, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__27);
+  __Pyx_GIVEREF(__pyx_tuple__27);
+  __pyx_codeobj__28 = (PyObject*)__Pyx_PyCode_New(7, 0, 36, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__27, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_surprise_agreements_pyx, __pyx_n_s_agree_trust_opitmal_a_b, 325, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__28)) __PYX_ERR(0, 325, __pyx_L1_error)
 
-  /* "surprise/agreements.pyx":413
+  /* "surprise/agreements.pyx":414
  *     return trust_matrix, trust_matrix_common, activity_matrix_val
  * 
  * def agree_trust_old(trainset, beta, epsilon, ptype='user', istrainset=True, activity=False):             # <<<<<<<<<<<<<<
  *     print('======================== agree_trust_old |START|========================')
  *     if istrainset == True:
  */
-  __pyx_tuple__27 = PyTuple_Pack(21, __pyx_n_s_trainset, __pyx_n_s_beta, __pyx_n_s_epsilon, __pyx_n_s_ptype, __pyx_n_s_istrainset, __pyx_n_s_activity, __pyx_n_s_ratings, __pyx_n_s_u, __pyx_n_s_i, __pyx_n_s_r, __pyx_n_s_trust_matrix, __pyx_n_s_user_a, __pyx_n_s_user_b, __pyx_n_s_a_ratings, __pyx_n_s_b_ratings, __pyx_n_s_commonset, __pyx_n_s_common_set_length, __pyx_n_s_trust, __pyx_n_s_a_positive, __pyx_n_s_b_positive, __pyx_n_s_agreement); if (unlikely(!__pyx_tuple__27)) __PYX_ERR(0, 413, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__27);
-  __Pyx_GIVEREF(__pyx_tuple__27);
-  __pyx_codeobj__28 = (PyObject*)__Pyx_PyCode_New(6, 0, 21, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__27, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_surprise_agreements_pyx, __pyx_n_s_agree_trust_old, 413, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__28)) __PYX_ERR(0, 413, __pyx_L1_error)
+  __pyx_tuple__29 = PyTuple_Pack(21, __pyx_n_s_trainset, __pyx_n_s_beta, __pyx_n_s_epsilon, __pyx_n_s_ptype, __pyx_n_s_istrainset, __pyx_n_s_activity, __pyx_n_s_ratings, __pyx_n_s_u, __pyx_n_s_i, __pyx_n_s_r, __pyx_n_s_trust_matrix, __pyx_n_s_user_a, __pyx_n_s_user_b, __pyx_n_s_a_ratings, __pyx_n_s_b_ratings, __pyx_n_s_commonset, __pyx_n_s_common_set_length, __pyx_n_s_trust, __pyx_n_s_a_positive, __pyx_n_s_b_positive, __pyx_n_s_agreement); if (unlikely(!__pyx_tuple__29)) __PYX_ERR(0, 414, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__29);
+  __Pyx_GIVEREF(__pyx_tuple__29);
+  __pyx_codeobj__30 = (PyObject*)__Pyx_PyCode_New(6, 0, 21, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__29, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_surprise_agreements_pyx, __pyx_n_s_agree_trust_old, 414, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__30)) __PYX_ERR(0, 414, __pyx_L1_error)
 
-  /* "surprise/agreements.pyx":462
+  /* "surprise/agreements.pyx":463
  *     return trust_matrix
  * 
  * def odonovan_trust_old(trainset, algo, ptype='user', alpha=0.2):             # <<<<<<<<<<<<<<
  *     """Computes knn version of trust matrix proposed by J. ODonovan and B. Smyth, in Trust in recommender systems, """
- *     # print('======================== odonovan_trust |START|========================')
+ *     if algo.verbose:
  */
-  __pyx_tuple__29 = PyTuple_Pack(20, __pyx_n_s_trainset, __pyx_n_s_algo, __pyx_n_s_ptype, __pyx_n_s_alpha, __pyx_n_s_rows, __pyx_n_s_trust_matrix, __pyx_n_s_testset, __pyx_n_s_x, __pyx_n_s_start, __pyx_n_s_newset, __pyx_n_s_p, __pyx_n_s_df, __pyx_n_s_filtered_df, __pyx_n_s_new_list, __pyx_n_s_nu, __pyx_n_s_den, __pyx_n_s_results, __pyx_n_s_i, __pyx_n_s_n, __pyx_n_s_d); if (unlikely(!__pyx_tuple__29)) __PYX_ERR(0, 462, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__29);
-  __Pyx_GIVEREF(__pyx_tuple__29);
-  __pyx_codeobj__30 = (PyObject*)__Pyx_PyCode_New(4, 0, 20, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__29, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_surprise_agreements_pyx, __pyx_n_s_odonovan_trust_old, 462, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__30)) __PYX_ERR(0, 462, __pyx_L1_error)
+  __pyx_tuple__31 = PyTuple_Pack(20, __pyx_n_s_trainset, __pyx_n_s_algo, __pyx_n_s_ptype, __pyx_n_s_alpha, __pyx_n_s_rows, __pyx_n_s_trust_matrix, __pyx_n_s_testset, __pyx_n_s_x, __pyx_n_s_start, __pyx_n_s_newset, __pyx_n_s_p, __pyx_n_s_df, __pyx_n_s_filtered_df, __pyx_n_s_new_list, __pyx_n_s_nu, __pyx_n_s_den, __pyx_n_s_results, __pyx_n_s_i, __pyx_n_s_n, __pyx_n_s_d); if (unlikely(!__pyx_tuple__31)) __PYX_ERR(0, 463, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__31);
+  __Pyx_GIVEREF(__pyx_tuple__31);
+  __pyx_codeobj__32 = (PyObject*)__Pyx_PyCode_New(4, 0, 20, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__31, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_surprise_agreements_pyx, __pyx_n_s_odonovan_trust_old, 463, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__32)) __PYX_ERR(0, 463, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -15994,28 +16141,28 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_agree_trust_opitmal_a_b, __pyx_t_1) < 0) __PYX_ERR(0, 325, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "surprise/agreements.pyx":413
+  /* "surprise/agreements.pyx":414
  *     return trust_matrix, trust_matrix_common, activity_matrix_val
  * 
  * def agree_trust_old(trainset, beta, epsilon, ptype='user', istrainset=True, activity=False):             # <<<<<<<<<<<<<<
  *     print('======================== agree_trust_old |START|========================')
  *     if istrainset == True:
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_8surprise_10agreements_9agree_trust_old, NULL, __pyx_n_s_surprise_agreements); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 413, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_8surprise_10agreements_9agree_trust_old, NULL, __pyx_n_s_surprise_agreements); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 414, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_agree_trust_old, __pyx_t_1) < 0) __PYX_ERR(0, 413, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_agree_trust_old, __pyx_t_1) < 0) __PYX_ERR(0, 414, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "surprise/agreements.pyx":462
+  /* "surprise/agreements.pyx":463
  *     return trust_matrix
  * 
  * def odonovan_trust_old(trainset, algo, ptype='user', alpha=0.2):             # <<<<<<<<<<<<<<
  *     """Computes knn version of trust matrix proposed by J. ODonovan and B. Smyth, in Trust in recommender systems, """
- *     # print('======================== odonovan_trust |START|========================')
+ *     if algo.verbose:
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_8surprise_10agreements_11odonovan_trust_old, NULL, __pyx_n_s_surprise_agreements); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 462, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_8surprise_10agreements_11odonovan_trust_old, NULL, __pyx_n_s_surprise_agreements); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 463, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_odonovan_trust_old, __pyx_t_1) < 0) __PYX_ERR(0, 462, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_odonovan_trust_old, __pyx_t_1) < 0) __PYX_ERR(0, 463, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "surprise/agreements.pyx":1
