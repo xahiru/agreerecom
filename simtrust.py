@@ -126,7 +126,9 @@ class OdnovanAlgorithm(AlgoBase):
         print('OdnovanAlgorithm here')
         start = time.time()
         if self.load == False:
-           self.algo.sim = odonovan_trust_old(trainset, self.algo, ptype=self.ptype, alpha=self.alpha)
+            # self.algo.sim = odonovan_trust_old(trainset, self.algo, ptype=self.ptype, alpha=self.alpha)
+            n_process = multiprocessing.cpu_count()
+            self.algo.sim  = odonovan_trust_old(trainset, self.algo, ptype=self.ptype, alpha=self.alpha, optimized=True, n_jobs=n_process)
         print('OdnovanAlgorithm fit time')
         print('time.time() - start')
         print(time.time() - start)
@@ -185,16 +187,16 @@ sim_options={'name':'pearson','user_based':user_based}
 
 # # # ##
 kf = KFold(n_splits=5,  random_state=100)
-# alpha=0.2
-# predict_alog=KNNWithMeans
-# algo = OdnovanAlgorithm(alog=KNNWithMeans, sim_options=sim_options,load=False, user_based=user_based, alpha=alpha, verbose=False)
-# algo_name = 'OdnovanAlgorithm'
-# epsilon=0.6
-epsilon=1
-lambdak=0.5
+alpha=0.2
 predict_alog=KNNWithMeans
-algo = MyOwnAlgorithm(k=40, alog=predict_alog, user_based =user_based, beta=beta, epsilon=epsilon, lambdak=lambdak, sim_options=sim_options)
-algo_name = 'MyOwnAlgorithm'
+algo = OdnovanAlgorithm(alog=KNNWithMeans, sim_options=sim_options,load=False, user_based=user_based, alpha=alpha, verbose=False)
+algo_name = 'OdnovanAlgorithm'
+# epsilon=0.6
+# epsilon=1
+# lambdak=0.5
+# predict_alog=KNNWithMeans
+# algo = MyOwnAlgorithm(k=40, alog=predict_alog, user_based =user_based, beta=beta, epsilon=epsilon, lambdak=lambdak, sim_options=sim_options)
+# algo_name = 'MyOwnAlgorithm'
 # algo = KNNWithMeans(k=40,sim_options=sim_options)
 # algo_name = 'KNNWithMeans'
 # algo = SVD()

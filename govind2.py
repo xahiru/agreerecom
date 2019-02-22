@@ -24,6 +24,7 @@ from surprise.agreements import agree_trust_opitmal_a_b
 from surprise.model_selection import KFold
 import matplotlib.pyplot as plt
 import pandas as pd
+import copy as cp
 import os
 import time
 
@@ -38,7 +39,7 @@ random.seed(300)
 
 
 datasetname = 'ml-latest-small'
-number_of_users = 100
+number_of_users = 10
 file_path = os.path.expanduser('~') + '/.surprise_data/ml-latest-small/ratings.csv'
 df = pd.read_csv(file_path) 
 list = df.userId.unique()
@@ -97,6 +98,7 @@ class MyOwnAlgorithm(AlgoBase):
         # self.algo.sim = mixsim
         print('Calculating AgreeTrust matrix ...')
         start = time.time()
+        # tr, comon, noncom = agree_trust_opitmal_a_b(trainset, self.beta, self.epsilon, self.algo.sim, ptype=self.ptype, istrainset=True, activity=False)
         tr, comon, noncom = agree_trust_opitmal_a_b(trainset, self.beta, self.epsilon, self.algo.sim, ptype=self.ptype, istrainset=True, activity=False)
         self.algo.sim = tr**self.lambdak - (self.epsilon*noncom)
         # self.algo.sim[self.algo.sim > 1] = 1 
@@ -131,7 +133,8 @@ class OdnovanAlgorithm(AlgoBase):
         print('OdnovanAlgorithm here')
         start = time.time()
         if self.load == False:
-           self.algo.sim = odonovan_trust_old(trainset, self.algo, ptype=self.ptype, alpha=self.alpha)
+        	n_process = multiprocessing.cpu_count()
+        	self.algo.sim  = odonovan_trust_old(trainset, self.algo, ptype=self.ptype, alpha=self.alpha, optimized=True, n_jobs=n_process)
         print(time.time() - start)
         print('OdnovanAlgorithm fit time')
         print(self.algo.sim.shape)
@@ -147,13 +150,14 @@ user_based = True
 sim_options={'name':'pearson','user_based':user_based}
 
 # alpha=0.2
-# predict_alog=KNNWithMeans
-# algo = OdnovanAlgorithm(alog=KNNWithMeans, sim_options=sim_options,load=False, user_based=user_based, alpha=alpha, verbose=False)
-# algo_name = 'OdnovanAlgorithm'
-epsilon=1
-lambdak=0.5
+alpha=0.9
 predict_alog=KNNWithMeans
-algo = MyOwnAlgorithm(k=40, alog=predict_alog, user_based =user_based, beta=beta, epsilon=epsilon, lambdak=lambdak, sim_options=sim_options, verbose=False)
+algo = OdnovanAlgorithm(alog=KNNWithMeans, sim_options=sim_options,load=False, user_based=user_based, alpha=alpha, verbose=False)
+algo_name = 'OdnovanAlgorithm'
+# epsilon=1
+# lambdak=0.5
+# predict_alog=KNNWithMeans
+# algo = MyOwnAlgorithm(k=40, alog=predict_alog, user_based =user_based, beta=beta, epsilon=epsilon, lambdak=lambdak, sim_options=sim_options, verbose=False)
 # algo_name = 'MyOwnAlgorithm'
 # algo = KNNWithMeans(k=40,sim_options=sim_options)
 # algo_name = 'KNNWithMeans'
@@ -165,13 +169,13 @@ algo = MyOwnAlgorithm(k=40, alog=predict_alog, user_based =user_based, beta=beta
 # algo_name = 'KNNWithZScore'
 # k = 5
 # for ktimes in range(k):
-# 	# start = time.time()
+# start = time.time()
 algo.fit(trainset)
 testset = trainset.build_testset()
 p = algo.test(testset)
 rmse(p)
 mae(p)
-	# print(time.time() - start)
+# print(time.time() - start)
 
 ######################################### grahps #############################
 # trust_matrix = np.load('ml-20m0_OdnovanAlgorithm_user_based_True_alpha_0.2_trust_matrix_.npy')
@@ -181,6 +185,7 @@ mae(p)
 
 trust_matrix = algo.algo.sim
 # trust_matrix = algo.sim
+print(trust_matrix)
 
 print(sum(x == 0 for row in trust_matrix for x in row))
 # print(trust_matrix[30,40])
