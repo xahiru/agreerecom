@@ -1,8 +1,0 @@
-@inproceedings{guo2012simple,
-  title={A simple but effective method to incorporate trusted neighbors in recommender systems},
-  author={Guo, Guibing and Zhang, Jie and Thalmann, Daniel},
-  booktitle={International Conference on User Modeling, Adaptation, and Personalization},
-  pages={114--125},
-  year={2012},
-  organization={Springer}
-}
