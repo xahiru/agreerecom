@@ -1,8 +1,0 @@
-@inproceedings{korolova2008link,
-  title={Link privacy in social networks},
-  author={Korolova, Aleksandra and Motwani, Rajeev and Nabar, Shubha U and Xu, Ying},
-  booktitle={Proceedings of the 17th ACM conference on Information and knowledge management},
-  pages={289--298},
-  year={2008},
-  organization={ACM}
-}
