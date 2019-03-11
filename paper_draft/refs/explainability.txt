@@ -1,8 +1,0 @@
-@inproceedings{pu2006trust,
-  title={Trust building with explanation interfaces},
-  author={Pu, Pearl and Chen, Li},
-  booktitle={Proceedings of the 11th international conference on Intelligent user interfaces},
-  pages={93--100},
-  year={2006},
-  organization={ACM}
-}
