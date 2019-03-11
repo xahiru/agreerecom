@@ -1,8 +1,0 @@
-@inproceedings{lathia2008trust,
-  title={Trust-based collaborative filtering},
-  author={Lathia, Neal and Hailes, Stephen and Capra, Licia},
-  booktitle={IFIP international conference on trust management},
-  pages={119--134},
-  year={2008},
-  organization={Springer}
-}
