@@ -1,4 +1,4 @@
-# agreerecom
+# AgreeTrust
 
 ## requirement
 
