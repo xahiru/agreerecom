@@ -1,8 +1,0 @@
-@inproceedings{quercia2006b,
-  title={B-trust: Bayesian trust framework for pervasive computing},
-  author={Quercia, Daniele and Hailes, Stephen and Capra, Licia},
-  booktitle={International Conference on Trust Management},
-  pages={298--312},
-  year={2006},
-  organization={Springer}
-}
