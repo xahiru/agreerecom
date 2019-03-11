@@ -1,7 +1,7 @@
 .DS_Store
 
 data/
-paper_draft/
+paper_draft
 bin/
 include/
 lib/
