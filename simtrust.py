@@ -35,8 +35,8 @@ print(start)
 # data = Dataset.load_from_file(file_path, rating_scale=(-10, 10), reader=reader)
 file_path_save_data = 'data/processed/'
 # datasetname = 'ml-20m'
-datasetname = 'ml-latest-small'
-# datasetname = 'jester'
+# datasetname = 'ml-latest-small'
+datasetname = 'jester'
 
 data = Dataset.load_builtin(datasetname)
 # data = Dataset.load_builtin('ml-20m')
@@ -187,16 +187,16 @@ sim_options={'name':'pearson','user_based':user_based}
 
 # # # ##
 kf = KFold(n_splits=5,  random_state=100)
-alpha=0.2
-predict_alog=KNNWithMeans
-algo = OdnovanAlgorithm(alog=KNNWithMeans, sim_options=sim_options,load=False, user_based=user_based, alpha=alpha, verbose=False)
-algo_name = 'OdnovanAlgorithm'
-# epsilon=0.6
-# epsilon=1
-# lambdak=0.5
+# alpha=0.2
 # predict_alog=KNNWithMeans
-# algo = MyOwnAlgorithm(k=40, alog=predict_alog, user_based =user_based, beta=beta, epsilon=epsilon, lambdak=lambdak, sim_options=sim_options)
-# algo_name = 'MyOwnAlgorithm'
+# algo = OdnovanAlgorithm(alog=KNNWithMeans, sim_options=sim_options,load=False, user_based=user_based, alpha=alpha, verbose=False)
+# algo_name = 'OdnovanAlgorithm'
+# epsilon=0.6
+epsilon=1
+lambdak=0.5
+predict_alog=KNNWithMeans
+algo = MyOwnAlgorithm(k=40, alog=predict_alog, user_based =user_based, beta=beta, epsilon=epsilon, lambdak=lambdak, sim_options=sim_options)
+algo_name = 'MyOwnAlgorithm'
 # algo = KNNWithMeans(k=40,sim_options=sim_options)
 # algo_name = 'KNNWithMeans'
 # algo = SVD()
@@ -218,7 +218,7 @@ for trainset, testset in kf.split(data):
     print(time.time() - start)
     # if kt == 0:
     if algo_name == 'MyOwnAlgorithm':
-        np.save(datasetname+str(kt)+'_'+algo_name+'_user_based_'+str(user_based)+'_epsilon_'+str(epsilon)+'_lambdak_'+str(lambdak)+'_trust_matrix_.npy', algo.algo.sim)
+        np.save(file_path_save_data+datasetname+str(kt)+'_'+algo_name+'_user_based_'+str(user_based)+'_epsilon_'+str(epsilon)+'_lambdak_'+str(lambdak)+'_trust_matrix_.npy', algo.algo.sim)
     elif algo_name == 'OdnovanAlgorithm':
         if algo.load:
             algo.algo.sim = np.load(file_path_save_data+datasetname+str(kt)+'_'+algo_name+'_user_based_'+str(user_based)+'_alpha_'+str(alpha)+'_trust_matrix_.npy')

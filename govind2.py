@@ -35,7 +35,7 @@ import time
 #     # next(f) # skip first row
 #     df = pd.DataFrame(l.rstrip().split() for l in f)
 import random
-random.seed(300)
+random.seed(301)
 
 
 datasetname = 'ml-latest-small'
@@ -43,6 +43,8 @@ number_of_users = 10
 file_path = os.path.expanduser('~') + '/.surprise_data/ml-latest-small/ratings.csv'
 df = pd.read_csv(file_path) 
 list = df.userId.unique()
+# list = df.movieId.unique()
+print(len(list))
 random_number = random.randint(0,len(list)-number_of_users)
 # list = df.movieId.unique()
 # list = random.sample(set(list), 10) 
@@ -51,8 +53,9 @@ list = list[list[random_number:random_number+number_of_users]]
 print(len(list))
 print(list)
 df = df.loc[df['userId'].isin(list)]
+# df = df.loc[df['rating'].isin([3])]
 
-# print(df)
+print(df)
 #reader is still required to load from dataframe
 reader = Reader(rating_scale=(0.5, 5))
 data = Dataset.load_from_df(df[['userId', 'movieId', 'rating']],rating_scale=(0.5, 5), reader=reader)
@@ -149,16 +152,16 @@ class OdnovanAlgorithm(AlgoBase):
 user_based = True
 sim_options={'name':'pearson','user_based':user_based}
 
+# alpha=0.01
 # alpha=0.2
-alpha=0.9
-predict_alog=KNNWithMeans
-algo = OdnovanAlgorithm(alog=KNNWithMeans, sim_options=sim_options,load=False, user_based=user_based, alpha=alpha, verbose=False)
-algo_name = 'OdnovanAlgorithm'
-# epsilon=1
-# lambdak=0.5
 # predict_alog=KNNWithMeans
-# algo = MyOwnAlgorithm(k=40, alog=predict_alog, user_based =user_based, beta=beta, epsilon=epsilon, lambdak=lambdak, sim_options=sim_options, verbose=False)
-# algo_name = 'MyOwnAlgorithm'
+# algo = OdnovanAlgorithm(alog=KNNWithMeans, sim_options=sim_options,load=False, user_based=user_based, alpha=alpha, verbose=False)
+# algo_name = 'OdnovanAlgorithm'
+epsilon=1
+lambdak=0.5
+predict_alog=KNNWithMeans
+algo = MyOwnAlgorithm(k=40, alog=predict_alog, user_based =user_based, beta=beta, epsilon=epsilon, lambdak=lambdak, sim_options=sim_options, verbose=False)
+algo_name = 'MyOwnAlgorithm'
 # algo = KNNWithMeans(k=40,sim_options=sim_options)
 # algo_name = 'KNNWithMeans'
 # algo = SVD()
@@ -171,8 +174,16 @@ algo_name = 'OdnovanAlgorithm'
 # for ktimes in range(k):
 # start = time.time()
 algo.fit(trainset)
+# algo.algo.sim[algo.algo.sim > 1] = 1
+algo.algo.sim[algo.algo.sim < 0] = 0
 testset = trainset.build_testset()
 p = algo.test(testset)
+df = pd.DataFrame(p,columns=['uid', 'iid', 'rui', 'est', 'details'])
+# df['err'] = abs(df.est - df.rui)
+# print(df)
+# df = df.loc[df['est'] != 0]
+print('test set contains'+str(trainset.n_items))
+print("predictions for "+str(len(df.iid.unique()))+" users")
 rmse(p)
 mae(p)
 # print(time.time() - start)
@@ -182,7 +193,8 @@ mae(p)
 # trust_matrix = np.load('ml-20m0_MyOwnAlgorithm_user_based_True_trust_matix_.npy')
 # trust_matrix[trust_matrix > 1] = 1
 # trust_matrix[trust_matrix < 1] = 0  
-
+df = pd.DataFrame(p, columns=['uid', 'iid', 'rui', 'est', 'details']) 
+print(df.head())
 trust_matrix = algo.algo.sim
 # trust_matrix = algo.sim
 print(trust_matrix)
@@ -193,7 +205,8 @@ print(sum(x == 0 for row in trust_matrix for x in row))
 
 # print(trust_matrix[37,54])
 # print(trust_matrix[54,37])
-plt.matshow(trust_matrix);
-plt.colorbar()
-plt.show()
+# plt.colorscale = [[0.0, 'rgb(165,0,38)'], [0.1111111111111111, 'rgb(215,48,39)'], [0.2222222222222222, 'rgb(244,109,67)'], [0.3333333333333333, 'rgb(253,174,97)'], [0.4444444444444444, 'rgb(254,224,144)'], [0.5555555555555556, 'rgb(224,243,248)'], [0.6666666666666666, 'rgb(171,217,233)'], [0.7777777777777778, 'rgb(116,173,209)'], [0.8888888888888888, 'rgb(69,117,180)'], [1.0, 'rgb(49,54,149)']]
+# plt.matshow(trust_matrix);
+# plt.colorbar()
+# plt.show()
 
